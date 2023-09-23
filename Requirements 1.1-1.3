@@ -1,6 +1,7 @@
 Nao Robot:
 Small humanoid robot with 25 degrees of freedom, 7 touch sensors, microphones, speech recognition, and two cameras. The little guy is about 2 feet tall (58cm).
 Product page https://www.aldebaran.com/en/nao
+
 Sensors:
 Touch: http://doc.aldebaran.com/1-14/family/robots/contact-sensors_robot.html#robot-contact-sensors
 Video: http://doc.aldebaran.com/1-14/family/robots/video_robot.html
@@ -8,6 +9,7 @@ Range (from chest): http://doc.aldebaran.com/1-14/family/robots/sonar_robot.html
 Every joint has encoders
 Microphones: http://doc.aldebaran.com/1-14/family/robots/microphone_robot.html
 IMU: http://doc.aldebaran.com/1-14/family/robots/inertial_robot.html
+
 Pros:
 •	OpenCV support
 •	API has nice things like joint position interpolation
@@ -15,11 +17,13 @@ Pros:
 •	Floating body inverse kinematics already done (can walk) http://doc.aldebaran.com/1-14/naoqi/motion/control-cartesian.html
 •	Extremely detailed measurements
 •	Difficult, but possible to add sensors https://www.frontiersin.org/articles/10.3389/frobt.2022.840335/full 
+
 Cons:
 •	May have to climb on table
 •	No touch sensors on fingers
 •	Only version 4 models have some area of binocular vision
 •	API has very strong opinions http://doc.aldebaran.com/1-14/dev/naoqi/index.html#naoqi-overview
+
 API:
 Python version: http://doc.aldebaran.com/1-14/dev/python/index.html
 C++ version: http://doc.aldebaran.com/1-14/dev/cpp/index.html#cpp-introduction
@@ -28,6 +32,7 @@ Pepper Robot:
 Overview:
 Medium wheeled robot with two arms and a tablet, 4 touch sensors, microphones, speech recognition, 2D, and 3D cameras. Pepper is about 4 feet tall (120cm).
 Product page https://us.softbankrobotics.com/pepper
+
 Sensors:
 Touch: http://doc.aldebaran.com/2-5/family/pepper_technical/contact-sensors_pep.html
 Video: http://doc.aldebaran.com/2-5/family/pepper_technical/video_overview.html
@@ -35,12 +40,14 @@ Video: http://doc.aldebaran.com/2-5/family/pepper_technical/video_overview.html
 Every joint has encoders
 Microphones: http://doc.aldebaran.com/2-5/family/pepper_technical/microphone_pep.html
 IMU: http://doc.aldebaran.com/2-5/family/pepper_technical/inertial_pep.html
+
 Pros:
 •	Has a tablet for interaction
 •	API has nice things like joint position interpolation
 •	Floating body inverse kinematics already done (can walk)
 •	Extremely detailed measurements
 •	3D camera
+
 Cons:
 •	No touch sensors on fingers
 •	Android SDK
@@ -52,5 +59,6 @@ Overview:
 Single arm industrial manufacturing robot.
 Product page https://www.rethinkrobotics.com/sawyer/ 
 Seems like a bad fit. This is built for interacting with large objects. The SDK is centered around getting it to learn how to do a task, it may be difficult to wrangle it to play uno.
+
 SDK:
 https://www.rethinkrobotics.com/intera
