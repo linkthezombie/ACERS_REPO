@@ -1,7 +1,0 @@
-We needed to decide which of our three robot choices would work best for playing a card game.  
-Our choices were between the Nao robots, the Pepper robots, or the Sawyer robots.  
-The Pepper robot has an API that would be nice to work with, can already move and has a 3D camera for visual input, but it doesn’t have touch sensors on its fingers and is a little large.  
-The Sawyer robot is mostly built for handling larger objects than playing cards and is mostly for industrial tasks, it is also very large, so it didn’t seem like a good fit for our project.  
-The Nao robots are smaller and would have to be set on a table, but they have nice APIs as well and can move around.  
-While the Nao robots don’t have sensors on their fingers, it would be possible to add them to the robot.  
-After discussing as a group and reviewing our research on the three robots we decided to use the Nao robots for our project because of its API and movement capabilities.
