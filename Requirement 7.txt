@@ -1,0 +1,3 @@
+We have decided that the best game to teach our robot first would be crazy 8's. We chose this game because of it's relative simplicity compared to most other card games in terms of game rules, 
+as well as the fact that it is played using the standard 52 playing card deck. This will mean that during the process of teaching the robot to play crazy 8's, we will also teach it to be able 
+to recognize all of the cards of the standard 52 card deck, making it easier to teach the robot one of the many games using those cards in the future.

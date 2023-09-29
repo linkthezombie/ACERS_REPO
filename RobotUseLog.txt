@@ -1,0 +1,7 @@
+
+
+Robot Use Log:
+
+9-19-23: Gained access to robot via Tom Colwell and the EECS shop
+		Charged battery, turned on robot to confirm fucntionality
+		
