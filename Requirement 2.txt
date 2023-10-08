@@ -1,0 +1,8 @@
+While testing the capabilities of the NAO robot's movements this week, we found that its
+stability while walking is rather poor, meaning if we were to have the NAO robot walking
+around the room while it is in operation we would have to find ways around it's lacking
+ability to control it's center of gravity and overall stability for itself. Additionally,
+we decided that it's ability to both hold a hand of cards in one hand and then draw a card
+with the other hand and place the new card in the existing hand of cards also left much to be desired due to how the NAO robot struggles to perform any sort of precise movements with its arms across its chest, meaning we need to rethink our strategy on how the NAO robot holds it's cards. Otherwise, we think that the NAO robot has the range of motion in its arms and grip strength in its fingers in order to draw a card from a deck of cards on a table, as well as place a card from its "hand" (literal or not depending on our solution to the previously addressed problem) into a discard pile, which allows it to still function for our project's needs. Additionally, though we could not find the NAO robot's previous username and password
+login information, Liam was able to gain access to the robot's shell in order to create
+a new username and password by use of NAOFlasher and a USB drive.
