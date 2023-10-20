@@ -9,6 +9,8 @@ Created by Liam McKinney
 Created 9/20/2023
 Revised 9/29/2023
     -Added comments (Liam McKinney)
+Revised 10/19/2023
+    -Python 2.7 compatibility (Liam McKinney)
 """
 
 from typing import TypeVar, Generic, List, Callable
@@ -18,19 +20,19 @@ from DataTypes import *
 # know what data types to expect during development
 T = TypeVar('T')
 class Event(Generic[T]):
-    subscribers: List[Callable[[T],None]] # list of callbacks when this event triggers
-
     # basic initialization
     def __init__(self):
-        self.subscribers = []
+        self.subscribers = [] # type: List[Callable[[T],None]]
 
     # trigger the event, calling all subscriber callbacks
-    def trigger(self, data: T) -> None:
+    def trigger(self, data):
+        # type: (T) -> None
         for subCallBack in self.subscribers:
             subCallBack(data)
 
     # provide a callback to be called whenever the event triggers
-    def subscribe(self, callback: Callable[[T], None]) -> None:
+    def subscribe(self, callback):
+        # type: (Callable[[T], None]) -> None
         self.subscribers.append(callback)
 
 # singleton class to hold all game events
@@ -42,7 +44,7 @@ class AbstractionLayer:
         return cls.instance
 
     #initialize events
-    def __init__(self) -> None:
+    def __init__(self):
         #Robot commands
         self.playCard = Event[int]()
         self.drawCard = Event[None]()
