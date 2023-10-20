@@ -10,15 +10,20 @@ Revised 10/X/2023
     -added bones
 Edited 10/6/2023 - Elise Lovell
     -added potential methods/functionality
+Edited 10-19-2023 - Shelby Jones
+    -added rough functionality, choice, cardsInDeck
+
 """
 
 from DataTypes import *
+import FSM
+import random
 
 
 NaoCards = ["""list of cards"""] #an array to hold the current cards in Nao's hand
 PlayableCards = [] #an array for the playable cards for the current state
 FaceUpCard = Card
-NumOfCards = 0;
+NumOfCards = 0
 
 def makeMove:
     when(oppPlayed):
@@ -30,7 +35,7 @@ def makeMove:
 
 ##
 #decison making for robot on it's own turn
-def turn(a, b):
+def turn(a, b): ####What do a and b represent here? -Shelby
 #loop through each card in hand
     for card in hand:
         #if the card is legal to play on to the stack return true
@@ -55,12 +60,23 @@ def turn(a, b):
 def cardsInDeck():
     #must be able to return a boolean stating whether there are cards left in the deck or not
     #will need to either do this visually or possibly have an integer keeping track of the number of cards in play and in the stack
-    
+    if NumOfCards == 0:
+        return false
+    else:
+        return true
+
+
 def choice(Card a, Card b):
     #main logic, must decide whether or not the new card is a better option to playable
     #true if new card is a better choice
     #want to get rid of higher numbers
-        
+    if a.Value > b.Value:
+        return a
+    elif b.Value == a.Value:
+        return random.choice([a,b])
+    else:
+        return b
+    
     
 def playable(Card c):
     #compares top card of stack, using number and suite, checks the suite and number of the card passed in to see if it is playable
@@ -83,5 +99,5 @@ def play(Card c):
 
 def getNumOfCards():
     return NumOfCards
-
+        #returns the current number of cards in hand
 
