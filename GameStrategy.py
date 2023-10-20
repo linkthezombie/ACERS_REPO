@@ -18,7 +18,7 @@ from DataTypes import *
 NaoCards = ["""list of cards"""] #an array to hold the current cards in Nao's hand
 PlayableCards = [] #an array for the playable cards for the current state
 FaceUpCard = Card
-
+NumOfCards = 0;
 
 def makeMove:
     when(oppPlayed):
@@ -81,5 +81,7 @@ def play(Card c):
         #physically remove card from hand and place on stack, announce end of turn
         #set game state to opponents turn
 
+def getNumOfCards():
+    return NumOfCards
 
 
