@@ -10,6 +10,8 @@ Created 10/19/2023
 
 Edited 10/21/2023  -Elise Lovell
         Added comments to clarify code
+Edited 10/27/2023  - Elise Lovell
+	Added main functionality and reordering of instertion into array
 """
 #import needed functionality for arrays and classes
 #import array 
@@ -47,7 +49,8 @@ def addCard(v, s):
                         if greater(c, x) == False:
                             hand.insert(i, c)
                             return 0
-                        i += 1
+                        i= i+1
+                print("\nAdded to hand")
         else:
             print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
         return 0
@@ -64,7 +67,7 @@ def greater(c1, c2):
         #suits are the same value
         elif c1.suit == c2.suit:
                 #checks which face value of the cards is larger
-                if c1.value >= c2.value:
+                if c1.value > c2.value:
                         return True
                 else:
                         return False
@@ -90,6 +93,7 @@ def removeCard(v, s):
                             return 0
                         else:
                             i += 1
+                print("\nRemoved from hand")
             else:
                 print("\nCard isn't in hand")
         else:
@@ -148,11 +152,11 @@ class Card():
             self.ss = s.lower()
             self.vs = v.lower()
         #sets int for suit based on inputted string version of suit
-            if s.lower() == "heart":
+            if s.lower() == "club":
                     self.suit = 1
-            elif s.lower() == "club":
-                    self.suit = 2
             elif s.lower() == "diamond":
+                    self.suit = 2
+            elif s.lower() == "heart":
                     self.suit = 3
             elif s.lower() == "spade":
                 self.suit = 4
@@ -160,7 +164,7 @@ class Card():
             v = v.lower()
 
         #sets int for value based on inputted string version of value
-            if v == "ace":
+            if v == "a":
                     self.value = 1
             elif v == "2":
                     self.value = 2
@@ -169,7 +173,7 @@ class Card():
             elif v == "4":
                     self.value = 4
             elif v == "5":
-                    self.self.value = 5
+                    self.value = 5
             elif v == "6":
                     self.value = 6
             elif v == "7":
@@ -188,7 +192,7 @@ class Card():
                     self.value = 13
 
 #test functions for each method - result in output to console
-addCard( "2", "spade")
+'''addCard( "2", "spade")
 addCard( "A", "Diamond")
 getHand()
 addCard("J", "heArt")
@@ -204,3 +208,5 @@ print(len(hand))
 
 removeCard("2", "Spade")
 getHand()
+'''
+
