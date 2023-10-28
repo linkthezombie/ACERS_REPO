@@ -12,35 +12,28 @@ Edited 10/6/2023 - Elise Lovell
     -added potential methods/functionality
 Edited 10-19-2023 - Shelby Jones
     -added rough functionality, choice, cardsInDeck
+Edited 10-27-23 -Shelby Jones
+    -Fixed errors
 
 """
 
 from DataTypes import *
 import FSM
 import random
+import hand
 
 
-NaoCards = ["""list of cards"""] #an array to hold the current cards in Nao's hand
-PlayableCards = [] #an array for the playable cards for the current state
 TopCard = Card #stores last known top card
-NumOfCards = 0 #stores num of cards in hand
 CardsInDrawPile = 52 #tracks cards left in draw pile
 NumOfPlayers = 2 #stores total number of players
 Players = [] #stores players in array
+CardsInDiscardPile = 1
 
-
-
-def makeMove:
-    when(oppPlayed):
-    #Nao Assesses current face-up card
-    #Nao makes play decision
-    #Nao makes game action, either playing or passing
-    #Nao Ends turn
 
 ##
 #decison making for robot on it's own turn
 def turn(): ####What do a and b represent here? -Shelby
-#loop through each card in hand
+    #loop through each card in hand
     for card in hand:
         #if the card is legal to play on to the stack return true
         if (playable(card) == True):
@@ -59,15 +52,6 @@ def turn(): ####What do a and b represent here? -Shelby
     #draw card from card to play
     else:
         play(currCard)
-    
-    
-def cardsInDeck():
-    #must be able to return a boolean stating whether there are cards left in the deck or not
-    #will need to either do this visually or possibly have an integer keeping track of the number of cards in play and in the stack
-    if NumOfCards == 0:
-        return false
-    else:
-        return true
 
 
 def choice(a, b):
@@ -81,27 +65,30 @@ def choice(a, b):
     else:
         return b
     
-    
-def playable(c):
+  
+def canPlayCard():
     #compares top card of stack, using number and suite, checks the suite and number of the card passed in to see if it is playable
     #eight is always playable
-    if(c.num == 8):
-        return True
+    var = False
+    for card in hand.NaoHand:
+        if(card.suit == TopCard.suit or card.value == TopCard.value):
+            var = True
+    return var        
     
-def drawCard():
-    #call to phyiscal function to move robot to locate, and draw a card from deck
-    #indendify card, and add to list of current cards in hand, then physically put card in hand
-    #set game state to opponents turn
-    
-def passTurn():
-    #call to functions so robot can verablly signal it is done with it's turn, set game state to opponets turn
-    
-def play(Card c):
-        #remove card from list of current cards in hand
-        #physically remove card from hand and place on stack, announce end of turn
-        #set game state to opponents turn
 
 def NextPlayer():
+    print("Next Player")
+    if(Players[len(Players)] == 1):
+        Players[len(Players)] = 0
+        Players[0] = 1
+    else:
+        i = 0
+        for x in Players:
+            if(x == 1):
+                Players[i] = 0
+                Players[i+1] = 1
+            i = i + 1
+
         #transition to next players turn
 
 def Compare(c): #if the top card on the draw pile is the same as the 
@@ -112,6 +99,6 @@ def Compare(c): #if the top card on the draw pile is the same as the
         return False
 
 def getNumOfCards():
-    return NumOfCards
+    return len(hand.NaoHand)
         #returns the current number of cards in hand
 

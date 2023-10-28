@@ -19,7 +19,7 @@ from array import array
 # ab_classes.py
 
 #array to store cards
-hand  = []
+NaoHand  = []
 
 #adds a new card to the array
 #takes string for value and suit to add to the array
@@ -30,24 +30,24 @@ def addCard(v, s):
             #checks if the card is already in the hand, if it is, can't add a repeat to the hand
             if findCardInHand(c) == True:
                     print("\nCard already exists in hand")                        
-                    return 0;
+                    return 0
             else:
                 print("\nAdding: Suit: "+ s + ", Value: "+ v)
                 #check if the card will be the first entry in the array and add
-                if len(hand) == 0:
-                        hand.append(c)
+                if len(NaoHand) == 0:
+                        NaoHand.append(c)
                 #insert at front of the array
-                elif greater(hand[0], c) == True:
-                        hand.insert(0, c)
+                elif greater(NaoHand[0], c) == True:
+                        NaoHand.insert(0, c)
                 #insert at back of array
-                elif greater(hand[len(hand)-1], c) == False:
-                        hand.append(c)
+                elif greater(NaoHand[len(NaoHand)-1], c) == False:
+                        NaoHand.append(c)
                 else:
                     #in middle of array, loop through till right location is found
-                    i = 0;
-                    for x in hand:
+                    i = 0
+                    for x in NaoHand:
                         if greater(c, x) == False:
-                            hand.insert(i, c)
+                            NaoHand.insert(i, c)
                             return 0
                         i= i+1
                 print("\nAdded to hand")
@@ -86,10 +86,10 @@ def removeCard(v, s):
             if findCardInHand(c) == True:
                 i = 0
                 #loop till card is found in the array
-                for x in hand:
+                for x in NaoHand:
                         if x.suit == c.suit and x.value == c.value:
                         #remove the card
-                            hand.pop(i)
+                            NaoHand.pop(i)
                             return 0
                         else:
                             i += 1
@@ -120,7 +120,7 @@ def findCardInHand(c):
         t = False
         #for each item in the array, check if the passed in card matches the current card in the array
         #if yes, set variable to True
-        for x in hand:
+        for x in NaoHand:
                 if x.value == c.value and x.suit == c.suit:
                         t = True
         return t
@@ -130,7 +130,7 @@ def findCardInHand(c):
 def getHand():
         print("\nHand:")
         #loops through array and prints string value and suit associated with that card
-        for x in hand:
+        for x in NaoHand:
                 print("\nSuit: " + x.ss + " Value: " + x.vs)
 
 #Card class for creating a card with a suit and face value
@@ -142,9 +142,9 @@ class Card():
         #String version of value
         vs = ""
         #int version of suit
-        suit  = 0;
+        suit  = 0
         #int version of value
-        value = 0;
+        value = 0
 
         #method for initalizing a card with 2 input variables
         def __init__(self, v, s):
@@ -204,7 +204,7 @@ addCard("7", "Spade")
 addCard("14", "heart")
 
 getHand()
-print(len(hand))
+print(len(NaoHand))
 
 removeCard("2", "Spade")
 getHand()
