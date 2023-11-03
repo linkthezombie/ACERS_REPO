@@ -74,19 +74,20 @@ def transition():
             print("Opponent drew card\n")
         else:
             temp = False
-			while temp != True:
-			    s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
-				if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
-				    temp = True
-				else:
-					print("\nPlease enter a valid suit")
-			temp = False
-			while temp != True:
-			    v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
-				if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
-				    temp = True
-				else:
-					print("\nPlease enter a valid face value")
+            while temp != True:
+                s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
+                if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
+                    temp = True
+                else:
+                    print("\nPlease enter a valid suit")
+            
+            temp = False
+            while temp != True:
+                v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
+                if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
+                    temp = True
+                else:
+                    print("\nPlease enter a valid face value")
             CardsInDrawPile = CardsInDrawPile - 1
             NewCard = Card(v, s)
             GameStrategy.TopCard = NewCard #store the new card on the pile
@@ -119,19 +120,19 @@ def transition():
 
     elif state == "drawing":
         temp = False
-		while temp != True:
-		    s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
-			if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
-			    temp = True
-			else:
-				print("\nPlease enter a valid suit")
-		temp = False
-		while temp != True:
-			v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
-			if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
-				temp = True
-			else:
-				print("\nPlease enter a valid face value")
+        while temp != True:
+            s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
+            if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
+                temp = True
+            else:
+                print("\nPlease enter a valid suit")
+                temp = False
+        while temp != True:
+            v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
+            if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
+                temp = True
+            else:
+                print("\nPlease enter a valid face value")
         hand.addCard(v, s)
         drawCard() #physicall draw a card
         GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
