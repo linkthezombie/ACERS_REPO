@@ -14,6 +14,8 @@ Edited 10-19-2023 - Shelby Jones
     -added rough functionality, choice, cardsInDeck
 Edited 10-27-23 -Shelby Jones
     -Fixed errors
+Edited 10-27-23 -Shelby & Elise
+    -Fleshed out Methods
 Edited 11/3/2023 - Elise Lovell
     -added methods/functionality and comments
 """
