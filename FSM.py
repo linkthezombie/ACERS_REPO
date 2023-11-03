@@ -189,5 +189,3 @@ def setPlayerArr():
 c = Card("3", "Spade")
 topCard = c
 startGame()
-      
-main()
