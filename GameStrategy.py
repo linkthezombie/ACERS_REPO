@@ -114,7 +114,7 @@ def NextPlayer():
                 Players[i] = 0
                 Players[i+1] = 1
             i = i + 1
-    print("Player "+ str(Players.index(1) + 1) + "'s turn.\n"
+    print("Player "+ str(Players.index(1) + 1) + "'s turn.\n")
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
 def compare(c): 
