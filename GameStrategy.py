@@ -17,7 +17,7 @@ Edited 10-27-23 -Shelby Jones
 Edited 10-27-23 -Shelby & Elise
     -Fleshed out Methods
 Edited 11/3/2023 - Elise Lovell
-    -added methods/functionality and comments
+    -added methods/functionality and comments and print statements for debugging
 """
 
 from DataTypes import *
@@ -44,6 +44,7 @@ def turn():
             if(choice(currCard, card) == True or currCard is None):
                 currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
+    print("Playing card: suit: " + str(currCard.suit()) + "value: " + str(currCard.value()) + ".\n")
     playCard(currCard)
 
 #main logic, must decide whether or not the new card is a better option to play
@@ -53,6 +54,7 @@ def turn():
 def choice(a, b):
     #check if a is of higher value
     if a.Value > b.Value:
+        print(str(b.suit) +", " + str(b.value) + " is lower\n")
         return True
     # same value, different suits
     elif b.Value == a.Value:
@@ -66,11 +68,15 @@ def choice(a, b):
                 aSuitNum = aSuitNum + 1
         #if there are more of a's suit in Nao's hand, return true, else false
         if aSuitNum > bSuitNum:
+            print(str(b.suit) +", " + str(b.value) + " is lower\n")
             return True
         else:
+            print(str(a.suit) +", " + str(a.value) + " is lower\n")
             return False
+            
     #a is of a lower value
     else:
+        print(str(a.suit) +", " + str(a.value) + " is lower\n")
         return False
 
 #checks if there are any playablel cards at all in Nao's hand and returns true if there are
@@ -83,15 +89,17 @@ def canPlayCard():
         #is the card has a matching suit or value, set to True since it would be a playable card
         if(card.suit == TopCard.suit or card.value == TopCard.value):
             var = True
+            print("There are playable cards\n")
         # if the card is an eight, it is a playable card
         elif card.value == 8:
             var = True
+            print("There are playable cards\n")
     return var        
     
 
 #sets the array representing the players turn be be the next players turn
 def NextPlayer():
-    print("Next Player")
+    print("Next Player\n")
     #edge case, if last player in the array finshed their turn, loop back around to the front
     if(Players[len(Players)] == 1):
         Players[len(Players)] = 0
@@ -106,13 +114,15 @@ def NextPlayer():
                 Players[i] = 0
                 Players[i+1] = 1
             i = i + 1
-
+    print("Player "+ str(Players.index(1) + 1) + "'s turn.\n"
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
 def compare(c): 
     if(c.value == TopCard.value and c.suit == TopCard.suit):
+        print("Top cards do match\n")
         return True
     else:
+        print("Top cards don't match\n")
         return False
 
 #takes a card object and return true if the card can be played on the stack
@@ -120,11 +130,14 @@ def compare(c):
 def playable(c): 
     #check if suit or value mactch
     if(c.value == TopCard.value or c.suit == TopCard.suit):
+        print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
         return True
     #check if card in an eight
     elif c.value == 8:
+        print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
         return True
     else:
+        print("Card " + str(c.value) + ", " + str(c.suit) + " is not playable\n")
         return False
 
 #return the number of cards in the Nao's hand
