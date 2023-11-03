@@ -26,36 +26,43 @@ Edited 11/3/2023 - Elise Lovell
 
 import AbstractionLayer
 import GameStrategy
+import hand
+import random
+from array import array
 
 states = ["start", "opponentPlay", "thinking", "playing", "drawing", "NaoPlay", "win"]
 state = ""
 
 def startGame():
+    global state
     state = "start"
     var = False
-    C = Card("9", "Club")
+    C = hand.Card("9", "Club")
     while var == False:
         var = transition()
     return 0
 
 
 def transition():
+    global state
     if state == "win":
         print("\nWin! Woo hoo")
         return True
         #end the game
     elif state == "start": #when the game starts
         print("Starting Game: \n\n")
+        
         state = random.choice(["drawing", "opponentPlay"]) #decides who plays first
+        state = "drawing" #COMMENT OUT WHEN DONE TESTING
         if state == "drawing":
             print("\nNao goes first")
         else:
             print("\nOpponent goes first")
         GameStrategy.NumOfPlayers = 2
         print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
-        GameStrategy.CardsInDrawPile = 52 - (numOfPlayers * 5) - 1 #calculates cards in draw pile
+        GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
         print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
-        GameStrategy.TopCard = C #read in card via computer vision implemented later
+        #GameStrategy.TopCard = C #read in card via computer vision implemented later
                 
         ##Nao needs to store correct number of players
         GameStrategy.CardsInDiscardPile = 1
@@ -68,12 +75,14 @@ def transition():
         print("Opponent's turn\n")
         #wait for confrimation of player ending turn via voice recognition
             #or if top card changes
-        if GameStrategy.Compare(NewCard) == True:  #if theres NOT a new card in the draw pile
+        if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the draw pile
             GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
             print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
             print("Opponent drew card\n")
         else:
             temp = False
+            s = "0"
+            v = "0"
             while temp != True:
                 s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
                 if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
@@ -89,7 +98,7 @@ def transition():
                 else:
                     print("\nPlease enter a valid face value")
             CardsInDrawPile = CardsInDrawPile - 1
-            NewCard = Card(v, s)
+            NewCard = hand.Card(v, s)
             GameStrategy.TopCard = NewCard #store the new card on the pile
             GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
             print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
@@ -120,13 +129,15 @@ def transition():
 
     elif state == "drawing":
         temp = False
+        v = "0"
+        s = "0"
         while temp != True:
             s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
             if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
                 temp = True
             else:
                 print("\nPlease enter a valid suit")
-                temp = False
+        temp = False
         while temp != True:
             v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
             if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
@@ -137,7 +148,7 @@ def transition():
         drawCard() #physicall draw a card
         GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
         
-        if(canPlayCard() == True):
+        if(GameStrategy.canPlayCard() == True):
             GameStrategy.turn() 
             state = "playing"
         else:
@@ -178,8 +189,8 @@ def getCurrentState():
     return state
 
 def setPlayerArr():
-    for player in GameStrategy.NumOfPlayers:
-        GameStrategy.Players.push(0)
+    for player in range(GameStrategy.NumOfPlayers):
+        GameStrategy.Players.append(0)
 
     if(state == "drawing"):
         GameStrategy.Players[0] = 1
@@ -187,5 +198,5 @@ def setPlayerArr():
         GameStrategy.Players[1] = 1
         
 c = hand.Card("3", "Spade")
-topCard = c
+TopCard = c
 startGame()

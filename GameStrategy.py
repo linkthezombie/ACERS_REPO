@@ -101,8 +101,9 @@ def canPlayCard():
 def NextPlayer():
     print("Next Player\n")
     #edge case, if last player in the array finshed their turn, loop back around to the front
-    if(Players[len(Players)] == 1):
-        Players[len(Players)] = 0
+    print(len(Players))
+    if(Players[len(Players)-1] == 1):
+        Players[len(Players)-1] = 0
         Players[0] = 1
     #find the current player, set them to 0 and make the player after them one
     else:
