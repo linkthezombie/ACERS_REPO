@@ -186,3 +186,8 @@ def setPlayerArr():
     else:
         GameStrategy.Players[1] = 1
         
+c = Card("3", "Spade")
+topCard = c
+startGame()
+      
+main()
