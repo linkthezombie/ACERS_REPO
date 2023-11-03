@@ -114,14 +114,17 @@ def transition():
 
 
 def drawCard():
-    print("Pphysically draw card")
+    print("Physically draw card")
         ## pysically draw card
             #implement later
-def playCard():
+    #hand.addCard(val, suit)
+
+def playCard(c):
     print("physically play card")
         # pysically play card
             #implement later
-
+    hand.removeCard(c.value, c.suit)
+    
 def winGame(): #checks if NAO has won the game
     if len(hand.NaoHand) == 0:
         state = "win"
