@@ -20,6 +20,8 @@ Revised 10-27-23 -Shelby Jones
     -Fixed errors
 Revised 10-27-23 - Shelby & Elise
     -fixed flow control and interactivity of methods
+Edited 11/3/2023 - Elise Lovell
+    -added print statements for debugging
 """
 
 import AbstractionLayer
@@ -56,15 +58,19 @@ def transition():
         GameStrategy.CardsInDiscardPile = 1
         ##Nao should announce who's turn it is first
         setPlayerArr()
+        return False
         #for player in range(GameStrategy.NumOfPlayers):
     elif state == "opponentPlay":
+        print("Opponent's turn\n")
         #wait for confrimation of player ending turn via voice recognition
             #or if top card changes
         if GameStrategy.Compare(NewCard) == True:  #if theres NOT a new card in the draw pile
             GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
+            print("Opponent drew card\n")
         else:
             GameStrategy.TopCard = NewCard #store the new card on the pile
             GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
+            print("Opponent played card\n")
            
 
         GameStrategy.NextPlayer() #transition to next player
@@ -74,14 +80,11 @@ def transition():
             return False
 
     elif state == "thinking":
-        
         if(canPlayCard() == True):
             GameStrategy.turn() 
             state = "playing"
         else:
-            state = "drawing"
-
-        
+            state = "drawing"        
         return False
 
     elif state == "playing":
@@ -104,23 +107,25 @@ def transition():
         return False
 
     elif state == "NaoPlay":
+        print("Nao's turn\n")
         state = "thinking"
         return False
 
     else:
-        print("error Not Valid State")
+        print("Error Not Valid State\n")
         return False
         #error
 
 
 def drawCard():
-    print("Physically draw card")
+    print("Physically draw card\n")
         ## pysically draw card
             #implement later
     #hand.addCard(val, suit)
 
 def playCard(c):
-    print("physically play card")
+    print("Physically play card\n")
+    
         # pysically play card
             #implement later
     hand.removeCard(c.value, c.suit)
@@ -130,10 +135,10 @@ def winGame(): #checks if NAO has won the game
         state = "win"
 
 def getCurrentState():
+    print("Current state: " + str(state) + "\n")
     return state
 
 def setPlayerArr():
-        
     for player in GameStrategy.NumOfPlayers:
         GameStrategy.Players.push(0)
 
