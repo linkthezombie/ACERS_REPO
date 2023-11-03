@@ -26,7 +26,7 @@ import random
 import hand
 
 
-TopCard = Card #stores last known top card
+TopCard = hand.Card("6", "spade") #stores last known top card
 CardsInDrawPile = 52 #tracks cards left in draw pile
 NumOfPlayers = 2 #stores total number of players
 Players = [] #stores players in array
