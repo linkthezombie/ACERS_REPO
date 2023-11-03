@@ -18,6 +18,8 @@ Revised 10-22-23 - Shelby
     -syntax and comments
 Revised 10-27-23 -Shelby Jones
     -Fixed errors
+Revised 10-27-23 - Shelby & Elise
+    -fixed flow control and interactivity of methods
 """
 
 import AbstractionLayer
