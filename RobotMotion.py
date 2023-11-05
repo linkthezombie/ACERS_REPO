@@ -7,6 +7,10 @@ ranging from simple adjustments to sequences of game actions
 Created by Liam McKinney
 
 Created 10/19/2023
+
+Revised 11/1/2023
+  -Refined draw animation
+  -Reworked and separated handoff & put in tray into two separate motions
 """
 import time
 from naoqi import ALProxy
@@ -20,38 +24,16 @@ pctMax = .35
 motion = ALProxy("ALMotion", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 # predefined positions for drawing/playing Cards
-drawStart = [0.015298128128051758, -0.09668397903442383, -0.19485998153686523, -0.14568805694580078, 0.015298128128051758, 0.7135999798774719]
-newStart = [0.11347413063049316, -0.12276196479797363, -1.5355758666992188, -0.08893013000488281, 1.3851600885391235, 0.722000002861023]
-
-startPos6d = [0.2145160734653473, 0.09448506683111191, 0.053448572754859924, 0, 0.14129656553268433, -0.07788744568824768]
-
 realStart = [0.1548919677734375, -0.07060599327087402, -90 * d2r, -0.03490658476948738, 90 * d2r, .65]
-# gently rest a hand onto whatever surface it's hovering above
-#def restHand():
-#   # loosen shoulder joint, allowing it to fall
-#   motion.setStiffnesses("LShoulderPitch", 0)
-#   # wait for it to fall, then set the arm's target to wherever it fell to
-#   time.sleep(.75)
-#   motion.setAngles("LArm", motion.getAngles("LArm", True), pctMax)
-#   # give Nao a bit of time to process the new target position
-#   time.sleep(.2)
-#   # stiffen the shoulder again for future motion
-#   motion.setStiffnesses("LShoulderPitch", 1)
-#
-## grab the top card of the deck, assuming the robot's hand is resting on the deck
-#
-## TODO needs work. Maybe reduce hand stiffness when dragging?
-#def grabCard():
-#    names = list()
-#    times = list()
-#    keys = list()
-#    #pull hand up and back as we curl the fingers
-#    motion.changePosition("LArm", 0, [-.03, 0, 0, 0, 0, 0], pctMax, 63)
-#    time.sleep(1)
-#    motion.setAngles("LHand", .29, pctMax)
 
+holderPlacement = [-0.0827939, -0.25622, 0.246933, 0.325249, -0.0506639, 0.27]
 
+centerCardL = [-0.0445281, 0.360449, -0.243948, -1.36368, -1.17048, 0.28]
+centerCardR = [0.1, -0.299172, 0.246933, 1.31928, 1.21489, 1]
+
+# Draw a card from the top of the stack into Ace's left hand.
 def drawCard():
+    # starting position
     motion.setAngles("LArm", realStart, pctMax)
     time.sleep(1)
 
@@ -67,80 +49,69 @@ def drawCard():
     motion.changeAngles("LElbowRoll", -15 * d2r, .1)
     time.sleep(1)
 
+    # Move the hand forward to position the thumb under the card so it can grab
     motion.changePosition("LArm", 0, [.02, 0, 0, 0, 0, 0], pctMax, 7)
     time.sleep(1)
 
-    #grab the card
+    # grab the card
     motion.setAngles("LHand", .29, pctMax)
     time.sleep(1)
 
-    #pull the card the rest of the way out
+    # pull the card the rest of the way out
     motion.changeAngles("LElbowRoll", -20 * d2r, pctMax)
     time.sleep(1)
 
+    # Rotate the hand 180 degrees to remove the card from the tray completely
     motion.setAngles("LWristYaw", -100 * d2r, pctMax)
+    time.sleep(1)
 
-# assuming a card is in Ace's left hand, pass it off to the right hand and place it in the card holder at the specified position
-frameTimes = [2, 3, 4, 5, 7, 8, 9]
-def putCardInHolder(offset):
-    # Choregraphe simplified export in Python.
-    names = list()
-    times = list()
-    keys = list()
+# Assuming a card is in Ace's left hand, hand it off to the right hand
+def handOffLtoR():
+    # Move the left hand to center the card in front of Ace's chest
+    motion.setAngles("LArm", centerCardL, pctMax)
+    time.sleep(1.5)
 
-    #[1, 1.4, 2, 2.6, 4.2, 4.8]
+    #TODO check what card we drew, if we can see the marker
 
-    names.append("LElbowRoll")
-    times.append(frameTimes)
-    keys.append([-1.36368, -1.36368, -1.36368, -1.36368, -1.36368, -1.36368, -1.36368])
+    # Make a copy of the right arm pose
+    upperPos = centerCardR[:]
+    # Adjust shoulder to be further out to the side
+    upperPos[1] = -60 * d2r
 
-    names.append("LElbowYaw")
-    times.append(frameTimes)
-    keys.append([-0.243948, -0.243948, -0.243948, -0.243948, -0.243948, -0.243948, -0.243948])
+    # put right hand to the right of the card, so we can move the hand in without colliding with the card
+    motion.setAngles("RArm", upperPos, pctMax)
+    time.sleep(1.5)
 
-    names.append("LHand")
-    times.append(frameTimes)
-    keys.append([0.28, 0.28, 0.28, 1, 0.9924, 0.9924, 0.9924])
+    # move the right hand in, so it can grab the card.
+    motion.setAngles("RShoulderRoll", centerCardR[1], pctMax)
+    time.sleep(1)
 
-    names.append("LShoulderPitch")
-    times.append(frameTimes)
-    keys.append([-0.0445281, -0.0445281, -0.0445281, -0.0445281, -0.0445281, -0.0445281, -0.0445281])
+    # Loosen left hand grip so right hand can "pull it out" as it grabs the card.
+    motion.setStiffnesses("LHand", .5)
 
-    names.append("LShoulderRoll")
-    times.append(frameTimes)
-    keys.append([0.360449, 0.360449, 0.360449, 0.360449, 0.360449, 0.360449, 0.360449])
+    # Grab the card with the right hand
+    motion.setAngles("RHand", .27, pctMax)
+    time.sleep(.5)
 
-    names.append("LWristYaw")
-    times.append(frameTimes)
-    keys.append([-1.17048, -1.17048, -1.17048, -1.17048, -1.17048, -1.17048, -1.17048])
+    # Release with the left hand
+    motion.setAngles("LHand", 1, pctMax)
+    time.sleep(.5)
 
-    names.append("RElbowRoll")
-    times.append(frameTimes)
-    keys.append([1.31928, 1.31928, 1.31928, 1.29014, 0.326598, 0.325249, 0.325249])
+    # Move left arm out of the way, and restore the hand's stiffness
+    motion.setAngles("LShoulderRoll", 60 * d2r, pctMax)
+    motion.setStiffnesses("LHand", 1)
+    time.sleep(1)
 
-    names.append("RElbowYaw")
-    times.append(frameTimes)
-    keys.append([0.246933, 0.246933, 0.246933, 0.246933, 0.246933, 0.246933, 0.246933])
+    #TODO check card again; other corner should be visible now
 
-    names.append("RHand")
-    times.append(frameTimes)
-    keys.append([1, 0.29, 0.29, 0.29, 0.29, 0.29, 0.9868])
+# Assuming the card is in Ace's right hand, put it into the tray at in the [offset]th position
+def placeCardInHolder(offset):
+    targetPos = holderPlacement[:]
 
-    names.append("RShoulderPitch")
-    times.append(frameTimes)
-    keys.append([-0.0199001, -0.0199001, -0.0199001, -0.0199001, -0.161893, -0.0827939, -0.0827939])
+    targetPos[1] -= 10 * d2r * offset
 
-    names.append("RShoulderRoll")
-    times.append(frameTimes)
-    keys.append([-0.299172, -0.299172, -0.299172, -0.299172, -0.299172, -0.25622, -0.25622])
+    motion.setAngles("RArm", targetPos, pctMax)
+    time.sleep(1)
 
-    names.append("RWristYaw")
-    times.append(frameTimes)
-    keys.append([1.21489, 1.21489, 1.21489, 1.21489, -0.110265, -0.0506639, -0.0506639])
-
-    try:
-        # uncomment the following line and modify the IP if you use this script outside Choregraphe.
-        motion.angleInterpolation(names, keys, times, True)
-    except BaseException, err:
-        print err
-
+    motion.setAngles("RHand", 1, pctMax)
+    time.sleep(.5)
