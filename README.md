@@ -61,8 +61,8 @@ Requirement 6:
       - After testing we found that the Nao would be able to accomplish the required movements to complete his tasks without modification.  The next step will be to determine specific movements to regularly perform these actions with confidence.
 
 Sprint 4:
-	Requirement 8: ComputerVision.py
- 	Requirement 9.2.2 and 13.1: RobbotMotion.py
-  	Requiremnt 18: GameStrategy.py
-   	Requirement 22.1: FSM.py - completed ahead of schedule
+Requirement 8: ComputerVision.py
+Requirement 9.2.2 and 13.1: RobbotMotion.py
+Requiremnt 18: GameStrategy.py
+Requirement 22.1: FSM.py - completed ahead of schedule
 
