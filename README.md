@@ -62,7 +62,7 @@ Requirement 6:
 
 Sprint 4:
 	Requirement 8: ComputerVision.py
-	Requirement 9.2.2 and 13.1: RobbotMotion.py
-	Requiremnt 18: GameStrategy.py
-	Requirement 22.1: FSM.py - completed ahead of schedule
+ 	Requirement 9.2.2 and 13.1: RobbotMotion.py
+  	Requiremnt 18: GameStrategy.py
+   	Requirement 22.1: FSM.py - completed ahead of schedule
 
