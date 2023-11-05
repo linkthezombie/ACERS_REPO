@@ -11,13 +11,10 @@ Requirement 17 is both in FSM and GameStrategy
 Requirement 5 and 26 are in ComputerVision.py
 
 Sprint 4:  
-Requirement 8:
-
-Sprint 4:
-Requirement 8: ComputerVision.py
-Requirement 9.2.2 and 13.1: RobbotMotion.py
-Requiremnt 18: GameStrategy.py
-Requirement 22.1: FSM.py - completed ahead of schedule
+Requirement 8: ComputerVision.py  
+Requirement 9.2.2 and 13.1: RobbotMotion.py  
+Requiremnt 18: GameStrategy.py  
+Requirement 22.1: FSM.py - completed ahead of schedule  
 
 Requirement 6:
    - Intro: 
