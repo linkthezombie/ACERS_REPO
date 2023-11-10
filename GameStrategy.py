@@ -36,6 +36,7 @@ CardsInDiscardPile = 1
 #decison making for robot on it's own turn and select a card to play
 #function only called if there are playable cards in Nao's hand
 def turn(): 
+    currCard = hand[0]
     #loop through each card in hand
     for card in hand:
         #call method to check if the card is legal to play on to the stack return true
