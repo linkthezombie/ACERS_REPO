@@ -58,55 +58,67 @@ def transition():
             print("\nNao goes first")
         else:
             print("\nOpponent goes first")
+        #Game.Strategy.NumOfPlayers = input("\nHow many players are there (including Nao and yourself): ")
         GameStrategy.NumOfPlayers = 2
         print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
         GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
         print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
-        #GameStrategy.TopCard = C #read in card via computer vision implemented later
+       
+        #Implement receving card from higher abstraction
+        #method in either computerVision or abstraction layer to return the card in the discard pile feild
+        #current implementation relies on human player inputing what they see
+        s = input("\nPlease enter the suit for the top card of the discard pile: ")
+        v = input("\nPlease enter the face value for the top card of the discard pile: ")
+        while hand.checkValidity(v, s) == False:
+            print("Invalid input, please try again\n")
+            s = input("\nPlease enter the suit for the top card of the discard pile: ")
+            v = input("\nPlease enter the face value for the top card of the discard pile: ")
+        C = hand.Card(v, s)
+        GameStrategy.TopCard = C
                 
         ##Nao needs to store correct number of players
         GameStrategy.CardsInDiscardPile = 1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
-        ##Nao should announce who's turn it is first
+        #propoagate the array representing who's turn it is
         setPlayerArr()
         return False
-        #for player in range(GameStrategy.NumOfPlayers):
+    
     elif state == "opponentPlay":
-        print("Opponent's turn\n")
+        print("Opponent's turn, please compelete turn\n")
+        
         #wait for confrimation of player ending turn via voice recognition
-            #or if top card changes
+        #function to listen called, and wait for true return?
+        #from command detection or abstraction layer
+
+        #implementation for human player interaction till computer vision is linked
+        #should create card based on return from function in computer vision or abstraction layer
+        #should get card in the discard pile field
+        
+        s = input("\nPlease enter the suit for the current top card of the discard pile: ")
+        v = input("\nPlease enter the face value for the current top card of the discard pile: ")
+        while hand.checkValidity(v, s) == False:
+            print("Invalid input, please try again\n")
+            s = input("\nPlease enter the suit for the top card of the discard pile: ")
+            v = input("\nPlease enter the face value for the top card of the discard pile: ")
+        NewCard = hand.Card(v, s)
+        
         if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the draw pile
             GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
             print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
             print("Opponent drew card\n")
         else:
             temp = False
-            s = "0"
-            v = "0"
-            while temp != True:
-                s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
-                if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
-                    temp = True
-                else:
-                    print("\nPlease enter a valid suit")
-            
-            temp = False
-            while temp != True:
-                v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
-                if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
-                    temp = True
-                else:
-                    print("\nPlease enter a valid face value")
             CardsInDrawPile = CardsInDrawPile - 1
-            NewCard = hand.Card(v, s)
             GameStrategy.TopCard = NewCard #store the new card on the pile
             GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
             print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
             print("Opponent played card\n")
-           
 
+        print("\nThank you for waiting, the next player may go now\n")
+        
         GameStrategy.NextPlayer() #transition to next player
 
+        #check if it is Nao's turn
         if(Players[0] == 1):
             state = "NaoPlay"
             return False
@@ -128,24 +140,24 @@ def transition():
         return False
 
     elif state == "drawing":
-        temp = False
-        v = "0"
-        s = "0"
-        while temp != True:
-            s = input("\nOptions: Spade, Heart, Club, Diamond\nPlease pick a suit for the card to be drawn: ")
-            if s.lower() == "spade" or s.lower() == "heart" or s.lower() == "club"  or s.lower() == "diamond":
-                temp = True
-            else:
-                print("\nPlease enter a valid suit")
-        temp = False
-        while temp != True:
-            v = input("\nOptions: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K\nPlease pick a value for the card to be drawn: ")
-            if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7"  or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j"  or v.lower() == "q" or v.lower() == "k":
-                temp = True
-            else:
-                print("\nPlease enter a valid face value")
+
+        #function to implment physcially mechansim to draw card
+        #trigger event in abstraction layer or robot motion
+        #possibly use drawCard() #physicall draw a card
+        
+        #computer vision
+        #should create card based on return from function in computer vision or abastarction layer
+        #return card from feild near face
+
+        #implementation for human player interaction till computer vision is linked
+        s = input("\nPlease enter the suit for the card Nao drew: ")
+        v = input("\nPlease enter the face value for the card Nao drew: ")
+        while hand.checkValidity(v, s) == False:
+            print("Invalid input, please try again\n")
+            s = input("\nPlease enter the suit for the card Nao drew: ")
+            v = input("\nPlease enter the face value for the card Nao drew: ")
         hand.addCard(v, s)
-        drawCard() #physicall draw a card
+
         GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
         
         if(GameStrategy.canPlayCard() == True):
