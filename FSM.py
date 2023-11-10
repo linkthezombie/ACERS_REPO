@@ -30,7 +30,7 @@ import hand
 import random
 from array import array
 
-states = ["start", "opponentPlay", "thinking", "playing", "drawing", "NaoPlay", "win"]
+states = ["start", "opponentPlay", "playing", "drawing", "NaoPlay", "win"]
 state = ""
 
 def startGame():
@@ -51,6 +51,9 @@ def transition():
         #end the game
     elif state == "start": #when the game starts
         print("Starting Game: \n\n")
+
+        #adds all of Nao's cards in his start hand to his memory
+        propogateHandOnStart()
         
         state = random.choice(["drawing", "opponentPlay"]) #decides who plays first
         state = "drawing" #COMMENT OUT WHEN DONE TESTING
@@ -113,7 +116,8 @@ def transition():
             GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
             print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
             print("Opponent played card\n")
-
+        playerinput = input("\nIf player won, please enter won, else enter next": )
+        
         print("\nThank you for waiting, the next player may go now\n")
         
         GameStrategy.NextPlayer() #transition to next player
@@ -123,16 +127,16 @@ def transition():
             state = "NaoPlay"
             return False
 
-    elif state == "thinking":
-        if(canPlayCard() == True):
-            GameStrategy.turn() 
-            state = "playing"
-        else:
-            state = "drawing"        
-        return False
+        #take voice command at end of player turn, either be turn complete or won, see beinging of statement for where implmenation should be
+        #current implementaion to allow for command line interaction
+        if playerin.lower() == "won":
+            state = "win"
 
     elif state == "playing":
+
+        
         playCard() #physically play the card
+        
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         state = "opponentPlay"
         GameStrategy.NextPlayer()
@@ -169,8 +173,11 @@ def transition():
         return False
 
     elif state == "NaoPlay":
-        print("Nao's turn\n")
-        state = "thinking"
+        if(canPlayCard() == True):
+            GameStrategy.turn() 
+            state = "playing"
+        else:
+            state = "drawing"        
         return False
 
     else:
@@ -183,7 +190,6 @@ def drawCard():
     print("Physically draw card\n")
         ## pysically draw card
             #implement later
-    #hand.addCard(val, suit)
 
 def playCard(c):
     print("Physically play card\n")
@@ -208,6 +214,23 @@ def setPlayerArr():
         GameStrategy.Players[0] = 1
     else:
         GameStrategy.Players[1] = 1
+
+def propogateHandOnStart():
+
+    #call function in robot motion to draw card
+    #call method in abstraction layer or computer vision to indentify card in drawn field
+
+    #do above 5 times 
+
+    #implmentation to allow for command line interaction for testing
+    for x in range(5):
+        s = input("\nPlease enter the suit for the card Nao drew: ")
+        v = input("\nPlease enter the face value for the card Nao drew: ")
+        while hand.checkValidity(v, s) == False:
+            print("Invalid input, please try again\n")
+            s = input("\nPlease enter the suit for the card Nao drew: ")
+            v = input("\nPlease enter the face value for the card Nao drew: ")
+        hand.addCard(v, s)
 
 GameStrategy.TopCard.suit = "spade"
 GameStrategy.TopCard.suit = "K"
