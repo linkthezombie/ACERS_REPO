@@ -22,6 +22,8 @@ Revised 10-27-23 - Shelby & Elise
     -fixed flow control and interactivity of methods
 Edited 11/3/2023 - Elise Lovell
     -added print statements for debugging
+Edited 11/10/2023 - Elise Lovell
+    -added interaction for debugging and comments for location to link to other programs
 """
 
 import AbstractionLayer
@@ -134,8 +136,8 @@ def transition():
 
     elif state == "playing":
 
-        
-        playCard() #physically play the card
+        #handles selecting card to play and communciating with other layers
+        GameStrategy.turn()
         
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         state = "opponentPlay"
@@ -173,8 +175,7 @@ def transition():
         return False
 
     elif state == "NaoPlay":
-        if(canPlayCard() == True):
-            GameStrategy.turn() 
+        if(canPlayCard() == True): 
             state = "playing"
         else:
             state = "drawing"        
@@ -192,10 +193,13 @@ def drawCard():
             #implement later
 
 def playCard(c):
-    print("Physically play card\n")
     
-        # pysically play card
-            #implement later
+    print("Physically play card\n")
+
+    #call to camera to locate the desired card as determined by game strategy
+    #call to robot motion to pickup and play said card
+
+    #remove card from memory
     hand.removeCard(c.value, c.suit)
     
 def winGame(): #checks if NAO has won the game
