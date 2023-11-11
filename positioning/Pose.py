@@ -11,8 +11,8 @@ Created 11/11/2023
 from dataclasses import dataclass
 import numpy as np
 
-from positioning.Orientation import Orientation
-from positioning.Vector3D import Vector3D
+from Orientation import Orientation
+from Vector3D import Vector3D
 
 
 # Contains position and orientation information in 3D

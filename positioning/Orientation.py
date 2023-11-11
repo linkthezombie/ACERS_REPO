@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import numpy as np
 import quaternion # numpy-quaternion package
 
-from positioning.Vector3D import Vector3D
+from Vector3D import Vector3D
 
 @dataclass
 class Orientation:
