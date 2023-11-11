@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import numpy as np
 import quaternion # numpy-quaternion package
 
-from Vector3D import Vector3D
+from positioning.Vector3D import Vector3D
 
 @dataclass
 class Orientation:
@@ -22,7 +22,7 @@ class Orientation:
 
     # Returns a base orientation
     def __init__(self):
-        self.orientation = np.quaternion(1.0, 0.0, 0.0, 0.0)
+        self.quaternion = np.quaternion(1.0, 0.0, 0.0, 0.0)
 
     # Constructs an orientation from an axis-angle representation
     # Angle is in radians.
