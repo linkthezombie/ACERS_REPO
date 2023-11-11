@@ -89,3 +89,14 @@ def test_roll():
     vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
     expected = Vector3D([0.0, -1.0, 0.0])
     assert_vectors(vector, expected)
+
+def test_axis_angle_construction():
+    orientation = Orientation.fromAxisAngle(Vector3D([1.0, 0.0, 0.0]), 0.0)
+    vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
+    expected = Vector3D([0.0, 0.0, 1.0])
+    assert_vectors(vector, expected)
+
+    orientation = Orientation.fromAxisAngle(Vector3D([0.0, 999213.5, 0.0]), pi / 2.0)
+    vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    expected = Vector3D([0.0, 0.0, -1.0])
+    assert_vectors(vector, expected)

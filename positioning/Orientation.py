@@ -27,7 +27,13 @@ class Orientation:
     # Constructs an orientation from an axis-angle representation
     # Angle is in radians.
     def fromAxisAngle(axis: Vector3D, angle: float):
-        raise NotImplementedError
+        axis.normalize()
+        axis.scale(angle)
+        list_vector: list[float] = axis.getList()
+
+        orientation = Orientation()
+        orientation.quaternion = quaternion.from_rotation_vector(list_vector)
+        return orientation
 
     # Constructs an orientation from an rvec
     # An rvec is like an axis-angle representation, but uses two orthogonal vectors
@@ -37,7 +43,11 @@ class Orientation:
 
     # Gets the axis-angle representation of the orientation
     def getAxisAngle(self) -> (Vector3D, float):
-        raise NotImplementedError
+        listVector: list[float] = quaternion.as_rotation_vector(self.quaternion)
+        vector: Vector3D = Vector3D(listVector)
+        rotation: float = vector.getLength()
+
+        return (vector, rotation)
 
     # Gets Euler angle representation of the orientation (pitch, yaw, roll)
     def getEulerAngles(self) -> (float, float, float):
