@@ -49,10 +49,6 @@ class Orientation:
 
         return (vector, rotation)
 
-    # Gets Euler angle representation of the orientation (pitch, yaw, roll)
-    def getEulerAngles(self) -> (float, float, float):
-        raise NotImplementedError
-
     # Gets a rotation matrix equivalent to the orientation
     def getRotationMatrix(self) -> list[list[float]]:
         return quaternion.as_rotation_matrix(self.quaternion)
