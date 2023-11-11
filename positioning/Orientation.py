@@ -45,28 +45,45 @@ class Orientation:
 
     # Gets a rotation matrix equivalent to the orientation
     def getRotationMatrix(self) -> list[list[float]]:
-        raise NotImplementedError
+        return quaternion.as_rotation_matrix(self.quaternion)
 
     # Gets the rvec representation of the orientation
     def getRvec(self) -> list[list[float]]:
         raise NotImplementedError
 
-    # Rotates this orientation counter-clockwise around the z-axis
+    # Rotates around the y-axis
+    # Positive values will cause the orientation to point up
     def pitch(self, radians):
-        raise NotImplementedError
+        q = quaternion.from_rotation_vector([0.0, -radians, 0.0])
+        self.rotateQuaternion(q)
 
-    # Changes the orientation by a quaternion
-    def rotate(orientation):
-        raise NotImplementedError
-
-    # Rotates this orientation counter-clockwise around the x-axis
+    # Rotates around the x-axis
+    # Positive values will cause the orientation to roll right
     def roll(self, radians):
-        raise NotImplementedError
+        q = quaternion.from_rotation_vector([radians, 0.0, 0.0])
+        self.rotateQuaternion(q)
+
+
+    # Changes the orientation by another orientation
+    def rotate(self, other):
+        self.quaternion *= other.quaternion
+
+    # Changes the orientation by a raw quaternion
+    def rotateQuaternion(self, quaternion):
+        self.quaternion *= quaternion
 
     # Rotates a vector by this orientation
     def rotateVector(self, vector: Vector3D) -> Vector3D:
-        raise NotImplementedError
+        v = vector
+        m = self.getRotationMatrix()
+        x = v.x * m[0][0] + v.y * m[0][1] + v.z * m[0][2]
+        y = v.x * m[1][0] + v.y * m[1][1] + v.z * m[1][2]
+        z = v.x * m[2][0] + v.y * m[2][1] + v.z * m[2][2]
 
-    # Rotates this orientation counter-clockwise around the z-axis
+        return Vector3D([x, y, z])
+
+    # Rotates around the z-axis
+    # Positive values will cause the orientation to point left
     def yaw(self, radians):
-        raise NotImplementedError
+        q = quaternion.from_rotation_vector([0.0, 0.0, radians])
+        self.rotateQuaternion(q)
