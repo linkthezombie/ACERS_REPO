@@ -35,11 +35,16 @@ class Orientation:
         orientation.quaternion = quaternion.from_rotation_vector(list_vector)
         return orientation
 
+    # Constructs an orientation from an rotation matrix
+    def fromRotationMatrix(rvec: list[list[float]]):
+        orientation = Orientation()
+        orientation.quaternion = quaternion.from_rotation_matrix(rvec)
+
+        return orientation
+
     # Constructs an orientation from an rvec
-    # An rvec is like an axis-angle representation, but uses two orthogonal vectors
-    # to describe rotation.
     def fromRvec(rvec: list[list[float]]):
-        raise NotImplementedError
+        return Orientation.fromRotationMatrix(rvec)
 
     # Gets the axis-angle representation of the orientation
     def getAxisAngle(self) -> (Vector3D, float):
@@ -55,7 +60,7 @@ class Orientation:
 
     # Gets the rvec representation of the orientation
     def getRvec(self) -> list[list[float]]:
-        raise NotImplementedError
+        return self.getRotationMatrix()
 
     # Rotates around the y-axis
     # Positive values will cause the orientation to point up
