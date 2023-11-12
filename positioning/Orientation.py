@@ -64,10 +64,10 @@ class Orientation:
 
     # Creates an opposite orientation that undoes this one
     def invert(self):
-        new_orientation = Orientation()
-        new_orientation.quaternion /= self.quaternion
+        orientation = Orientation()
+        orientation.quaternion = self.quaternion.inverse()
 
-        return new_orientation
+        return orientation
 
     # Rotates around the y-axis
     # Positive values will cause the orientation to pitch up
@@ -80,7 +80,6 @@ class Orientation:
     def roll(self, radians):
         q = quaternion.from_rotation_vector([radians, 0.0, 0.0])
         self.rotateQuaternion(q)
-
 
     # Changes the orientation by another orientation
     def rotate(self, other):

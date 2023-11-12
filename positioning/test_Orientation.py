@@ -104,13 +104,16 @@ def test_axis_angle_construction():
 
 def test_inversion():
     num_tests = 100
-    origin = Orientation()
 
     for _ in range(0, num_tests):
         test = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
+        expected = Vector3D([random(), random(), random()])
+        vector0 = test.rotateVector(expected)
         inverse = test.invert()
         test.rotate(inverse)
 
-        expected = Vector3D([random(), random(), random()])
-        vector = test.rotateVector(expected)
-        assert_vectors(vector, expected)
+        vector1 = test.rotateVector(expected)
+        assert_vectors(vector1, expected)
+
+        vector2 = inverse.rotateVector(vector0)
+        assert_vectors(vector2, expected)
