@@ -1,5 +1,6 @@
 from math import pi
 import quaternion
+from random import random
 
 from positioning.Orientation import Orientation
 from positioning.Vector3D import Vector3D
@@ -102,12 +103,14 @@ def test_axis_angle_construction():
     assert_vectors(vector, expected)
 
 def test_inversion():
+    num_tests = 100
     origin = Orientation()
 
-    test = Orientation.fromAxisAngle(Vector3D([1.0, 2.0, 3.0]), 4.0)
-    inverse = test.invert()
-    test.rotate(inverse)
+    for _ in range(0, num_tests):
+        test = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
+        inverse = test.invert()
+        test.rotate(inverse)
 
-    expected = Vector3D([1.0, 0.0, 0.0])
-    vector = test.rotateVector(expected)
-    assert_vectors(vector, expected)
+        expected = Vector3D([random(), random(), random()])
+        vector = test.rotateVector(expected)
+        assert_vectors(vector, expected)
