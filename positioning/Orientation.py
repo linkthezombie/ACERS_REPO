@@ -62,6 +62,13 @@ class Orientation:
     def getRvec(self) -> list[list[float]]:
         return self.getRotationMatrix()
 
+    # Creates an opposite orientation that undoes this one
+    def invert(self):
+        new_orientation = Orientation()
+        new_orientation.quaternion /= self.quaternion
+
+        return new_orientation
+
     # Rotates around the y-axis
     # Positive values will cause the orientation to pitch up
     def pitch(self, radians):

@@ -100,3 +100,14 @@ def test_axis_angle_construction():
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([0.0, 0.0, -1.0])
     assert_vectors(vector, expected)
+
+def test_inversion():
+    origin = Orientation()
+
+    test = Orientation.fromAxisAngle(Vector3D([1.0, 2.0, 3.0]), 4.0)
+    inverse = test.invert()
+    test.rotate(inverse)
+
+    expected = Vector3D([1.0, 0.0, 0.0])
+    vector = test.rotateVector(expected)
+    assert_vectors(vector, expected)
