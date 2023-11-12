@@ -38,3 +38,61 @@ def test_transformation_matrix():
                           [0.0, 1.0, 0.0, 2.0],
                           [0.0, 0.0, 1.0, 3.0],
                           [0.0, 0.0, 0.0, 1.0]])
+
+def test_forward_change_of_basis_identity():
+    origin = Pose.getNewOrigin()
+    pitch = Orientation()
+    pitch.pitch(pi / 2.0)
+
+    test = Pose(Vector3D([1.0, 2.0, 3.0]), pitch).baseOn(origin)
+    assert_vectors(test.position, Vector3D([1.0, 2.0, 3.0]))
+    rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
+
+def test_forwared_change_of_basis_translation():
+    translation = Pose(Vector3D([1.0, 2.0, 3.0]), Orientation())
+    pitch = Orientation()
+    pitch.pitch(pi / 2.0)
+
+    test = Pose(Vector3D([-2.0, 1.0, 0.0]), pitch).baseOn(translation)
+    assert_vectors(test.position, Vector3D([-1.0, 3.0, 3.0]))
+    rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
+
+def test_forward_change_of_basis_rotation():
+    pitch = Orientation()
+    pitch.pitch(pi / 2.0)
+    yaw = Orientation()
+    yaw.yaw(pi / 2.0)
+
+    pitchPose = Pose(Vector3D([0.0, 0.0, 0.0]), pitch)
+    yawPose = Pose(Vector3D([0.0, 0.0, 0.0]), yaw)
+
+    test = pitchPose.baseOn(yawPose)
+    assert_vectors(test.position, Vector3D([0.0, 0.0, 0.0]))
+    rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
+
+    test2 = yawPose.baseOn(pitchPose)
+    assert_vectors(test2.position, Vector3D([0.0, 0.0, 0.0]))
+    rot2 = test2.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot2, Vector3D([0.0, 1.0, 0.0]))
+
+def test_forward_change_of_basis_complex():
+    pitch = Orientation()
+    pitch.pitch(pi / 2.0)
+    yaw = Orientation()
+    yaw.yaw(pi / 2.0)
+
+    pitchPose = Pose(Vector3D([1.0, 0.0, 0.0]), pitch)
+    yawPose = Pose(Vector3D([1.0, 0.0, 0.0]), yaw)
+
+    test = pitchPose.baseOn(yawPose)
+    assert_vectors(test.position, Vector3D([1.0, 1.0, 0.0]))
+    rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
+
+    test2 = yawPose.baseOn(pitchPose)
+    assert_vectors(test2.position, Vector3D([1.0, 0.0, 1.0]))
+    rot2 = test2.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
+    assert_vectors(rot2, Vector3D([0.0, 1.0, 0.0]))

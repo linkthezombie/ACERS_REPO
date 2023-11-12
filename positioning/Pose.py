@@ -8,6 +8,7 @@ Created by Dylan Polson
 Created 11/11/2023
 """
 
+from copy import deepcopy
 from dataclasses import dataclass
 import numpy as np
 
@@ -28,7 +29,23 @@ class Pose:
 
     # Returns a copy of this pose in coordinates based on the end of basePose
     def baseOn(self, basePose):
-        raise NotImplementedError
+        # Orientation update
+        this = deepcopy(self)
+        that_orientation = deepcopy(basePose.orientation)
+        that_orientation.rotate(self.orientation)
+        this.orientation = that_orientation
+
+        # Position update
+        m = basePose.getTransformationMatrix()
+        v = this.position
+
+        # Assume a w value of 1 on input, then immediately discard resultant w
+        this.position.x = v.x * m[0][0] + v.y * m[0][1] + v.z * m[0][2] + m[0][3]
+        this.position.y = v.x * m[1][0] + v.y * m[1][1] + v.z * m[1][2] + m[1][3]
+        this.position.z = v.x * m[2][0] + v.y * m[2][1] + v.z * m[2][2] + m[2][3]
+
+        return this
+
 
     # Gets the origin pose
     def getNewOrigin():
