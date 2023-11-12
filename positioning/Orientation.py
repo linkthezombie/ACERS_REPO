@@ -91,11 +91,13 @@ class Orientation:
 
     # Rotates a vector by this orientation
     def rotateVector(self, vector: Vector3D) -> Vector3D:
-        v = vector
-        m = self.getRotationMatrix()
-        x = v.x * m[0][0] + v.y * m[0][1] + v.z * m[0][2]
-        y = v.x * m[1][0] + v.y * m[1][1] + v.z * m[1][2]
-        z = v.x * m[2][0] + v.y * m[2][1] + v.z * m[2][2]
+        wx = self.quaternion.w * vector.x + self.quaternion.y * vector.z - self.quaternion.z * vector.y
+        wy = self.quaternion.w * vector.y + self.quaternion.z * vector.x - self.quaternion.x * vector.z
+        wz = self.quaternion.w * vector.z + self.quaternion.x * vector.y - self.quaternion.y * vector.x
+
+        x = vector.x + 2.0 * (self.quaternion.y * wz - self.quaternion.z * wy)
+        y = vector.y + 2.0 * (self.quaternion.z * wx - self.quaternion.x * wz)
+        z = vector.z + 2.0 * (self.quaternion.x * wy - self.quaternion.y * wx)
 
         return Vector3D([x, y, z])
 

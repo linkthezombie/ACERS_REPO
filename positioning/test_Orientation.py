@@ -50,14 +50,17 @@ def test_pitch():
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([0.0, 0.0, 1.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     vector = orientation.rotateVector(Vector3D([0.0, 1.0, 0.0]))
     expected = Vector3D([0.0, 1.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
     expected = Vector3D([-1.0, 0.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
 def test_yaw():
     orientation = Orientation()
@@ -66,14 +69,17 @@ def test_yaw():
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([0.0, 1.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     vector = orientation.rotateVector(Vector3D([0.0, 1.0, 0.0]))
     expected = Vector3D([-1.0, 0.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
     expected = Vector3D([0.0, 0.0, 1.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
 def test_roll():
     orientation = Orientation()
@@ -82,6 +88,7 @@ def test_roll():
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([1.0, 0.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     vector = orientation.rotateVector(Vector3D([0.0, 1.0, 0.0]))
     expected = Vector3D([0.0, 0.0, 1.0])
@@ -90,12 +97,14 @@ def test_roll():
     vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
     expected = Vector3D([0.0, -1.0, 0.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
 def test_axis_angle_construction():
     orientation = Orientation.fromAxisAngle(Vector3D([1.0, 0.0, 0.0]), 0.0)
     vector = orientation.rotateVector(Vector3D([0.0, 0.0, 1.0]))
     expected = Vector3D([0.0, 0.0, 1.0])
     assert_vectors(vector, expected)
+    assert_floats(vector.getLength(), expected.getLength())
 
     orientation = Orientation.fromAxisAngle(Vector3D([0.0, 999213.5, 0.0]), pi / 2.0)
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
