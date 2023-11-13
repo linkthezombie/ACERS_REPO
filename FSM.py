@@ -107,7 +107,7 @@ def transition():
             v = input("\nPlease enter the face value for the top card of the discard pile: ")
         NewCard = hand.Card(v, s)
         
-        if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the draw pile
+        if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
             GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
             print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
             print("Opponent drew card\n")
@@ -163,7 +163,7 @@ def transition():
             s = input("\nPlease enter the suit for the card Nao drew: ")
             v = input("\nPlease enter the face value for the card Nao drew: ")
         hand.addCard(v, s)
-
+        
         GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
         
         if(GameStrategy.canPlayCard() == True):
@@ -193,12 +193,12 @@ def drawCard():
             #implement later
 
 def playCard(c):
+    #abslayer.drawcard.subscribe(Card?)
     
     print("Physically play card\n")
 
     #call to camera to locate the desired card as determined by game strategy
     #call to robot motion to pickup and play said card
-
     #remove card from memory
     hand.removeCard(c.value, c.suit)
     
