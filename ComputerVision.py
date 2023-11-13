@@ -8,6 +8,10 @@ Created by Liam McKinney
 Created 10/12/2023
 Revised 10/19/2023
     -Added comments (Liam McKinney)
+Revised 11/10/2023
+    -Added feature to scan in Aruco marker ids and convert them to card suits and values (Nathan Smith)
+Revised 11/13/2023
+    -Altered the way ids are returned in getCardSpecs (Nathan Smith)
 """
 
 from CameraCalibration import *
@@ -117,6 +121,18 @@ def getVisibleCards():
         xs.append(T_MT[:3,3])
     return ids, xs, Rs
 
+# Takes the marker ids, and determines the suit and rank of the card that id represents
+def getCardSpecs(marker_ids):
+    # Determine the suits of each card based on marker_id
+    card_specs = []
+    # Determine the suit and rank of each id in the marker_ids
+    for marker_id in marker_ids:
+        suit = marker_id // 13
+        rank = (marker_id % 13) + 1
+        card_specs.append((suit, rank))
+
+    return card_specs
+
 # run some initialization the first time this module is imported
 init()
 
@@ -130,6 +146,8 @@ if __name__ == "__main__":
 
         if(ids is None):
             print("No markers visible!")
+        else:
+            cardTypes = getCardSpecs(ids)
         zeroFound = False
         for i in range(len(ids)):
             if ids[i] == 0:
