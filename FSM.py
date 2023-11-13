@@ -33,14 +33,12 @@ import random
 from array import array
 
 states = ["start", "opponentPlay", "playing", "drawing", "NaoPlay", "win"]
-
 state = "start"
-C = hand.Card("9", "Club")
-
 
 def win():
     print("\nWin! Woo hoo")
     #end the game
+    return 0
 
 def start():
     
