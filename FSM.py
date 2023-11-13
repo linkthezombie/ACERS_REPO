@@ -33,16 +33,9 @@ import random
 from array import array
 
 states = ["start", "opponentPlay", "playing", "drawing", "NaoPlay", "win"]
-state = ""
 
-def startGame():
-    global state
-    state = "start"
-    var = False
-    C = hand.Card("9", "Club")
-    while var == False:
-        var = transition()
-    return 0
+state = "start"
+C = hand.Card("9", "Club")
 
 
 def win():
@@ -214,7 +207,6 @@ def propogateHandOnStart():
             s = input("\nPlease enter the suit for the card Nao drew: ")
             v = input("\nPlease enter the face value for the card Nao drew: ")
         hand.addCard(v, s)
-
+        
 GameStrategy.TopCard.suit = "spade"
 GameStrategy.TopCard.suit = "K"
-startGame()
