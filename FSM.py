@@ -45,146 +45,125 @@ def startGame():
     return 0
 
 
-def transition():
-    global state
-    if state == "win":
-        print("\nWin! Woo hoo")
-        return True
-        #end the game
-    elif state == "start": #when the game starts
-        print("Starting Game: \n\n")
+def win():
+    print("\nWin! Woo hoo")
+    #end the game
 
-        #adds all of Nao's cards in his start hand to his memory
-        propogateHandOnStart()
+def start():
+    
+    print("Starting Game: \n\n")
+
+    #adds all of Nao's cards in his start hand to his memory
+    propogateHandOnStart()
         
-        state = random.choice(["drawing", "opponentPlay"]) #decides who plays first
-        state = "drawing" #COMMENT OUT WHEN DONE TESTING
-        if state == "drawing":
-            print("\nNao goes first")
-        else:
-            print("\nOpponent goes first")
-        #Game.Strategy.NumOfPlayers = input("\nHow many players are there (including Nao and yourself): ")
-        GameStrategy.NumOfPlayers = 2
-        print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
-        GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
-        print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
+    state = random.choice(["drawing", "opponentPlay"]) #decides who plays first
+    state = "drawing" #COMMENT OUT WHEN DONE TESTING
+    if state == "drawing":
+        print("\nNao goes first")
+    else:
+        print("\nOpponent goes first")
+    #Game.Strategy.NumOfPlayers = input("\nHow many players are there (including Nao and yourself): ")
+    GameStrategy.NumOfPlayers = 2
+    print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
+    GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
+    print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
        
-        #Implement receving card from higher abstraction
-        #method in either computerVision or abstraction layer to return the card in the discard pile feild
-        #current implementation relies on human player inputing what they see
+    #Implement receving card from higher abstraction
+    #method in either computerVision or abstraction layer to return the card in the discard pile feild
+    #current implementation relies on human player inputing what they see
+    s = input("\nPlease enter the suit for the top card of the discard pile: ")
+    v = input("\nPlease enter the face value for the top card of the discard pile: ")
+    while hand.checkValidity(v, s) == False:
+        print("Invalid input, please try again\n")
         s = input("\nPlease enter the suit for the top card of the discard pile: ")
         v = input("\nPlease enter the face value for the top card of the discard pile: ")
-        while hand.checkValidity(v, s) == False:
-            print("Invalid input, please try again\n")
-            s = input("\nPlease enter the suit for the top card of the discard pile: ")
-            v = input("\nPlease enter the face value for the top card of the discard pile: ")
-        C = hand.Card(v, s)
-        GameStrategy.TopCard = C
+    C = hand.Card(v, s)
+    GameStrategy.TopCard = C
                 
-        ##Nao needs to store correct number of players
-        GameStrategy.CardsInDiscardPile = 1
-        print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
-        #propoagate the array representing who's turn it is
-        setPlayerArr()
-        return False
+    ##Nao needs to store correct number of players
+    GameStrategy.CardsInDiscardPile = 1
+    print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
+    #propoagate the array representing who's turn it is
+    setPlayerArr()
     
-    elif state == "opponentPlay":
-        print("Opponent's turn, please compelete turn\n")
+    
+def opponentPlay():
+    print("Opponent's turn, please compelete turn\n")
         
-        #wait for confrimation of player ending turn via voice recognition
-        #function to listen called, and wait for true return?
-        #from command detection or abstraction layer
+    #wait for confrimation of player ending turn via voice recognition
+    #function to listen called, and wait for true return?
+    #from command detection or abstraction layer
 
-        #implementation for human player interaction till computer vision is linked
-        #should create card based on return from function in computer vision or abstraction layer
-        #should get card in the discard pile field
+    #implementation for human player interaction till computer vision is linked
+    #should create card based on return from function in computer vision or abstraction layer
+    #should get card in the discard pile field
         
-        s = input("\nPlease enter the suit for the current top card of the discard pile: ")
-        v = input("\nPlease enter the face value for the current top card of the discard pile: ")
-        while hand.checkValidity(v, s) == False:
-            print("Invalid input, please try again\n")
-            s = input("\nPlease enter the suit for the top card of the discard pile: ")
-            v = input("\nPlease enter the face value for the top card of the discard pile: ")
-        NewCard = hand.Card(v, s)
-        
-        if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
-            GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
-            print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
-            print("Opponent drew card\n")
-        else:
-            temp = False
-            CardsInDrawPile = CardsInDrawPile - 1
-            GameStrategy.TopCard = NewCard #store the new card on the pile
-            GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
-            print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
-            print("Opponent played card\n")
-        playerinput = input("\nIf player won, please enter won, else enter next": )
-        
-        print("\nThank you for waiting, the next player may go now\n")
-        
-        GameStrategy.NextPlayer() #transition to next player
 
-        #check if it is Nao's turn
-        if(Players[0] == 1):
-            state = "NaoPlay"
-            return False
-
-        #take voice command at end of player turn, either be turn complete or won, see beinging of statement for where implmenation should be
-        #current implementaion to allow for command line interaction
-        if playerin.lower() == "won":
-            state = "win"
-
-    elif state == "playing":
-
-        #handles selecting card to play and communciating with other layers
-        GameStrategy.turn()
+    NewCard = hand.Card(v, s)
         
+    if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
+        GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
+        print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
+        print("Opponent drew card\n")
+    else:
+        temp = False
+        CardsInDrawPile = CardsInDrawPile - 1
+        GameStrategy.TopCard = NewCard #store the new card on the pile
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
+        print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
+        print("Opponent played card\n")
+    playerinput = input("\nIf player won, please enter won, else enter next": )
+        
+    print("\nThank you for waiting, the next player may go now\n")
+        
+    GameStrategy.NextPlayer() #transition to next player
+
+    #check if it is Nao's turn
+    if(Players[0] == 1):
+        state = "NaoPlay"
+        return False
+
+    #take voice command at end of player turn, either be turn complete or won, see beinging of statement for where implmenation should be
+    #current implementaion to allow for command line interaction
+    if playerin.lower() == "won":
+        state = "win"
+
+def playing():
+
+    #handles selecting card to play and communciating with other layers
+    GameStrategy.turn()
+        
+    GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
+    state = "opponentPlay"
+    GameStrategy.NextPlayer()
+    winGame() #check if wins game
+
+def drawing(card1):
+
+    #function to implment physcially mechansim to draw card
+    #trigger event in abstraction layer or robot motion
+    #possibly use drawCard() #physicall draw a card
+        
+    #computer vision
+    #should create card based on return from function in computer vision or abastarction layer
+    #return card from feild near face
+
+    hand.addCard(card1.value, cards.suit)
+        
+    GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
+        
+    if(GameStrategy.canPlayCard() == True):
+        GameStrategy.turn() 
+        state = "playing"
+    else:
         state = "opponentPlay"
         GameStrategy.NextPlayer()
-        winGame() #check if wins game
-        return False
 
-    elif state == "drawing":
-
-        #function to implment physcially mechansim to draw card
-        #trigger event in abstraction layer or robot motion
-        #possibly use drawCard() #physicall draw a card
-        
-        #computer vision
-        #should create card based on return from function in computer vision or abastarction layer
-        #return card from feild near face
-
-        #implementation for human player interaction till computer vision is linked
-        s = input("\nPlease enter the suit for the card Nao drew: ")
-        v = input("\nPlease enter the face value for the card Nao drew: ")
-        while hand.checkValidity(v, s) == False:
-            print("Invalid input, please try again\n")
-            s = input("\nPlease enter the suit for the card Nao drew: ")
-            v = input("\nPlease enter the face value for the card Nao drew: ")
-        hand.addCard(v, s)
-        
-        GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
-        
-        if(GameStrategy.canPlayCard() == True):
-            GameStrategy.turn() 
-            state = "playing"
-        else:
-            state = "opponentPlay"
-            GameStrategy.NextPlayer()
-        return False
-
-    elif state == "NaoPlay":
-        if(canPlayCard() == True): 
-            state = "playing"
-        else:
-            state = "drawing"        
-        return False
-
+def NaoPlay():
+    if(canPlayCard() == True): 
+        state = "playing"
     else:
-        print("Error Not Valid State\n")
-        return False
-        #error
+        state = "drawing"        
 
 
 def drawCard():
