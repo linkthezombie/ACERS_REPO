@@ -55,7 +55,6 @@ class Pose:
 
         # Position update
         v = this.position - base.position
-        print(v.getMagnitude())
         this.position = base.orientation.invert().rotateVector(v)
 
         return this
