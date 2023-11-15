@@ -27,9 +27,7 @@ class Orientation:
     # Constructs an orientation from an axis-angle representation
     # Angle is in radians.
     def fromAxisAngle(axis: Vector3D, angle: float):
-        axis.normalize()
-        axis.scale(angle)
-        list_vector: list[float] = axis.getList()
+        list_vector: list[float] = axis.normalize().scale(angle).getList()
 
         orientation = Orientation()
         orientation.quaternion = quaternion.from_rotation_vector(list_vector)

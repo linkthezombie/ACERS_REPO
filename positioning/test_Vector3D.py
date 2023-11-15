@@ -25,22 +25,18 @@ def test_scale():
     bigNumber = 9999999999999999999999.0
 
     v = Vector3D([0.0, 0.0, 0.0])
-    v.scale(bigNumber)
-    assert v.getMagnitude() == 0.0
+    assert v.scale(bigNumber).getMagnitude() == 0.0
 
     v = Vector3D([bigNumber, bigNumber, bigNumber])
-    v.scale(0.0)
-    assert v.getMagnitude() == 0.0
+    assert v.scale(0.0).getMagnitude() == 0.0
 
     v = Vector3D([3.0, 4.0, 0.0])
-    v.scale(1.0)
-    assert v.getMagnitude() == 5.0
-    v.scale(1.0 / 5.0)
+    assert v.scale(1.0).getMagnitude() == 5.0
+    v = v.scale(1.0 / 5.0)
     assert v.getMagnitude() == 1.0
-    v.scale(100.0)
+    v = v.scale(100.0)
     assert v.getMagnitude() == 100.0
 
 def test_normalize():
     v = Vector3D([123.0, 55555555.0, 0.0002])
-    v.normalize()
-    assert v.getMagnitude() == 1.0
+    assert v.normalize().getMagnitude() == 1.0

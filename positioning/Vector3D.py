@@ -8,6 +8,7 @@ Created by Dylan Polson
 Created 11/11/2023
 """
 
+from copy import deepcopy
 from dataclasses import dataclass
 from math import sqrt
 
@@ -34,7 +35,7 @@ class Vector3D:
 
         return Vector3D([x, y, z])
 
-	# Vector addition
+    # Vector addition
     def __sub__(self, other):
         x: float = self.x - other.x
         y: float = self.y - other.y
@@ -54,18 +55,25 @@ class Vector3D:
     def getList(self) -> list[float]:
         return [self.x, self.y, self.z]
 
-    # Normalizes the vector so the length is 1
+    # Returns a copy of this vector with a length of 1
     def normalize(self):
         length = self.getMagnitude()
-        self.scale(1 / length)
+        return self.scale(1.0 / length)
 
-    # Scales this vector by a scalar value
+    # Returns a copy of this vector scaled by a scalar
     def scale(self, scalar: float):
-        self.x = self.x * scalar
-        self.y = self.y * scalar
-        self.z = self.z * scalar
+        this = deepcopy(self)
+        this.x = self.x * scalar
+        this.y = self.y * scalar
+        this.z = self.z * scalar
 
-    # Swizzles values to switch the coordinate system's handedness around the Z axis
+        return this
+
+    # Returns a copy of this vector with values swizzled to switch the coordinate
+    # system's handedness around the Z axis.
     # I swear I didn't just make up a word https://en.wikipedia.org/wiki/Swizzling_(computer_graphics)
     def swizzleHandedness(self):
-        (self.x, self.y) = (self.y, self.x)
+        this = deepcopy(self)
+        (this.x, this.y) = (self.y, self.x)
+
+        return this
