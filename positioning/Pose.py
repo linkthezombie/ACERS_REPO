@@ -77,16 +77,6 @@ class Pose:
         orientation = Orientation()
         return Pose(position, orientation)
 
-    # Gets the transformation matrix (4x4) to get from the origin to this pose
-    def getTransformationMatrix(self) -> list[list[float]]:
-        v = self.position
-        r = self.orientation.getRotationMatrix()
-
-        return [[r[0][0], r[0][1], r[0][2], v.x],
-                [r[1][0], r[1][1], r[1][2], v.y],
-                [r[2][0], r[2][1], r[2][2], v.z],
-                [0.0,     0.0,     0.0,     1.0]]
-
     # Rotates the orientation around by another orientation
     def rotate(self, orientation: Orientation):
         self.orientation.rotate(orientation)

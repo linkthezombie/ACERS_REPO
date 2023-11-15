@@ -31,15 +31,6 @@ def assert_matrices(a: list[list[float]], b: list[list[float]]):
         for j in range(0, 4):
             assert_floats(a[i][j], b[i][j])
 
-def test_transformation_matrix():
-    pose = Pose(Vector3D([1.0, 2.0, 3.0]), Orientation())
-    mat = pose.getTransformationMatrix()
-
-    assert_matrices(mat, [[1.0, 0.0, 0.0, 1.0],
-                          [0.0, 1.0, 0.0, 2.0],
-                          [0.0, 0.0, 1.0, 3.0],
-                          [0.0, 0.0, 0.0, 1.0]])
-
 def test_forward_change_of_basis_identity():
     origin = Pose.getNewOrigin()
     pitch = Orientation()
