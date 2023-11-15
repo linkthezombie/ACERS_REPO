@@ -17,30 +17,30 @@ def test_addition_identity():
     assert zeroes + zeroes == zeroes
 
 def test_length():
-    assert Vector3D([0.0, 0.0, 0.0]).getLength() == 0.0
-    assert Vector3D([3.0, 4.0, 0.0]).getLength() == 5.0
-    assert Vector3D([-3.0, -4.0, -0.0]).getLength() == 5.0
+    assert Vector3D([0.0, 0.0, 0.0]).getMagnitude() == 0.0
+    assert Vector3D([3.0, 4.0, 0.0]).getMagnitude() == 5.0
+    assert Vector3D([-3.0, -4.0, -0.0]).getMagnitude() == 5.0
 
 def test_scale():
     bigNumber = 9999999999999999999999.0
 
     v = Vector3D([0.0, 0.0, 0.0])
     v.scale(bigNumber)
-    assert v.getLength() == 0.0
+    assert v.getMagnitude() == 0.0
 
     v = Vector3D([bigNumber, bigNumber, bigNumber])
     v.scale(0.0)
-    assert v.getLength() == 0.0
+    assert v.getMagnitude() == 0.0
 
     v = Vector3D([3.0, 4.0, 0.0])
     v.scale(1.0)
-    assert v.getLength() == 5.0
+    assert v.getMagnitude() == 5.0
     v.scale(1.0 / 5.0)
-    assert v.getLength() == 1.0
+    assert v.getMagnitude() == 1.0
     v.scale(100.0)
-    assert v.getLength() == 100.0
+    assert v.getMagnitude() == 100.0
 
 def test_normalize():
     v = Vector3D([123.0, 55555555.0, 0.0002])
     v.normalize()
-    assert v.getLength() == 1.0
+    assert v.getMagnitude() == 1.0

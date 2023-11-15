@@ -50,7 +50,7 @@ class Orientation:
     def getAxisAngle(self) -> (Vector3D, float):
         listVector: list[float] = quaternion.as_rotation_vector(self.quaternion)
         vector: Vector3D = Vector3D(listVector)
-        rotation: float = vector.getLength()
+        rotation: float = vector.getMagnitude()
 
         return (vector, rotation)
 

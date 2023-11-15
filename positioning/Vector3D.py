@@ -35,7 +35,7 @@ class Vector3D:
         return Vector3D([x, y, z])
 
     # Gets the length from tail to tip
-    def getLength(self) -> float:
+    def getMagnitude(self) -> float:
         x = self.x**2
         y = self.y**2
         z = self.z**2
@@ -48,7 +48,7 @@ class Vector3D:
 
     # Normalizes the vector so the length is 1
     def normalize(self):
-        length = self.getLength()
+        length = self.getMagnitude()
         self.scale(1 / length)
 
     # Scales this vector by a scalar value
