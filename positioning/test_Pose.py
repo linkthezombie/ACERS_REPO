@@ -33,8 +33,7 @@ def assert_matrices(a: list[list[float]], b: list[list[float]]):
 
 def test_forward_change_of_basis_identity():
     origin = Pose.getNewOrigin()
-    pitch = Orientation()
-    pitch.pitch(pi / 2.0)
+    pitch = Orientation().pitch(pi / 2.0)
 
     test = Pose(Vector3D([1.0, 2.0, 3.0]), pitch).addOnto(origin)
     assert_vectors(test.position, Vector3D([1.0, 2.0, 3.0]))
@@ -43,8 +42,7 @@ def test_forward_change_of_basis_identity():
 
 def test_forwared_change_of_basis_translation():
     translation = Pose(Vector3D([1.0, 2.0, 3.0]), Orientation())
-    pitch = Orientation()
-    pitch.pitch(pi / 2.0)
+    pitch = Orientation().pitch(pi / 2.0)
 
     test = Pose(Vector3D([-2.0, 1.0, 0.0]), pitch).addOnto(translation)
     assert_vectors(test.position, Vector3D([-1.0, 3.0, 3.0]))
@@ -52,10 +50,8 @@ def test_forwared_change_of_basis_translation():
     assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
 
 def test_forward_change_of_basis_rotation():
-    pitch = Orientation()
-    pitch.pitch(pi / 2.0)
-    yaw = Orientation()
-    yaw.yaw(pi / 2.0)
+    pitch = Orientation().pitch(pi / 2.0)
+    yaw = Orientation().yaw(pi / 2.0)
 
     pitchPose = Pose(Vector3D([0.0, 0.0, 0.0]), pitch)
     yawPose = Pose(Vector3D([0.0, 0.0, 0.0]), yaw)
@@ -71,10 +67,8 @@ def test_forward_change_of_basis_rotation():
     assert_vectors(rot2, Vector3D([0.0, 1.0, 0.0]))
 
 def test_forward_change_of_basis_complex():
-    pitch = Orientation()
-    pitch.pitch(pi / 2.0)
-    yaw = Orientation()
-    yaw.yaw(pi / 2.0)
+    pitch = Orientation().pitch(pi / 2.0)
+    yaw = Orientation().yaw(pi / 2.0)
 
     pitchPose = Pose(Vector3D([1.0, 0.0, 0.0]), pitch)
     yawPose = Pose(Vector3D([1.0, 0.0, 0.0]), yaw)

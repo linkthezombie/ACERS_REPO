@@ -44,8 +44,7 @@ def test_get_rotation_matrix():
     assert_matrices(matrix, identity)
 
 def test_pitch():
-    orientation = Orientation()
-    orientation.pitch(pi / 2.0)
+    orientation = Orientation().pitch(pi / 2.0)
 
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([0.0, 0.0, 1.0])
@@ -63,8 +62,7 @@ def test_pitch():
     assert_floats(vector.getMagnitude(), expected.getMagnitude())
 
 def test_yaw():
-    orientation = Orientation()
-    orientation.yaw(pi / 2.0)
+    orientation = Orientation().yaw(pi / 2.0)
 
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([0.0, 1.0, 0.0])
@@ -82,8 +80,7 @@ def test_yaw():
     assert_floats(vector.getMagnitude(), expected.getMagnitude())
 
 def test_roll():
-    orientation = Orientation()
-    orientation.roll(pi / 2.0)
+    orientation = Orientation().roll(pi / 2.0)
 
     vector = orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     expected = Vector3D([1.0, 0.0, 0.0])
@@ -119,7 +116,7 @@ def test_inversion():
         expected = Vector3D([random(), random(), random()])
         vector0 = test.rotateVector(expected)
         inverse = test.invert()
-        test.rotate(inverse)
+        test = test.rotate(inverse)
 
         vector1 = test.rotateVector(expected)
         assert_vectors(vector1, expected)

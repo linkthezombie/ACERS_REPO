@@ -71,21 +71,24 @@ class Orientation:
     # Positive values will cause the orientation to pitch up
     def pitch(self, radians):
         q = quaternion.from_rotation_vector([0.0, -radians, 0.0])
-        self.rotateQuaternion(q)
+        return self.rotateQuaternion(q)
 
     # Rotates around the x-axis
     # Positive values will cause the orientation to roll to the right
     def roll(self, radians):
         q = quaternion.from_rotation_vector([radians, 0.0, 0.0])
-        self.rotateQuaternion(q)
+        return self.rotateQuaternion(q)
 
-    # Changes the orientation by another orientation
+    # Returns a copy of this orientation rotated by another orientation
     def rotate(self, other):
-        self.quaternion *= other.quaternion
+        return self.rotateQuaternion(other.quaternion)
 
-    # Changes the orientation by a raw quaternion
+    # Returns a copy of this orientation rotated by a raw quaternion
     def rotateQuaternion(self, quaternion):
-        self.quaternion *= quaternion
+        orientation = Orientation()
+        orientation.quaternion = self.quaternion * quaternion
+
+        return orientation
 
     # Rotates a vector by this orientation
     def rotateVector(self, vector: Vector3D) -> Vector3D:
@@ -103,4 +106,4 @@ class Orientation:
     # Positive values will cause the orientation yaw to the left
     def yaw(self, radians):
         q = quaternion.from_rotation_vector([0.0, 0.0, radians])
-        self.rotateQuaternion(q)
+        return self.rotateQuaternion(q)

@@ -31,16 +31,13 @@ class Pose:
     # robot, you can find the hand relative to the world.
     def addOnto(self, base):
         # Orientation update
-        this = deepcopy(self)
-        thatOrientation = deepcopy(base.orientation)
-        thatOrientation.rotate(self.orientation)
-        this.orientation = thatOrientation
+        orientation = base.orientation.rotate(self.orientation)
 
         # Position update
-        v = base.orientation.rotateVector(this.position)
-        this.position = base.position + v
+        v = base.orientation.rotateVector(self.position)
+        position = base.position + v
 
-        return this
+        return Pose(position, orientation)
 
     # Takes another Pose with the same origin as this one
     # Returns a new Pose with base as its origin.
@@ -48,16 +45,13 @@ class Pose:
     # and focusing on something in base's frame of reference.
     def changeOrigin(self, base):
         # Orientation update
-        this = deepcopy(self)
-        inverse = base.orientation.invert()
-        inverse.rotate(this.orientation)
-        this.orientation = inverse
+        orientation = base.orientation.invert().rotate(self.orientation)
 
         # Position update
-        v = this.position - base.position
-        this.position = base.orientation.invert().rotateVector(v)
+        v = self.position - base.position
+        position = base.orientation.invert().rotateVector(v)
 
-        return this
+        return Pose(position, orientation)
 
     # Gets the origin pose
     def getNewOrigin():
@@ -67,7 +61,7 @@ class Pose:
 
     # Rotates the orientation around by another orientation
     def rotate(self, orientation: Orientation):
-        self.orientation.rotate(orientation)
+        self.orientation = self.orientation.rotate(orientation)
 
     # Rotates the entire position around from the base
     def rotateFromBase(self, orientation: Orientation):
