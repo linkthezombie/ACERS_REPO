@@ -14,7 +14,6 @@ from dataclasses import dataclass
 from positioning.Orientation import Orientation
 from positioning.Vector3D import Vector3D
 
-
 # Contains position and orientation information in 3D
 @dataclass
 class Pose:
@@ -55,18 +54,9 @@ class Pose:
         this.orientation = inverse
 
         # Position update
-        print(Vector3D([6.0, 5.0, 4.0]).getMagnitude())
-        # this.position = self.orientation.invert().rotateVector(this.position)
-
-        # print(max(self.position.x - this.position.x, self.position.y - this.position.y, self.position.z - this.position.z))
-
         v = this.position - base.position
         print(v.getMagnitude())
         this.position = base.orientation.invert().rotateVector(v)
-        # this.position = Vector3D([x, y, z])
-
-        # this.position = Vector3D([x, y, z])
-        # print(this.position.getMagnitude())
 
         return this
 
