@@ -61,7 +61,8 @@ class Pose:
 
     # Rotates the orientation around by another orientation
     def rotate(self, orientation: Orientation):
-        self.orientation = self.orientation.rotate(orientation)
+        orientation = self.orientation.rotate(orientation)
+        return Pose(self.position, orientation)
 
     # Rotates the entire pose and position around from the origin
     def rotateAtOrigin(self, orientation: Orientation):
