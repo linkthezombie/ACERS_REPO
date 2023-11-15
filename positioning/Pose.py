@@ -8,7 +8,7 @@ Created by Dylan Polson
 Created 11/11/2023
 """
 
-from copy import deepcopy
+from copy import copy
 from dataclasses import dataclass
 
 from positioning.Orientation import Orientation
@@ -61,8 +61,9 @@ class Pose:
 
     # Rotates the orientation around by another orientation
     def rotate(self, orientation: Orientation):
+        position = copy(self.position)
         orientation = self.orientation.rotate(orientation)
-        return Pose(self.position, orientation)
+        return Pose(position, orientation)
 
     # Rotates the entire pose and position around from the origin
     def rotateAtOrigin(self, orientation: Orientation):
@@ -70,4 +71,6 @@ class Pose:
 
     # Moves over by a translation vector
     def translate(self, translation: Vector3D):
-        return self.position + translation
+        position = self.position + translation
+        orientation = copy(self.orientation)
+        return Pose(position, orientation)

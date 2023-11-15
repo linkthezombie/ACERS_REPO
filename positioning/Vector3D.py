@@ -8,7 +8,7 @@ Created by Dylan Polson
 Created 11/11/2023
 """
 
-from copy import deepcopy
+from copy import copy, deepcopy
 from dataclasses import dataclass
 from math import sqrt
 
@@ -53,7 +53,7 @@ class Vector3D:
 
     # Gets the vector as a list of floats
     def getList(self) -> list[float]:
-        return [self.x, self.y, self.z]
+        return [copy(self.x), copy(self.y), copy(self.z)]
 
     # Returns a copy of this vector with a length of 1
     def normalize(self):
@@ -62,12 +62,11 @@ class Vector3D:
 
     # Returns a copy of this vector scaled by a scalar
     def scale(self, scalar: float):
-        this = deepcopy(self)
-        this.x = self.x * scalar
-        this.y = self.y * scalar
-        this.z = self.z * scalar
+        x = self.x * scalar
+        y = self.y * scalar
+        z = self.z * scalar
 
-        return this
+        return Vector3D([x, y, z])
 
     # Returns a copy of this vector with values swizzled to switch the coordinate
     # system's handedness around the Z axis.
