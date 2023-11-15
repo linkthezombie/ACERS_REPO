@@ -63,10 +63,10 @@ class Pose:
     def rotate(self, orientation: Orientation):
         self.orientation = self.orientation.rotate(orientation)
 
-    # Rotates the entire position around from the base
-    def rotateFromBase(self, orientation: Orientation):
+    # Rotates the entire pose and position around from the origin
+    def rotateAtOrigin(self, orientation: Orientation):
         raise NotImplementedError
 
     # Moves over by a translation vector
     def translate(self, translation: Vector3D):
-        self.position += translation
+        return self.position + translation
