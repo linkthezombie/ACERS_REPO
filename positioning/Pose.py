@@ -27,25 +27,49 @@ class Pose:
         self.position = position
         self.orientation = orientation
 
-    # Returns a copy of this pose in coordinates based on the end of basePose
-    def baseOn(self, basePose):
+    # Adds this Pose on top of a base Pose. Inverse of changeOrigin.
+    # This is useful to get a Pose in world oriented coordinates. If you know where
+    # the robot is in the world, and you know where your hand is relative to the
+    # robot, you can find the hand relative to the world.
+    def addOnto(self, base):
         # Orientation update
         this = deepcopy(self)
-        that_orientation = deepcopy(basePose.orientation)
-        that_orientation.rotate(self.orientation)
-        this.orientation = that_orientation
+        thatOrientation = deepcopy(base.orientation)
+        thatOrientation.rotate(self.orientation)
+        this.orientation = thatOrientation
 
         # Position update
-        m = basePose.getTransformationMatrix()
-        v = this.position
-
-        # Assume a w value of 1 on input, then immediately discard resultant w
-        this.position.x = v.x * m[0][0] + v.y * m[0][1] + v.z * m[0][2] + m[0][3]
-        this.position.y = v.x * m[1][0] + v.y * m[1][1] + v.z * m[1][2] + m[1][3]
-        this.position.z = v.x * m[2][0] + v.y * m[2][1] + v.z * m[2][2] + m[2][3]
+        v = base.orientation.rotateVector(this.position)
+        this.position = base.position + v
 
         return this
 
+    # Takes another Pose with the same origin as this one
+    # Returns a new Pose with base as its origin.
+    # This can be useful for abstracting away how the rest of the body is moving,
+    # and focusing on something in base's frame of reference.
+    def changeOrigin(self, base):
+        # Orientation update
+        this = deepcopy(self)
+        inverse = base.orientation.invert()
+        inverse.rotate(this.orientation)
+        this.orientation = inverse
+
+        # Position update
+        print(Vector3D([6.0, 5.0, 4.0]).getMagnitude())
+        # this.position = self.orientation.invert().rotateVector(this.position)
+
+        # print(max(self.position.x - this.position.x, self.position.y - this.position.y, self.position.z - this.position.z))
+
+        v = this.position - base.position
+        print(v.getMagnitude())
+        this.position = base.orientation.invert().rotateVector(v)
+        # this.position = Vector3D([x, y, z])
+
+        # this.position = Vector3D([x, y, z])
+        # print(this.position.getMagnitude())
+
+        return this
 
     # Gets the origin pose
     def getNewOrigin():
@@ -74,9 +98,3 @@ class Pose:
     # Moves over by a translation vector
     def translate(self, translation: Vector3D):
         self.position += translation
-
-    # Does the opposite of BaseOn
-    # Useful if you have a value based on a camera that can move.
-    # markerPos.unBaseOn(cameraPos) would get marker coordinates in world space.
-    def unBaseOn(self, basePose):
-        raise NotImplementedError

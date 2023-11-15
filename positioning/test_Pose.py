@@ -1,4 +1,5 @@
 from math import pi
+from random import random
 
 from positioning.Orientation import Orientation
 from positioning.Pose import Pose
@@ -44,7 +45,7 @@ def test_forward_change_of_basis_identity():
     pitch = Orientation()
     pitch.pitch(pi / 2.0)
 
-    test = Pose(Vector3D([1.0, 2.0, 3.0]), pitch).baseOn(origin)
+    test = Pose(Vector3D([1.0, 2.0, 3.0]), pitch).addOnto(origin)
     assert_vectors(test.position, Vector3D([1.0, 2.0, 3.0]))
     rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
@@ -54,7 +55,7 @@ def test_forwared_change_of_basis_translation():
     pitch = Orientation()
     pitch.pitch(pi / 2.0)
 
-    test = Pose(Vector3D([-2.0, 1.0, 0.0]), pitch).baseOn(translation)
+    test = Pose(Vector3D([-2.0, 1.0, 0.0]), pitch).addOnto(translation)
     assert_vectors(test.position, Vector3D([-1.0, 3.0, 3.0]))
     rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
@@ -68,12 +69,12 @@ def test_forward_change_of_basis_rotation():
     pitchPose = Pose(Vector3D([0.0, 0.0, 0.0]), pitch)
     yawPose = Pose(Vector3D([0.0, 0.0, 0.0]), yaw)
 
-    test = pitchPose.baseOn(yawPose)
+    test = pitchPose.addOnto(yawPose)
     assert_vectors(test.position, Vector3D([0.0, 0.0, 0.0]))
     rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
 
-    test2 = yawPose.baseOn(pitchPose)
+    test2 = yawPose.addOnto(pitchPose)
     assert_vectors(test2.position, Vector3D([0.0, 0.0, 0.0]))
     rot2 = test2.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
     assert_vectors(rot2, Vector3D([0.0, 1.0, 0.0]))
@@ -87,12 +88,29 @@ def test_forward_change_of_basis_complex():
     pitchPose = Pose(Vector3D([1.0, 0.0, 0.0]), pitch)
     yawPose = Pose(Vector3D([1.0, 0.0, 0.0]), yaw)
 
-    test = pitchPose.baseOn(yawPose)
+    test = pitchPose.addOnto(yawPose)
     assert_vectors(test.position, Vector3D([1.0, 1.0, 0.0]))
-    rot = test.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
-    assert_vectors(rot, Vector3D([0.0, 0.0, 1.0]))
+    rot = test.orientation.rotateVector(Vector3D([1.0, 2.0, 3.0]))
+    assert_vectors(rot, Vector3D([-2.0, -3.0, 1.0]))
 
-    test2 = yawPose.baseOn(pitchPose)
+    test2 = yawPose.addOnto(pitchPose)
     assert_vectors(test2.position, Vector3D([1.0, 0.0, 1.0]))
-    rot2 = test2.orientation.rotateVector(Vector3D([1.0, 0.0, 0.0]))
-    assert_vectors(rot2, Vector3D([0.0, 1.0, 0.0]))
+    rot2 = test2.orientation.rotateVector(Vector3D([1.0, 2.0, 3.0]))
+    assert_vectors(rot2, Vector3D([-3.0, 1.0, -2.0]))
+
+def test_inverse_change_of_basis():
+    num_tests: int = 1
+    v0 = Vector3D([random(), random(), random()])
+
+    for _ in range(0, num_tests):
+        o1 = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
+        o2 = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
+        p1 = Pose(Vector3D([1.0, 0.0, 0.0]), o1)
+        p2 = Pose(Vector3D([1.0, 0.0, 0.0]), o2)
+
+        p3 = p2.addOnto(p1)
+        p4 = p3.changeOrigin(p1)
+        assert_vectors(p2.position, p4.position)
+        v2 = p2.orientation.rotateVector(v0)
+        v4 = p4.orientation.rotateVector(v0)
+        assert_vectors(v2, v4)
