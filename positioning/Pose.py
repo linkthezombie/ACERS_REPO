@@ -67,8 +67,11 @@ class Pose:
         orientation = Orientation()
         return Pose(position, orientation)
 
-    # Rotates the orientation around by another orientation
-    def rotate(self, orientation: Orientation):
+    # Rotates the end orientation around
+    #
+    # orientation: Orientation
+    # returns a new Pose
+    def rotate(self, orientation):
         position = copy(self.position)
         orientation = self.orientation.rotate(orientation)
         return Pose(position, orientation)
@@ -81,7 +84,10 @@ class Pose:
         raise NotImplementedError
 
     # Moves over by a translation vector
-    def translate(self, translation: Vector3D):
+    #
+    # translation: Vector3D
+    # returns a new Pose
+    def translate(self, translation):
         position = self.position + translation
         orientation = copy(self.orientation)
         return Pose(position, orientation)
