@@ -99,14 +99,14 @@ def test_forward_change_of_basis_complex():
     assert_vectors(rot2, Vector3D([-3.0, 1.0, -2.0]))
 
 def test_inverse_change_of_basis():
-    num_tests: int = 1
+    num_tests: int = 100
     v0 = Vector3D([random(), random(), random()])
 
     for _ in range(0, num_tests):
         o1 = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
         o2 = Orientation.fromAxisAngle(Vector3D([random(), random(), random()]), random())
-        p1 = Pose(Vector3D([1.0, 0.0, 0.0]), o1)
-        p2 = Pose(Vector3D([1.0, 0.0, 0.0]), o2)
+        p1 = Pose(Vector3D([random(), random(), random()]), o1)
+        p2 = Pose(Vector3D([random(), random(), random()]), o2)
 
         p3 = p2.addOnto(p1)
         p4 = p3.changeOrigin(p1)
