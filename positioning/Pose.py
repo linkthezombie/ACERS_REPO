@@ -81,7 +81,8 @@ class Pose:
     # orientation: Orientation
     # returns a new Pose
     def rotateAtOrigin(self, orientation):
-        raise NotImplementedError
+        base = Pose.getNewOrigin().rotate(orientation)
+        return self.addOnto(base)
 
     # Moves over by a translation vector
     #
