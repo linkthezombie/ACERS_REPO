@@ -10,7 +10,6 @@ Created 11/11/2023
 
 from copy import deepcopy
 from dataclasses import dataclass
-import numpy as np
 
 from positioning.Orientation import Orientation
 from positioning.Vector3D import Vector3D
