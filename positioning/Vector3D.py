@@ -34,6 +34,14 @@ class Vector3D:
 
         return Vector3D([x, y, z])
 
+	# Vector addition
+    def __sub__(self, other):
+        x: float = self.x - other.x
+        y: float = self.y - other.y
+        z: float = self.z - other.z
+
+        return Vector3D([x, y, z])
+
     # Gets the length from tail to tip
     def getMagnitude(self) -> float:
         x = self.x**2
