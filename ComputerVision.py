@@ -127,9 +127,9 @@ def getCardSpecs(marker_ids):
     card_specs = []
     # Determine the suit and rank of each id in the marker_ids
     for marker_id in marker_ids:
-        suit = marker_id // 13
         rank = (marker_id % 13) + 1
-        card_specs.append((suit, rank))
+        suit = marker_id // 13
+        card_specs.append((rank, suit))
 
     return card_specs
 
