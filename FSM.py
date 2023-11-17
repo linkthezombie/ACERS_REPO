@@ -208,6 +208,7 @@ def propogateHandOnStart():
             s = input("\nPlease enter the suit for the card Nao drew: ")
             v = input("\nPlease enter the face value for the card Nao drew: ")
         hand.addCard(v, s)
-        
-GameStrategy.TopCard.suit = "spade"
-GameStrategy.TopCard.suit = "K"
+
+
+GameStrategy.TopCard = hand.Card("K", "spade")
+
