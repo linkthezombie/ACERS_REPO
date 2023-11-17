@@ -146,8 +146,6 @@ if __name__ == "__main__":
 
         if(ids is None):
             print("No markers visible!")
-        else:
-            cardTypes = getCardSpecs(ids)
         zeroFound = False
         for i in range(len(ids)):
             if ids[i] == 0:
