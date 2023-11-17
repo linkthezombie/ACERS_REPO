@@ -17,7 +17,7 @@ from positioning.Vector3D import Vector3D
 # on ArUco coordinates, they may even change between runs. We may want to eventually
 # use Pose's coordinate transformations to get world oriented coordinates if this
 # does not work.
-areas: list[(str, RectangularVolume)] = [
+areas = [
     ("discard pile", RectangularVolume(
         Pose(
             Vector3D([0.23672599, 0.03968427, -0.03701625]), # Position
@@ -42,7 +42,7 @@ areas: list[(str, RectangularVolume)] = [
 
 # Finds which area this pose is in
 # If it is in a defined area, return the corresponding string, otherwise return None
-def findPlayArea(pose: Pose) -> str:
+def findPlayArea(pose):
     for (name, area) in areas:
         if area.contains(pose):
             return name
