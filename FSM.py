@@ -26,7 +26,10 @@ Edited 11/10/2023 - Elise Lovell
     -added interaction for debugging and comments for location to link to other programs
 """
 
-import AbstractionLayer
+
+#!/usr/bin/env python2.7
+
+#import AbstractionLayer
 import GameStrategy
 import hand
 import random
@@ -103,7 +106,7 @@ def opponentPlay():
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
-    playerinput = input("\nIf player won, please enter won, else enter next": )
+    playerinput = input("\nIf player won, please enter won, else enter next:" )
         
     print("\nThank you for waiting, the next player may go now\n")
         

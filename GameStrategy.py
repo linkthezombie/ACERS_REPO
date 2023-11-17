@@ -20,7 +20,7 @@ Edited 11/3/2023 - Elise Lovell
     -added methods/functionality and comments and print statements for debugging
 """
 
-from DataTypes import *
+#from DataTypes import *
 import FSM
 import random
 import hand
