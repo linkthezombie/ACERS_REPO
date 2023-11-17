@@ -24,12 +24,14 @@ Edited 11/3/2023 - Elise Lovell
     -added print statements for debugging
 Edited 11/10/2023 - Elise Lovell
     -added interaction for debugging and comments for location to link to other programs
+Edited 11-17-2023 - Shelby Jones    
+    -added python 2.7 compatibility
 """
 
 
 #!/usr/bin/env python2.7
 
-#import AbstractionLayer
+import AbstractionLayer
 import GameStrategy
 import hand
 import random

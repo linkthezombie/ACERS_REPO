@@ -18,6 +18,8 @@ Edited 10-27-23 -Shelby & Elise
     -Fleshed out Methods
 Edited 11/3/2023 - Elise Lovell
     -added methods/functionality and comments and print statements for debugging
+Edited 11-17-2023 - Shelby Jones    
+    -added python 2.7 compatibility
 """
 
 #from DataTypes import *
