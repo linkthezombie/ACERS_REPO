@@ -11,10 +11,14 @@ Created 10/19/2023
 Revised 11/1/2023
   -Refined draw animation
   -Reworked and separated handoff & put in tray into two separate motions
+
+Revised 11/19/2023
+  -Implemented card checking during handOffLtoR
 """
 import time
 from naoqi import ALProxy
 import RobotInfo
+import ComputerVision
 
 d2r = 3.14159 / 180
 
@@ -71,7 +75,9 @@ def handOffLtoR():
     motion.setAngles("LArm", centerCardL, pctMax)
     time.sleep(1.5)
 
-    #TODO check what card we drew, if we can see the marker
+    # Check what card we drew, if we can see the marker
+    ids, xs, Rs = ComputerVision.getVisibleCards()
+    drawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
 
     # Make a copy of the right arm pose
     upperPos = centerCardR[:]
