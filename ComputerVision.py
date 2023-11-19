@@ -125,7 +125,7 @@ def getVisibleCards():
         xs.append(T_MT[:3,3])
     return ids, xs, Rs
 
-# Takes the marker ids, and determines the suit and rank of the card that id represents
+# Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 22.2.1)
 def getTopCard(marker_ids, xs, Rs):
     for id in marker_ids:
         pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
@@ -135,7 +135,7 @@ def getTopCard(marker_ids, xs, Rs):
             return((rank, suit))
     return None
 
-# Takes the marker ids, and determines the suit and rank of the card that id represents
+# Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 34)
 def getDrawnCard(marker_ids, xs, Rs):
     for id in marker_ids:
         pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
