@@ -18,9 +18,13 @@ Edited 10-27-23 -Shelby & Elise
     -Fleshed out Methods
 Edited 11/3/2023 - Elise Lovell
     -added methods/functionality and comments and print statements for debugging
+Edited 11-17-2023 - Shelby Jones    
+    -added python 2.7 compatibility
+Revised 11-17-2023 - Elise Lovell
+     -debugging
 """
 
-from DataTypes import *
+#from DataTypes import *
 import FSM
 import random
 import hand
@@ -36,17 +40,23 @@ CardsInDiscardPile = 1
 #decison making for robot on it's own turn and select a card to play
 #function only called if there are playable cards in Nao's hand
 def turn(): 
-    currCard = hand[0]
+    global TopCard
+    currCard = None
     #loop through each card in hand
-    for card in hand:
+    for card in hand.NaoHand:
         #call method to check if the card is legal to play on to the stack return true
         if (playable(card) == True):
-            #if the card is a better option to play or is the first card that is playable, set as current card
-            if(choice(currCard, card) == True or currCard is None):
+            #if first card that is playable
+            if currCard is None:
+                currCard = card
+            #if the card is a better option to play, set as current card
+            if(choice(currCard, card) == True):
                 currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
-    print("Playing card: suit: " + str(currCard.suit()) + "value: " + str(currCard.value()) + ".\n")
-    playCard(currCard)
+    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
+    TopCard = currCard
+    FSM.playCard(currCard)
+    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
 
 #main logic, must decide whether or not the new card is a better option to play
 #true if new card(a) is a better choice than older card (b)
@@ -55,8 +65,8 @@ def turn():
 def choice(a, b):
     #check if a is of higher value
     if a.Value > b.Value:
-        print(str(b.suit) +", " + str(b.value) + " is lower\n")
-        return True
+        print(b.ss +", " + b.vs + " is lower\n")
+        return False
     # same value, different suits
     elif b.Value == a.Value:
         bSuitNum = 0
@@ -69,15 +79,15 @@ def choice(a, b):
                 aSuitNum = aSuitNum + 1
         #if there are more of a's suit in Nao's hand, return true, else false
         if aSuitNum > bSuitNum:
-            print(str(b.suit) +", " + str(b.value) + " is lower\n")
-            return True
-        else:
-            print(str(a.suit) +", " + str(a.value) + " is lower\n")
+            print(b.ss +", " + b.vs + " is lower\n")
             return False
+        else:
+            print(a.ss +", " + a.vs + " is lower\n")
+            return True
             
     #a is of a lower value
     else:
-        print(str(a.suit) +", " + str(a.value) + " is lower\n")
+        print(a.ss +", " + a.vs + " is lower\n")
         return False
 
 #checks if there are any playablel cards at all in Nao's hand and returns true if there are
@@ -108,15 +118,12 @@ def NextPlayer():
         Players[0] = 1
     #find the current player, set them to 0 and make the player after them one
     else:
-        i = 0
-        #loop through each player
-        for x in Players:
-            #find current player and change status of it and the next player
-            if(x == 1):
-                Players[i] = 0
-                Players[i+1] = 1
-            i = i + 1
+        #find current player, set them to 0, set next player to 1
+        i = Players.index(1)
+        Players[i] = 0
+        Players[i+1] = 1
     print("Player "+ str(Players.index(1) + 1) + "'s turn.\n")
+    
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
 def compare(c): 

@@ -24,7 +24,12 @@ Edited 11/3/2023 - Elise Lovell
     -added print statements for debugging
 Edited 11/10/2023 - Elise Lovell
     -added interaction for debugging and comments for location to link to other programs
+Edited 11-17-2023 - Shelby Jones    
+    -added python 2.7 compatibility
 """
+
+
+#!/usr/bin/env python2.7
 
 import AbstractionLayer
 import GameStrategy
@@ -103,7 +108,7 @@ def opponentPlay():
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
-    playerinput = input("\nIf player won, please enter won, else enter next": )
+    playerinput = input("\nIf player won, please enter won, else enter next:" )
         
     print("\nThank you for waiting, the next player may go now\n")
         
@@ -205,6 +210,7 @@ def propogateHandOnStart():
             s = input("\nPlease enter the suit for the card Nao drew: ")
             v = input("\nPlease enter the face value for the card Nao drew: ")
         hand.addCard(v, s)
-        
-GameStrategy.TopCard.suit = "spade"
-GameStrategy.TopCard.suit = "K"
+
+
+GameStrategy.TopCard = hand.Card("K", "spade")
+

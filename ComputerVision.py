@@ -19,6 +19,10 @@ from naoqi import ALProxy
 import motion
 import RobotInfo
 import atexit
+import areas
+from positioning import Pose
+from positioning import Orientation
+from positioning import Vector3D
 import cv2
 import cv2.aruco as aruco
 
@@ -122,16 +126,25 @@ def getVisibleCards():
     return ids, xs, Rs
 
 # Takes the marker ids, and determines the suit and rank of the card that id represents
-def getCardSpecs(marker_ids):
-    # Determine the suits of each card based on marker_id
-    card_specs = []
-    # Determine the suit and rank of each id in the marker_ids
-    for marker_id in marker_ids:
-        suit = marker_id // 13
-        rank = (marker_id % 13) + 1
-        card_specs.append((suit, rank))
+def getTopCard(marker_ids, xs, Rs):
+    for id in marker_ids:
+        pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
+        if areas.findPlayArea(pose) == "discard pile":
+            rank = (id % 13) + 1
+            suit = id // 13
+            return((rank, suit))
+    return None
 
-    return card_specs
+# Takes the marker ids, and determines the suit and rank of the card that id represents
+def getDrawnCard(marker_ids, xs, Rs):
+    for id in marker_ids:
+        pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
+        if areas.findPlayArea(pose) == "in your face":
+            rank = (id % 13) + 1
+            suit = id // 13
+            return((rank, suit))
+    return None
+
 
 # run some initialization the first time this module is imported
 init()
@@ -146,8 +159,6 @@ if __name__ == "__main__":
 
         if(ids is None):
             print("No markers visible!")
-        else:
-            cardTypes = getCardSpecs(ids)
         zeroFound = False
         for i in range(len(ids)):
             if ids[i] == 0:
