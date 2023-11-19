@@ -13,7 +13,7 @@ Revised 10/19/2023
     -Python 2.7 compatibility (Liam McKinney)
 """
 
-from typing import TypeVar, Generic, List, Callable
+from typing import TypeVar, Generic, List, Callable, Tuple
 from DataTypes import *
 
 # We use type generic type hints for events to make it easier to
@@ -22,17 +22,17 @@ T = TypeVar('T')
 class Event(Generic[T]):
     # basic initialization
     def __init__(self):
-        self.subscribers = [] # type: List[Callable[[T],None]]
+        self.subscribers = [] # type: List[Callable[...,None]]
 
     # trigger the event, calling all subscriber callbacks
-    def trigger(self, data):
-        # type: (T) -> None
+    def trigger(self, *data):
+        # type: (Tuple[T]) -> None
         for subCallBack in self.subscribers:
-            subCallBack(data)
+            subCallBack(*data)
 
     # provide a callback to be called whenever the event triggers
     def subscribe(self, callback):
-        # type: (Callable[[T], None]) -> None
+        # type: (Callable[..., None]) -> None
         self.subscribers.append(callback)
 
 # singleton class to hold all game events
@@ -46,7 +46,7 @@ class AbstractionLayer:
     #initialize events
     def __init__(self):
         #Robot commands
-        self.playCard = Event[int]()
+        self.playCard = Event[Card]()
         self.drawCard = Event[None]()
 
         # Game events - Robot's actions
