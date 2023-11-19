@@ -109,6 +109,8 @@ def handOffLtoR():
     time.sleep(1)
 
     #TODO check card again; other corner should be visible now
+    ids, xs, Rs = ComputerVision.getVisibleCards()
+    checkDrawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
 
 # Assuming the card is in Ace's right hand, put it into the tray at in the [offset]th position
 def placeCardInHolder(offset):
