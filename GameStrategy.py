@@ -55,7 +55,7 @@ def turn():
     #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
     TopCard = currCard
-    FSM.playCard(currCard)
+    return currCard
     print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
 
 #main logic, must decide whether or not the new card is a better option to play
