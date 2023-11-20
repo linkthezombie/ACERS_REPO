@@ -202,6 +202,11 @@ def setPlayerArr():
     else:
         GameStrategy.Players[1] = 1
 
+#update variables when the deck must be refreshed and shuffled
+def shuffle():
+    GameStrategy.CardsInDrawPile = GameStrategy.CardsInDiscardPile + GameStrategy.CardsInDrawPile
+    GameStrategy.CardsInDiscardPile = 1
+
 #adds 5 cards drawn by the NAO to its hand to start the game
 def propogateHandOnStart():
 
