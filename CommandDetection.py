@@ -4,9 +4,12 @@ from naoqi import ALBroker
 import RobotInfo
 import atexit
 import FSM
+import ComputerVision
 
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
+
+absLayer = AbstractionLayer.AbstractionLayer()
 
 # Global variable to store the CommandDetector module instance
 CommandDetector = None
@@ -104,8 +107,7 @@ def endTurn():
     #Check the draw pile to see if there is a new card
     #if so, then update topcard
     #if not, decrease from draw pile counter variable 
-    
-    
+
 
 
     NaoTurnPhrases = [
@@ -119,14 +121,17 @@ def endTurn():
         "Your turn now!"
     ]
     # Choose a random phrase for the NAO to say
+    ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    absLayer.oppEndTurn.Trigger()
 
     if (FSM.state == "NaoPlay"):
         selected_phrase = random.choice(NaoTurnPhrases)
     elif(FSM.state == "opponentPlay"):
         selected_phrase = random.choice(NextPlayerTurnPhrases)
     # Say the specified line
-    tts.say(selected_phrase)
 
+    tts.say(selected_phrase)
+##end EndTurn Function
 
 init()
 
