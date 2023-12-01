@@ -16,9 +16,12 @@ def init():
     global CommandDetector
     
     commands = {
+        #test commands
         "Say hi": sayHi,
         "Be nice": compliment,
         "Play a card": sayCard,
+
+        #commands to end a player's turn
         "I end my turn": endTurn,
         "end turn": endTurn,
         "my turn is over": endTurn,
@@ -104,21 +107,24 @@ def endTurn():
     
     
 
+
     NaoTurnPhrases = [
         "Okay, my turn now",
+        "I PLAY NOW",
         "Cool, my turn"
     ]
     NextPlayerTurnPhrases = [
         "Okay, your turn",
-        "Next player please!"
+        "Next player please!",
+        "Your turn now!"
     ]
     # Choose a random phrase for the NAO to say
 
     if (FSM.state == "NaoPlay"):
         selected_phrase = random.choice(NaoTurnPhrases)
-    else:
+    elif(FSM.state == "opponentPlay"):
         selected_phrase = random.choice(NextPlayerTurnPhrases)
-    # Say the specified defeat line
+    # Say the specified line
     tts.say(selected_phrase)
 
 
