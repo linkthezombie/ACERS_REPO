@@ -3,6 +3,7 @@ from naoqi import ALModule
 from naoqi import ALBroker
 import RobotInfo
 import atexit
+import FSM
 
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
@@ -17,7 +18,13 @@ def init():
     commands = {
         "Say hi": sayHi,
         "Be nice": compliment,
-        "Play a card": sayCard
+        "Play a card": sayCard,
+        "I end my turn": endTurn,
+        "end turn": endTurn,
+        "my turn is over": endTurn,
+        "end": endTurn, 
+        "over": endTurn,
+        "done": endTurn
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -89,6 +96,31 @@ def compliment():
 
 def sayCard():
     CommandDetector.tts.say("I play the Ace of Spades")
+
+def endTurn():
+    #Check the draw pile to see if there is a new card
+    #if so, then update topcard
+    #if not, decrease from draw pile counter variable 
+    
+    
+
+    NaoTurnPhrases = [
+        "Okay, my turn now",
+        "Cool, my turn"
+    ]
+    NextPlayerTurnPhrases = [
+        "Okay, your turn",
+        "Next player please!"
+    ]
+    # Choose a random phrase for the NAO to say
+
+    if (FSM.state == "NaoPlay"):
+        selected_phrase = random.choice(NaoTurnPhrases)
+    else:
+        selected_phrase = random.choice(NextPlayerTurnPhrases)
+    # Say the specified defeat line
+    tts.say(selected_phrase)
+
 
 init()
 
