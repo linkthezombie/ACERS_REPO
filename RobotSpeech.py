@@ -75,21 +75,6 @@ def gameWinSpeech():
     # Say the specified victory line
     tts.say(selected_phrase)
 
-def drawCardSpeech():
-    # Create an array of various ways to announce NAO drawing a card
-    alternative_phrases = [
-        "I will draw a card.",
-        "I will draw.",
-        "I will take a card.",
-        "I will grab a card.",
-        "One more card for me.",
-        "I'm taking a card."
-    ]
-    # Choose a random phrase for the NAO to say
-    selected_phrase = random.choice(alternative_phrases)
-    # Say the specified drawing card line
-    tts.say(selected_phrase)
-
 def gameLostSpeech():
     # Create an array of various ways to announce NAO has lost
     alternative_phrases = [
