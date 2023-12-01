@@ -106,3 +106,4 @@ def gameLostSpeech():
 absLayer.playCard.subscribe(playCardSpeech)
 absLayer.drawCard.subscribe(drawCardSpeech)
 absLayer.NaoWon.subscribe(gameWinSpeech)
+absLayer.oppWon.subscribe(gameLostSpeech)
