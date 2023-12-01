@@ -45,8 +45,16 @@ class AbstractionLayer:
 
     #initialize events
     def __init__(self):
+        #begin game
+        self.startGame = Event[None]()
+        self.drewStartingHand = Event[]()
+        
+        #game over commands
+        self.oppWon = Event[None]()
+        self.NaoWon = Event[None]()
+        
         #Robot commands
-        self.playCard = Event[Card]()
+        self.playCard = Event[Card, suit]()
         self.drawCard = Event[None]()
 
         # Game events - Robot's actions
