@@ -46,14 +46,16 @@ state = ""
 
 def win():
     print("\nWin! Woo hoo")
+    abslayer.NaoWon.trigger()
     #end the game
     return 0
 
-def start():
+def start(startingHand):
     print("Starting Game: \n\n")
     state = "start"
     #adds all of Nao's cards in his start hand to his memory
-    propogateHandOnStart()
+    abslayer.trigger(drawStartingHand)
+    propogateHandOnStart(startingHand)
         
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     state = "NaoPlay" #COMMENT OUT WHEN DONE TESTING
@@ -87,7 +89,7 @@ def start():
     setPlayerArr()
 
 #determines what happens after another player has announced they have completed their turn
-def opponentPlay():
+def opponentPlay(tc):
     print("Opponent's turn, please compelete turn\n")
         
     #wait for confrimation of player ending turn via voice recognition
@@ -133,6 +135,7 @@ def opponentPlay():
     #current implementaion to allow for command line interaction
     if playerinput.lower() == "won":
         state = "win"
+        abslayer.oppWon.trigger()
     #check if it is Nao's turn
     elif (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
@@ -153,7 +156,9 @@ def playing():
     #call abstraction layer function to let program know there is a card to be played
     #sets of physical interactions with NAO
     #passes the card object that will be played
-    absLayer.playCard.trigger(card)
+    if card.value == 8:
+        newSuit = GameStrategy.suitChoice()
+    absLayer.playCard.trigger(card, newSuit)
 
 
 #what the Nao does if it must draw a card
@@ -203,26 +208,22 @@ def setPlayerArr():
         GameStrategy.Players[1] = 1
 
 #adds 5 cards drawn by the NAO to its hand to start the game
-def propogateHandOnStart():
+def propogateHandOnStart(sH):
 
     #must command NAO to draw, then see and return a card
     #do above 5 times
     #immplemented in later sprint
-
-    #implmentation to allow for command line interaction for testing by adding five cards from user
-    for x in range(5):       
-        s = input("\nPlease enter the suit for the card Nao drew: ")
-        v = input("\nPlease enter the face value for the card Nao drew: ")
-        while hand.checkValidity(v, s) == False:
-            print("Invalid input, please try again\n")
-            s = input("\nPlease enter the suit for the card Nao drew: ")
-            v = input("\nPlease enter the face value for the card Nao drew: ")
-        hand.addCard(v, s)
+    for x in sH:       
+        hand.addCard(x.value, x.suit)
 
 #when drewCard is triggered by other functions, drawing() will be called here
 #this will mean a card has been drawn physically and must be added virtually
 #it passes a card object
 absLayer.drewCard.subscribe(drawing)
+
+
+
+absLayer.startGame.subscribe(start)
 
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 #absLayer.oppTurn.subscribe(opponentPlay)
