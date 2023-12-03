@@ -1,3 +1,6 @@
 #ignore .pyc files
 *.pyc
 .vscode
+.vs
+
+config.json
