@@ -21,9 +21,19 @@ import RobotInfo
 import AbstractionLayer
 import numpy as np
 import almath
-from positioning.Pose import *
-import ComputerVision
+#from positioning.Pose import *
+#import ComputerVision
 
+# translate a 3d point or Position6D to work with the other arm
+def l2rPosn(vec):
+    if len(vec) == 3:
+        return [vec[0], -vec[1], vec[2]]
+    else:
+        return [vec[0], -vec[1], vec[2], -vec[3], vec[4], -vec[5]]
+
+# translate joint positions to give the same (mirrored) position with the other arm
+def l2rJoints(vec):
+    return [vec[0], -vec[1], -vec[2], -vec[3], -vec[4], vec[5]]
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
@@ -42,7 +52,7 @@ realStart = [0.1548919677734375, -0.07060599327087402, -90 * d2r, -0.03490658476
 holderPlacement = [-0.0827939, -0.25622, 0.246933, 0.325249, -0.246933, 0.27]
 
 # offset to the holderPlacement position to "pull back" the card slightly
-trayPlaceOffset = [0, -30*d2r, 0, 30*d2r, 0, 0]
+trayPlaceOffset = [0, -30*d2r, 0, 60*d2r, 0, 0]
 
 centerCardL = [-0.0445281, 0.3, -0.243948, -1.36368, -1.17048, 0.28]
 centerCardR = [0, -0.299172, 0.246933, 1.31928, 1.21489, .28]
@@ -113,7 +123,7 @@ def drawCard():
     time.sleep(1)
 
     # grab the card
-    motion.setAngles("LHand", .29, pctMax)
+    motion.setAngles("LHand", .25, pctMax)
     time.sleep(1)
 
     # pull the card the rest of the way out
@@ -212,57 +222,113 @@ def handOffRtoL():
 
 # Assuming the card is in Ace's right hand, put it into the tray at in the [offset]th position
 def placeCardInHolder(offset):
+    arm = "LArm"
+    hand = "LHand"
+
     targetPos = holderPlacement[:]
 
     targetPos[1] -= 10 * d2r * offset
 
     startPos = [ targetPos[i] + trayPlaceOffset[i] for i in range(len(targetPos)) ]
 
-    motion.setAngles("RArm", startPos, pctMax)
+    motion.setAngles(arm, l2rJoints(startPos), pctMax)
     time.sleep(1)
 
-    motion.setAngles("RArm", targetPos, pctMax)
+    motion.setAngles(arm, l2rJoints(targetPos), pctMax)
     time.sleep(.5)
 
-    motion.setAngles("RHand", 1, pctMax)
+    motion.setAngles(hand, 1, pctMax)
     time.sleep(.5)
 
-# these are random guesses, fix before running
-slot0 = [.5, -.15, -.06, 0, 0, 0]
-def testPerfectPositioning(offset):
-    targetPosition = slot0[:]
-    targetPosition[1] -= .025 * offset
-    targetPosition[0] -= .03
+# Position where the bot grabs cards from the left or right stack
+lStackPos = [0.1548919677734375, -0.5583341121673584, 0, 0.03490658476948738, 0, 1]
+rStackPos = [0.1548919677734375, -0.21471810340881348, 0, 0.03490658476948738, 0, 1]
 
-    motion.setPositions("RArm", 0, targetPosition, pctMax, 63 - 16) # axis mask = all axes except y axis (pitch)
+# Used to specify which stack to play/pick up from
+L = True
+R = False
+
+# Hand joint position to press thumb against the cards
+medHand = .5
+
+# Put a card from the bot's hand onto the specified stack
+def playOnStack(side):
+    arm = "LArm"
+    hand = "LHand"
+
+    if(side == L):
+        targetPos = lStackPos[:]
+    else:
+        targetPos = rStackPos[:]
+
+    # Keep hand closed, raise shoulder to put hand above the cards
+    targetPos[-1] = .25
+    targetPos[0] -= 20 * d2r
+
+    # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
+    targetPos[-4] = -90 * d2r
+    targetPos[-2] = 90 * d2r
+
+    startPos = targetPos[:]
+
+    # Start with arm pulled back a bit (shoulder raised, elbow bent)
+    startPos[0] -= 30 * d2r
+    startPos[-3] += 60 * d2r
+    # Pull back the end position slightly so we don't overshoot the holder
+    targetPos[0] -= 10 * d2r
+    targetPos[-3] += 20 * d2r
+
+    motion.setAngles(arm, l2rJoints(startPos), pctMax)
     time.sleep(1)
-
-    targetPosition[0] += .03
-    motion.setPositions("RArm", 0, targetPosition, pctMax, 63 - 16)
-    time.sleep(1)
-
-    motion.setAngles("RHand", 1, pctMax)
+    motion.angleInterpolation("LArm", l2rJoints(targetPos), .5, True)
+    time.sleep(.5)
+    motion.setAngles(hand, 1, pctMax)
     time.sleep(.5)
 
-def testCardRelative(offset):
-    targetPosition = slot0[:]
-    targetPosition[1] -= .025 * offset
+# Pick up the top card of the specified stack 
+def pickupFromStack(side):
+    arm = "LArm"
+    hand = "LHand"
+    shoulder = "LShoulderPitch"
 
-    targetTf = almath.Transform_fromPosition(*targetPosition)
-    # T_CT
+    targetPos = lStackPos[:] if side==L else rStackPos[:]
 
-    # T_HT = T_CT * T_CH^-1
-    target_HT = np.matmul( targetTf, np.linalg.inv( T_CH ) )
+    # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
+    targetPos[0] -= 30 * d2r
+    targetPos[-1] = 1
 
-    targetHandPos = almath.position6DFromTransform( target_HT )
-
-    motion.setPositions("RArm", 0, targetHandPos, pctMax, 63)
+    motion.setAngles(arm, l2rJoints(targetPos), pctMax)
     time.sleep(1)
-
-    motion.setAngles("RHand", 1, pctMax)
+    # Move arm down to put hand around cards
+    motion.changeAngles(shoulder, 30 * d2r, pctMax)
+    time.sleep(.5)
+    # Lightly press against the front of the cards
+    motion.setStiffnesses(hand, .2)
+    motion.setAngles(hand, medHand, pctMax)
+    time.sleep(.75)
+    # Raise hand upwards, dragging the top card with it
+    motion.changeAngles(shoulder, -20 * d2r, pctMax)
+    time.sleep(.5)
+    # Grab the top card the rest of the way, now that the stack is out of the way
+    motion.setStiffnesses(hand, 1)
+    motion.setAngles(hand, .25, pctMax)
+    time.sleep(.5)
+    # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
+    # This prevents us from dragging the other cards left or right on the tray.
+    motion.angleInterpolation("LArm", l2rJoints(trayPlaceOffset), .5, False)
     time.sleep(.5)
 
+def playFromLStack():
+    pickupFromStack(L)
+    playCard()
 
+def moveLtoR():
+    pickupFromStack(L)
+    playOnStack(R)
+
+def moveRtoL():
+    pickupFromStack(R)
+    playOnStack(L)
     
 # use Ace's right hand to pick up the card in the [offset]th slot of Ace's hand
 def pickUpFromHolder(offset):
