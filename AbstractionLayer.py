@@ -51,7 +51,7 @@ class AbstractionLayer:
     def __init__(self):
         #begin game
         self.startGame = Event[value, suit]()
-        self.drawStartingHand = Event[]()
+        self.drawStartingHand = Event[None]()
         self.returnSH = Event[CardArr]()
         
         #game over commands

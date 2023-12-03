@@ -1,3 +1,21 @@
+"""
+CommandDetection.py
+
+Handles the Nao's detection of commands by human opponents
+
+Created by Liam McKinney
+
+Created 10/2/2023
+
+Revised 10/19/2023
+    -testing command detection(Liam McKinney)
+Revised 12/1/2023
+    -Added Detection for player ending their turn (Shelby Jones)
+Revised 12/2/2023
+    -revised for clarity (Elise Lovell)
+"""
+
+
 
 from naoqi import ALProxy
 from naoqi import ALModule
@@ -123,7 +141,7 @@ def newOpp():
 
 #selects a pharse for the Nao to say if it is now his turn
 def NaoGoes():
-        NaoTurnPhrases = [
+    NaoTurnPhrases = [
         "Okay, my turn now",
         "I PLAY NOW",
         "Cool, my turn"
