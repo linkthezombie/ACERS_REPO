@@ -23,8 +23,8 @@ import RobotInfo
 import AbstractionLayer
 import numpy as np
 import almath
-#from positioning.Pose import *
-#import ComputerVision
+from positioning.Pose import *
+import ComputerVision
 
 # translate a 3d point or Position6D to work with the other arm
 def l2rPosn(vec):
@@ -382,8 +382,8 @@ def onDrewCard(card):
     
     placeCardInHolder(offset)
 
-def onPlayCard(cardToPlay, suitStringForEights):
-    #type: (AbstractionLayer.Card)->None
+def onPlayCard(cardToPlay, _):
+    #type: (AbstractionLayer.Card, str)->None
     for offset, cardInHand in enumerate(hand):
         if(cardInHand == cardToPlay):
             cardInHand = None
