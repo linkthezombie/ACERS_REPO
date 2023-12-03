@@ -32,6 +32,9 @@ Edited 11-17-2023 - Elise Lovell
     -debugging
 Edited 11-19-2023 - Elise Lovell
      - added abstraction layer calls
+Edited 12-2-2023 - Elise Lovell
+    - connected to commandDecetcion, robotspeech, robotmotion, and other layers
+    - functionality to draw five cards at start of game
 """
 #!/usr/bin/env python2.7
 
@@ -50,12 +53,11 @@ def win():
     #end the game
     return 0
 
-def start(startingHand):
+def start(v, s):
     print("Starting Game: \n\n")
     state = "start"
     #adds all of Nao's cards in his start hand to his memory
-    abslayer.trigger(drawStartingHand)
-    propogateHandOnStart(startingHand)
+    abslayer.drawStartingHand.trigger()
         
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     state = "NaoPlay" #COMMENT OUT WHEN DONE TESTING
@@ -68,17 +70,7 @@ def start(startingHand):
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
     print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
-       
-    #Implement receving card from higher abstraction
-    #method in either computerVision or abstraction layer to return the card in the discard pile feild
-    #current implementation relies on human player inputing what they see
-    #part of later sprint
-    s = input("\nPlease enter the suit for the top card of the discard pile: ")
-    v = input("\nPlease enter the face value for the top card of the discard pile: ")
-    while hand.checkValidity(v, s) == False:
-        print("Invalid input, please try again\n")
-        s = input("\nPlease enter the suit for the top card of the discard pile: ")
-        v = input("\nPlease enter the face value for the top card of the discard pile: ")
+    
     C = hand.Card(v, s)
     GameStrategy.TopCard = C
                 
@@ -89,21 +81,8 @@ def start(startingHand):
     setPlayerArr()
 
 #determines what happens after another player has announced they have completed their turn
-def opponentPlay(tc):
+def opponentPlay(v, s):
     print("Opponent's turn, please compelete turn\n")
-        
-    #wait for confrimation of player ending turn via voice recognition
-    #function to listen called, and wait for true return?
-    #from command detection or abstraction layer
-
-    #implementation for human player interaction till passing discard pile card to lower abstraction is implemented
-    #implemented in later sprint
-    s = input("\nPlease enter the suit for the current top card of the discard pile: ")
-    v = input("\nPlease enter the face value for the current top card of the discard pile: ")
-    while hand.checkValidity(v, s) == False:
-        print("Invalid input, please try again\n")
-        s = input("\nPlease enter the suit for the top card of the discard pile: ")
-        v = input("\nPlease enter the face value for the top card of the discard pile: ")
     NewCard = hand.Card(v, s)
         
     if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
@@ -111,8 +90,6 @@ def opponentPlay(tc):
         GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1 #assume player drew card
         print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
         print("Opponent drew card\n")
-        #abstraction layer call to oppDrew to signal they drew a card and set of chain of events
-        absLayer.oppDrew.trigger()
     else:
         #opp played a card
         #update all variables
@@ -122,9 +99,7 @@ def opponentPlay(tc):
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
-        #abstraction layer call to oppPlayed to signal they played a card and set of chain of events
-        #takes in the card that was played as a parameter
-        absLayer.oppPlayed.trigger(GameStrategy.TopCard)
+   
     playerinput = input("\nIf player won, please enter won, else enter next:" )
         
     print("\nThank you for waiting, the next player may go now\n")
@@ -139,7 +114,10 @@ def opponentPlay(tc):
     #check if it is Nao's turn
     elif (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
+        absLayer.NaoNext.trigger()
         NaoPlay()
+    else:
+        absLayer.oppNext.trigger()
 
 #actions the Nao must take if it is going to play a card
 def playing():
@@ -175,6 +153,7 @@ def drawing(card1):
     else:
         #moves onto next player
         GameStrategy.NextPlayer()
+        absLayer.oppNext.trigger()
 
 #starts the Nao's turn and moves flow on turn along
 def NaoPlay():
@@ -208,7 +187,7 @@ def setPlayerArr():
         GameStrategy.Players[1] = 1
 
 #adds 5 cards drawn by the NAO to its hand to start the game
-def propogateHandOnStart(sH):
+def propogateHandOnStart(sh):
 
     #must command NAO to draw, then see and return a card
     #do above 5 times
@@ -221,9 +200,10 @@ def propogateHandOnStart(sH):
 #it passes a card object
 absLayer.drewCard.subscribe(drawing)
 
-
+absLayer.returnSH.sybscribe(propogateHandOnStart)
 
 absLayer.startGame.subscribe(start)
 
+absLayer.oppEndTurn.subscribe(OpponentPlay)
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 #absLayer.oppTurn.subscribe(opponentPlay)
