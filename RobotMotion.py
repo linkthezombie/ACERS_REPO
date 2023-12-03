@@ -16,6 +16,8 @@ Revised 11/19/2023
   -Implemented card checking during handOffLtoR
 Edited 12/2/2023
   - Added function for drawing starting hand - Elise Lovell
+Edited 12/3/2023
+  - Added basic animations for 2-stack hand management
 """
 import time
 from naoqi import ALProxy
