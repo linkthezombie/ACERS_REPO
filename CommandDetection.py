@@ -1,3 +1,4 @@
+
 from naoqi import ALProxy
 from naoqi import ALModule
 from naoqi import ALBroker
@@ -103,36 +104,38 @@ def compliment():
 def sayCard():
     CommandDetector.tts.say("I play the Ace of Spades")
 
-def endTurn():
-    #Check the draw pile to see if there is a new card
-    #if so, then update topcard
-    #if not, decrease from draw pile counter variable 
+#oppoent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
+def endTurnOpp():
+    CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    val = "" + CTemp[0]
+    suit =  "" + CTemp[1]
+    absLayer.oppEndTurn.Trigger(val, suit)
 
-
-
-    NaoTurnPhrases = [
-        "Okay, my turn now",
-        "I PLAY NOW",
-        "Cool, my turn"
-    ]
+#selects a phrase to say if an opponent is going
+def newOpp():
     NextPlayerTurnPhrases = [
         "Okay, your turn",
         "Next player please!",
         "Your turn now!"
     ]
-    # Choose a random phrase for the NAO to say
-    ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-    absLayer.oppEndTurn.Trigger()
-
-    if (FSM.state == "NaoPlay"):
-        selected_phrase = random.choice(NaoTurnPhrases)
-    elif(FSM.state == "opponentPlay"):
-        selected_phrase = random.choice(NextPlayerTurnPhrases)
-    # Say the specified line
-
+    selected_phrase = random.choice(NaoTurnPhrases)
     tts.say(selected_phrase)
-##end EndTurn Function
+
+#selects a pharse for the Nao to say if it is now his turn
+def NaoGoes():
+        NaoTurnPhrases = [
+        "Okay, my turn now",
+        "I PLAY NOW",
+        "Cool, my turn"
+    ]
+    selected_phrase = random.choice(NextPlayerTurnPhrases)
+    tts.say(selected_phrase)
 
 init()
 
 atexit.register(deinit)
+
+#if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
+absLayer.NaoNext.subscribe(NaoGoes)
+#if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
+absLayer.oppNext.subscribe(newOpp)
