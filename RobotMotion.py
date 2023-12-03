@@ -14,6 +14,8 @@ Revised 11/1/2023
 
 Revised 11/19/2023
   -Implemented card checking during handOffLtoR
+Edited 12/2/2023
+  - Added function for drawing starting hand - Elise Lovell
 """
 import time
 from naoqi import ALProxy
@@ -330,10 +332,30 @@ def onPlayCard(cardToPlay, suitStringForEights):
     playCard()
     absLayer.playedCard.trigger()
 
-
+#draw five cards on the start of the game
+def startingHand():
+  arr = []
+  #loop to draw five cards
+  for x in range(6):
+    #draw card
+    drawCard()
+    #recognize and turn into card object
+    values = ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
+    v = "" + values[0]
+    s = "" + values[1]
+    c = hand.Card(v, s)
+    #add new card to array
+    arr.push(c)
+    #put card in holder
+    handOffLtoR()
+  #give abs layer list of cards drawn
+  absLayer.returnSH.trigger(arr)
+    
+    
 
 # Set up abstraction layer callbacks
 
+absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)
 absLayer.drewCard.subscribe(onDrewCard)
 absLayer.playCard.subscribe(onPlayCard)
