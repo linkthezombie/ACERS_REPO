@@ -47,18 +47,22 @@ from array import array
 absLayer = AbstractionLayer.AbstractionLayer()
 state = ""
 
+#called when the Nao has won
 def win():
     print("\nWin! Woo hoo")
     abslayer.NaoWon.trigger()
     #end the game
     return 0
 
+#runs to start the program and set up variables and functions
+#takes two string representing the value and suit of the seen card on the discard pile
 def start(v, s):
     print("Starting Game: \n\n")
     state = "start"
-    #adds all of Nao's cards in his start hand to his memory
+    #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
+    #first five starting cards
     abslayer.drawStartingHand.trigger()
-        
+
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     state = "NaoPlay" #COMMENT OUT WHEN DONE TESTING
     if state == "NaoPlay":
@@ -70,7 +74,8 @@ def start(v, s):
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
     print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
-    
+
+    #using passed in values, update the stored discard card to the one seen
     C = hand.Card(v, s)
     GameStrategy.TopCard = C
                 
@@ -81,6 +86,7 @@ def start(v, s):
     setPlayerArr()
 
 #determines what happens after another player has announced they have completed their turn
+#takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s):
     print("Opponent's turn, please compelete turn\n")
     NewCard = hand.Card(v, s)
@@ -114,9 +120,12 @@ def opponentPlay(v, s):
     #check if it is Nao's turn
     elif (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
+        #trigger abs layer event that will let Nao say he has won in commandDetection.py
         absLayer.NaoNext.trigger()
         NaoPlay()
     else:
+        #trigger abs layer event that will allow the Nao to tell player something before their turn
+        #triggers function in commandDetection.py
         absLayer.oppNext.trigger()
 
 #actions the Nao must take if it is going to play a card
@@ -134,7 +143,9 @@ def playing():
     #call abstraction layer function to let program know there is a card to be played
     #sets of physical interactions with NAO
     #passes the card object that will be played
+    newSuit = card.suit
     if card.value == 8:
+        #pick new suit if the card is an 8
         newSuit = GameStrategy.suitChoice()
     absLayer.playCard.trigger(card, newSuit)
 
@@ -153,6 +164,7 @@ def drawing(card1):
     else:
         #moves onto next player
         GameStrategy.NextPlayer()
+        #triggers abs layer event that will let commandDetection.py know to say something before an opponent goes
         absLayer.oppNext.trigger()
 
 #starts the Nao's turn and moves flow on turn along
@@ -187,11 +199,9 @@ def setPlayerArr():
         GameStrategy.Players[1] = 1
 
 #adds 5 cards drawn by the NAO to its hand to start the game
+#takes in array of 5 cards
 def propogateHandOnStart(sh):
-
-    #must command NAO to draw, then see and return a card
-    #do above 5 times
-    #immplemented in later sprint
+    #add the five cards in the array to the virtual hand
     for x in sH:       
         hand.addCard(x.value, x.suit)
 
@@ -200,10 +210,11 @@ def propogateHandOnStart(sh):
 #it passes a card object
 absLayer.drewCard.subscribe(drawing)
 
+#wait for event in abs layer that sends the cards drawn in the starting hand, then calls propogateHandOnStart()
 absLayer.returnSH.sybscribe(propogateHandOnStart)
 
+#wait for abs layer event to be triggered to start the game and call start()
 absLayer.startGame.subscribe(start)
 
-absLayer.oppEndTurn.subscribe(OpponentPlay)
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
-#absLayer.oppTurn.subscribe(opponentPlay)
+absLayer.oppEndTurn.subscribe(OpponentPlay)
