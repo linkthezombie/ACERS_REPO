@@ -1,11 +1,16 @@
+
 from naoqi import ALProxy
 from naoqi import ALModule
 from naoqi import ALBroker
 import RobotInfo
 import atexit
+import FSM
+import ComputerVision
 
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
+
+absLayer = AbstractionLayer.AbstractionLayer()
 
 # Global variable to store the CommandDetector module instance
 CommandDetector = None
@@ -15,9 +20,18 @@ def init():
     global CommandDetector
     
     commands = {
+        #test commands
         "Say hi": sayHi,
         "Be nice": compliment,
-        "Play a card": sayCard
+        "Play a card": sayCard,
+
+        #commands to end a player's turn
+        "I end my turn": endTurn,
+        "end turn": endTurn,
+        "my turn is over": endTurn,
+        "end": endTurn, 
+        "over": endTurn,
+        "done": endTurn
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -90,6 +104,38 @@ def compliment():
 def sayCard():
     CommandDetector.tts.say("I play the Ace of Spades")
 
+#opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
+def endTurnOpp():
+    CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    val = "" + CTemp[0]
+    suit =  "" + CTemp[1]
+    absLayer.oppEndTurn.Trigger(val, suit)
+
+#selects a phrase to say if an opponent is going
+def newOpp():
+    NextPlayerTurnPhrases = [
+        "Okay, your turn",
+        "Next player please!",
+        "Your turn now!"
+    ]
+    selected_phrase = random.choice(NaoTurnPhrases)
+    tts.say(selected_phrase)
+
+#selects a pharse for the Nao to say if it is now his turn
+def NaoGoes():
+        NaoTurnPhrases = [
+        "Okay, my turn now",
+        "I PLAY NOW",
+        "Cool, my turn"
+    ]
+    selected_phrase = random.choice(NextPlayerTurnPhrases)
+    tts.say(selected_phrase)
+
 init()
 
 atexit.register(deinit)
+
+#if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
+absLayer.NaoNext.subscribe(NaoGoes)
+#if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
+absLayer.oppNext.subscribe(newOpp)

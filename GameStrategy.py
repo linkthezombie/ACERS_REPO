@@ -28,6 +28,7 @@ Revised 11-17-2023 - Elise Lovell
 import FSM
 import random
 import hand
+from collections import defaultdict
 
 
 TopCard = hand.Card("6", "spade") #stores last known top card
@@ -55,7 +56,7 @@ def turn():
     #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
     TopCard = currCard
-    FSM.playCard(currCard)
+    return currCard
     print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
 
 #main logic, must decide whether or not the new card is a better option to play
@@ -106,7 +107,6 @@ def canPlayCard():
             var = True
             print("There are playable cards\n")
     return var        
-    
 
 #sets the array representing the players turn be be the next players turn
 def NextPlayer():
@@ -148,6 +148,14 @@ def playable(c):
     else:
         print("Card " + str(c.value) + ", " + str(c.suit) + " is not playable\n")
         return False
+    
+def suitChoice():
+    suit_counts = defaultdict(int) # Initialize defaultdict to store suit counts
+    for card in hand: 
+        suit_counts[card.suit] += 1 # Increment the count for the current card's suit in defaultdict
+    most_common_suit = max(suit_counts, key=suit_counts.get) # Find the suit with the maximum count using the max function and key argument
+    return most_common_suit 
+
 
 #return the number of cards in the Nao's hand
 def getNumOfCards():

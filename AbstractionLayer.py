@@ -11,6 +11,10 @@ Revised 9/29/2023
     -Added comments (Liam McKinney)
 Revised 10/19/2023
     -Python 2.7 compatibility (Liam McKinney)
+Revised 12/1/2023
+    -New events added (Elise Lovell)
+Revised 12/2/2023
+    -New events added (Elise Lovell)
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -45,8 +49,17 @@ class AbstractionLayer:
 
     #initialize events
     def __init__(self):
+        #begin game
+        self.startGame = Event[value, suit]()
+        self.drawStartingHand = Event[]()
+        self.returnSH = Event[CardArr]()
+        
+        #game over commands
+        self.oppWon = Event[None]()
+        self.NaoWon = Event[None]()
+        
         #Robot commands
-        self.playCard = Event[Card]()
+        self.playCard = Event[Card, suit]()
         self.drawCard = Event[None]()
 
         # Game events - Robot's actions
@@ -54,5 +67,8 @@ class AbstractionLayer:
         self.playedCard = Event[None]()
 
         # Player actions
-        self.oppDrew = Event[None]()
-        self.oppPlayed = Event[Card]()
+        self.oppEndTurn = Event[value, suit]()
+
+        #speech triggers
+        self.NaoNext = Event[None]()
+        self.oppNext = Event[None]()

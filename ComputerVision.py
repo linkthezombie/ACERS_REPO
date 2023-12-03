@@ -12,6 +12,8 @@ Revised 11/10/2023
     -Added feature to scan in Aruco marker ids and convert them to card suits and values (Nathan Smith)
 Revised 11/13/2023
     -Altered the way ids are returned in getCardSpecs (Nathan Smith)
+Revised 12/2/2023
+    -Altered return values for discard pile and if front of face (Elise Lovell)
 """
 
 from CameraCalibration import *
@@ -123,26 +125,31 @@ def getVisibleCards():
         # from the transformation matrix, and add them to the list
         Rs.append(T_MT[:3,:3])
         xs.append(T_MT[:3,3])
+        
     return ids, xs, Rs
 
-# Takes the marker ids, and determines the suit and rank of the card that id represents
+# Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 22.2.1)
+#returns array with int suit and value
 def getTopCard(marker_ids, xs, Rs):
     for id in marker_ids:
         pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
         if areas.findPlayArea(pose) == "discard pile":
             rank = (id % 13) + 1
             suit = id // 13
-            return((rank, suit))
+            tempArr = [rank, suit]
+            return(tempArr)
     return None
 
-# Takes the marker ids, and determines the suit and rank of the card that id represents
+# Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 34)
+#returns array with int suit and value
 def getDrawnCard(marker_ids, xs, Rs):
     for id in marker_ids:
         pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
         if areas.findPlayArea(pose) == "in your face":
             rank = (id % 13) + 1
             suit = id // 13
-            return((rank, suit))
+            tempArr = [rank, suit]
+            return(tempArr)
     return None
 
 

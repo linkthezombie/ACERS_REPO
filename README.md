@@ -16,9 +16,10 @@ Requirement 9.2.2 and 13.1: RobbotMotion.py
 Requiremnt 18: GameStrategy.py  
 Requirement 22.1: FSM.py - completed ahead of schedule  
 
-Sprint 5:
-Requirement 22.2.1: ComputerVision.py - completed ahead of schedule
-Requirement 34: ComputerVision.py, RobotMotion.py
+Sprint 5:  
+Requirement 9.2.1, 34, 36: in RobotMotion.py and ComputerVision.py  
+Requirement 22.2.1: ComputerVision.py - completed ahead of schedule  
+Requirement 35: in FSM.py  
 
 Requirement 6:
    - Intro: 
