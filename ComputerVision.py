@@ -142,6 +142,7 @@ def getDrawnCard(marker_ids, xs, Rs):
         if areas.findPlayArea(pose) == "in your face":
             rank = (id % 13) + 1
             suit = id // 13
+            
             return((rank, suit))
     return None
 
