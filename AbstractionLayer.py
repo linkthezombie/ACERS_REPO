@@ -72,7 +72,3 @@ class AbstractionLayer:
         #speech triggers
         self.NaoNext = Event[None]()
         self.oppNext = Event[None]()
-
-        #get and return starting discard pile card
-        self.getDiscardStart = Event[None]()
-        self.returnDiscardStart = Event[value, suit]()
