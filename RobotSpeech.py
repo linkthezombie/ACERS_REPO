@@ -8,6 +8,8 @@ Created by Nathan Smith
 Created 11/20/2023
 Edited 11-20-2023 - Nathan Smith
     -added access to abstraction layer and changes to playCardSpeech to not choose a random suit
+Edited 12/2/2023 - Elise Lovell
+    -added abs layer comments
 """
 
 # Import the necessary modules from the qi library
@@ -88,7 +90,11 @@ def gameLostSpeech():
     # Say the specified defeat line
     tts.say(selected_phrase)
 
+#if abs layer is told a card will be played, call playCardSpeech()
 absLayer.playCard.subscribe(playCardSpeech)
+#if abs layer is told a card should be drawn, call drawCardSpeech()
 absLayer.drawCard.subscribe(drawCardSpeech)
+#if abs layer is told Nao won, call gameWonSpeech()
 absLayer.NaoWon.subscribe(gameWinSpeech)
+#if abs layer is told an opponent won, call gameLostSpeech()
 absLayer.oppWon.subscribe(gameLostSpeech)
