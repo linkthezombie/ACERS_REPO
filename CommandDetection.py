@@ -104,7 +104,7 @@ def compliment():
 def sayCard():
     CommandDetector.tts.say("I play the Ace of Spades")
 
-#oppoent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
+#opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp():
     CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
     val = "" + CTemp[0]
