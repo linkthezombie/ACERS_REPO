@@ -50,16 +50,16 @@ class AbstractionLayer:
     #initialize events
     def __init__(self):
         #begin game
-        self.startGame = Event[value, suit]()
+        self.startGame = Event[Tuple[str, str]]()
         self.drawStartingHand = Event[None]()
-        self.returnSH = Event[CardArr]()
+        self.returnSH = Event[List[Card]]()
         
         #game over commands
         self.oppWon = Event[None]()
         self.NaoWon = Event[None]()
         
         #Robot commands
-        self.playCard = Event[Card, suit]()
+        self.playCard = Event[Tuple[Card, str]]()
         self.drawCard = Event[None]()
 
         # Game events - Robot's actions
@@ -67,7 +67,7 @@ class AbstractionLayer:
         self.playedCard = Event[None]()
 
         # Player actions
-        self.oppEndTurn = Event[value, suit]()
+        self.oppEndTurn = Event[Tuple[str, str]]()
 
         #speech triggers
         self.NaoNext = Event[None]()
