@@ -314,7 +314,7 @@ def onDrewCard(card):
     
     placeCardInHolder(offset)
 
-def onPlayCard(cardToPlay):
+def onPlayCard(cardToPlay, suitStringForEights):
     #type: (AbstractionLayer.Card)->None
     for offset, cardInHand in enumerate(hand):
         if(cardInHand == cardToPlay):
