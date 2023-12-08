@@ -9,7 +9,6 @@ Created 11/11/2023
 """
 
 from copy import copy
-from dataclasses import dataclass
 
 from positioning.Orientation import Orientation
 from positioning.Vector3D import Vector3D
