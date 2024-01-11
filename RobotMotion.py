@@ -25,8 +25,8 @@ import RobotInfo
 import AbstractionLayer
 import numpy as np
 import almath
-from positioning.Pose import *
-import ComputerVision
+#from positioning.Pose import *
+#import ComputerVision
 
 # translate a 3d point or Position6D to work with the other arm
 def l2rPosn(vec):
@@ -47,6 +47,7 @@ d2r = 3.14159 / 180
 pctMax = .35
 
 motion = ALProxy("ALMotion", RobotInfo.getRobotIP(), RobotInfo.getPort())
+temp = ALProxy("ALBodyTemperature", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 # predefined positions for drawing/playing Cards
 
@@ -107,8 +108,8 @@ def toRestPosition():
 T_CH = None
 def drawCard():
     # starting position
-    motion.setAngles("LArm", realStart, pctMax)
-    time.sleep(1)
+    motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
+    time.sleep(.5)
 
     # Allow the elbow to bend freely so we can easily "drag" the hand along the deck
     motion.setStiffnesses("LElbowRoll", 0)
@@ -123,8 +124,8 @@ def drawCard():
     time.sleep(1)
 
     # Move the hand forward to position the thumb under the card so it can grab
-    motion.changePosition("LArm", 0, [.02, 0, 0, 0, 0, 0], pctMax, 7)
-    time.sleep(1)
+    #motion.changePosition("LArm", 0, [.01, 0, 0, 0, 0, 0], pctMax, 7)
+    #time.sleep(1)
 
     # grab the card
     motion.setAngles("LHand", .25, pctMax)
@@ -132,6 +133,9 @@ def drawCard():
 
     # pull the card the rest of the way out
     motion.changeAngles("LElbowRoll", -20 * d2r, pctMax)
+    time.sleep(1)
+
+    motion.changeAngles("LShoulderPitch", -20 * d2r, pctMax)
     time.sleep(1)
 
     # Rotate the hand 180 degrees to remove the card from the tray completely
@@ -145,8 +149,8 @@ def handOffLtoR():
     time.sleep(1.5)
 
     # Check what card we drew, if we can see the marker
-    ids, xs, Rs = ComputerVision.getVisibleCards()
-    drawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
+    #ids, xs, Rs = ComputerVision.getVisibleCards()
+    #drawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
 
     # Make a copy of the right arm pose
     outerPos = centerCardR[:]
@@ -179,8 +183,8 @@ def handOffLtoR():
     time.sleep(1)
 
     #TODO check card again; other corner should be visible now
-    ids, xs, Rs = ComputerVision.getVisibleCards()
-    checkDrawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
+    #ids, xs, Rs = ComputerVision.getVisibleCards()
+    #checkDrawnCard = ComputerVision.getDrawnCard(ids, xs, Rs)
 
 
 
@@ -245,9 +249,11 @@ def placeCardInHolder(offset):
     time.sleep(.5)
 
 # Position where the bot grabs cards from the left or right stack
-lStackPos = [0.1548919677734375, -0.5583341121673584, 0, 0.03490658476948738, 0, 1]
-rStackPos = [0.1548919677734375, -0.21471810340881348, 0, 0.03490658476948738, 0, 1]
+lStackPos = [0.1548919677734375, -0.705974278834025, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.7583341121673584, 0.2, 0.03490658476948738, 0, 1]
+rStackPos = [0.10253213444010417, -0.37981154785325794, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.41471810340881348, 0.2, 0.03490658476948738, 0, 1]
 
+lposn6d = [0.1564960479736328, 0.24610111117362976, 0.06121184676885605, -0.13601450622081757, 0.15259084105491638, 0.6932932138442993]
+rposn6d = [0.19680142402648926, 0.18685270845890045, 0.06395590305328369, -0.18415850400924683, 0.1372106373310089, 0.3608408272266388]
 # Used to specify which stack to play/pick up from
 L = True
 R = False
@@ -270,8 +276,9 @@ def playOnStack(side):
     targetPos[0] -= 20 * d2r
 
     # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
-    targetPos[-4] = -90 * d2r
-    targetPos[-2] = 90 * d2r
+    #targetPos[-4] += (-100 if side==R else -110) * d2r
+    #targetPos[-2] += 90 * d2r
+    #targetPos[1] += .1
 
     startPos = targetPos[:]
 
@@ -282,8 +289,8 @@ def playOnStack(side):
     targetPos[0] -= 10 * d2r
     targetPos[-3] += 20 * d2r
 
-    motion.setAngles(arm, l2rJoints(startPos), pctMax)
-    time.sleep(1)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), pctMax)
+    time.sleep(.5)
     motion.angleInterpolation("LArm", l2rJoints(targetPos), .5, True)
     time.sleep(.5)
     motion.setAngles(hand, 1, pctMax)
@@ -304,12 +311,12 @@ def pickupFromStack(side):
     motion.setAngles(arm, l2rJoints(targetPos), pctMax)
     time.sleep(1)
     # Move arm down to put hand around cards
-    motion.changeAngles(shoulder, 30 * d2r, pctMax)
+    motion.changeAngles(shoulder, 33 * d2r, pctMax)
     time.sleep(.5)
     # Lightly press against the front of the cards
     motion.setStiffnesses(hand, .2)
     motion.setAngles(hand, medHand, pctMax)
-    time.sleep(.75)
+    time.sleep(1.5)
     # Raise hand upwards, dragging the top card with it
     motion.changeAngles(shoulder, -20 * d2r, pctMax)
     time.sleep(.5)
@@ -319,7 +326,10 @@ def pickupFromStack(side):
     time.sleep(.5)
     # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
     # This prevents us from dragging the other cards left or right on the tray.
-    motion.angleInterpolation("LArm", l2rJoints(trayPlaceOffset), .5, False)
+    offset = [-.03, .01, 0, 0, 0, 0]
+    posn = l2rPosn(motion.getPosition(arm, 0, True))
+    tgt = [posn[i] + offset[i] for i in range(6)]
+    motion.positionInterpolations("LArm", 0, l2rPosn(tgt), 7, .5)
     time.sleep(.5)
 
 def playFromLStack():
@@ -408,7 +418,7 @@ def startingHand():
     #draw card
     drawCard()
     #recognize and turn into card object
-    values = ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
+    values = []#ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
     v = "" + values[0]
     s = "" + values[1]
     c = hand.Card(v, s)
