@@ -13,6 +13,8 @@ Revised 12/1/2023
     -Added Detection for player ending their turn (Shelby Jones)
 Revised 12/2/2023
     -revised for clarity (Elise Lovell)
+Revised 12-4-2023
+    -revised logical errors in calling the end of players turn
 """
 
 
@@ -44,12 +46,12 @@ def init():
         "Play a card": sayCard,
 
         #commands to end a player's turn
-        "I end my turn": endTurn,
-        "end turn": endTurn,
-        "my turn is over": endTurn,
-        "end": endTurn, 
-        "over": endTurn,
-        "done": endTurn
+        "I end my turn": endTurnOpp,
+        "end turn": endTurnOpp,
+        "my turn is over": endTurnOpp,
+        "end": endTurnOpp, 
+        "over": endTurnOpp,
+        "done": endTurnOpp
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -143,7 +145,7 @@ def newOpp():
 def NaoGoes():
     NaoTurnPhrases = [
         "Okay, my turn now",
-        "I PLAY NOW",
+        "I get to go now",
         "Cool, my turn"
     ]
     selected_phrase = random.choice(NextPlayerTurnPhrases)

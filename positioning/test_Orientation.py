@@ -1,8 +1,8 @@
 from math import pi
-import quaternion
 from random import random
 
 from positioning.Orientation import Orientation
+from positioning.Quaternion import *
 from positioning.Vector3D import Vector3D
 
 # Comparing floats is painful. There's no perfect way of doing it unless you
@@ -32,11 +32,11 @@ def assert_matrices(a: list[list[float]], b: list[list[float]]):
             assert_floats(a[i][j], b[i][j])
 
 def test_identity_quaternion():
-    array = quaternion.as_float_array(Orientation().quaternion)
-    assert array[0] == 1.0
-    assert array[1] == 0.0
-    assert array[2] == 0.0
-    assert array[3] == 0.0
+    q = Orientation().quaternion
+    assert_floats(q.w, 1.0)
+    assert_floats(q.x, 0.0)
+    assert_floats(q.y, 0.0)
+    assert_floats(q.z, 0.0)
 
 def test_get_rotation_matrix():
     identity = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
@@ -108,6 +108,19 @@ def test_axis_angle_construction():
     expected = Vector3D([0.0, 0.0, -1.0])
     assert_vectors(vector, expected)
 
+def test_get_axis_angle():
+    num_tests = 100
+
+    for _ in range(0, num_tests):
+        test_vector = Vector3D([random(), random(), random()])
+        test_scalar = random()
+
+        test = Orientation.fromAxisAngle(test_vector, test_scalar)
+        (vector, scalar) = test.getAxisAngle()
+
+        assert_vectors(vector, test_vector.normalize())
+        assert_floats(scalar, test_scalar)
+
 def test_inversion():
     num_tests = 100
 
@@ -123,3 +136,19 @@ def test_inversion():
 
         vector2 = inverse.rotateVector(vector0)
         assert_vectors(vector2, expected)
+
+def test_from_matrix():
+    # 90 degree left yaw
+    mat = [
+        [0, -1, 0],
+        [1,  0, 0],
+        [0,  0, 1]
+    ]
+
+    test = Vector3D([1.0, 0.0, 0.0])
+    expected = Vector3D([0.0, 1.0, 0.0])
+
+    orientation = Orientation.fromRotationMatrix(mat)
+    actual = orientation.rotateVector(test)
+
+    assert_vectors(actual, expected)
