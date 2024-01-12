@@ -252,6 +252,10 @@ def placeCardInHolder(offset):
 lStackPos = [0.1548919677734375, -0.705974278834025, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.7583341121673584, 0.2, 0.03490658476948738, 0, 1]
 rStackPos = [0.10253213444010417, -0.37981154785325794, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.41471810340881348, 0.2, 0.03490658476948738, 0, 1]
 
+lPlayStart = [-0.7256240844726562, -0.49697399139404297, -2.023303985595703, 1.0783600807189941, 1.5938677787780762, 0.25]
+rPlayStart = [-0.5476799011230469, -0.21011614799499512, -1.8729721307754517, 1.0660879611968994, 1.8116960525512695, 0.25]
+
+#These are for the left arm, MAKE SURE you use coordinates for the correct arm
 lposn6d = [0.1564960479736328, 0.24610111117362976, 0.06121184676885605, -0.13601450622081757, 0.15259084105491638, 0.6932932138442993]
 rposn6d = [0.19680142402648926, 0.18685270845890045, 0.06395590305328369, -0.18415850400924683, 0.1372106373310089, 0.3608408272266388]
 # Used to specify which stack to play/pick up from
@@ -265,6 +269,7 @@ medHand = .5
 def playOnStack(side):
     arm = "LArm"
     hand = "LHand"
+    shoulder = "LShoulderPitch"
 
     if(side == L):
         targetPos = lStackPos[:]
@@ -272,29 +277,36 @@ def playOnStack(side):
         targetPos = rStackPos[:]
 
     # Keep hand closed, raise shoulder to put hand above the cards
-    targetPos[-1] = .25
-    targetPos[0] -= 20 * d2r
+    targetPos[-1] = .4
+
+    pitchUp = (25 if side==L else 20) * d2r
+    targetPos[0] -= pitchUp
 
     # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
-    #targetPos[-4] += (-100 if side==R else -110) * d2r
+    targetPos[-4] += (-15 if side==L else -10) * d2r
     #targetPos[-2] += 90 * d2r
     #targetPos[1] += .1
 
-    startPos = targetPos[:]
+    startPos = lPlayStart[:] if side == L else rPlayStart[:]
+    startPos[-1] = .4
 
-    # Start with arm pulled back a bit (shoulder raised, elbow bent)
-    startPos[0] -= 30 * d2r
-    startPos[-3] += 60 * d2r
     # Pull back the end position slightly so we don't overshoot the holder
     targetPos[0] -= 10 * d2r
     targetPos[-3] += 20 * d2r
 
     motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), pctMax)
     time.sleep(.5)
-    motion.angleInterpolation("LArm", l2rJoints(targetPos), .5, True)
+    motion.angleInterpolation(arm, l2rJoints(targetPos), .5, True)
+    time.sleep(.5)
+    motion.changeAngles(shoulder, pitchUp, pctMax)
     time.sleep(.5)
     motion.setAngles(hand, 1, pctMax)
     time.sleep(.5)
+    motion.changeAngles(shoulder, -pitchUp, pctMax)
+    time.sleep(.5)
+    #motion.changeAngles(shoulder, 20 * d2r, pctMax)
+    #time.sleep(.5)
+    #motion.setAngles(hand, 1, pctMax)
 
 # Pick up the top card of the specified stack 
 def pickupFromStack(side):
@@ -302,11 +314,19 @@ def pickupFromStack(side):
     hand = "LHand"
     shoulder = "LShoulderPitch"
 
-    targetPos = lStackPos[:] if side==L else rStackPos[:]
+    if side == L:
+        targetPos = lStackPos[:]
+        pullBackPos = lPlayStart[:]
+    else:
+        targetPos = rStackPos[:]
+        pullBackPos = rPlayStart[:]
 
     # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
     targetPos[0] -= 30 * d2r
     targetPos[-1] = 1
+
+    pullBackPos[0] -= 20 * d2r
+    pullBackPos[-1] = .4
 
     motion.setAngles(arm, l2rJoints(targetPos), pctMax)
     time.sleep(1)
@@ -322,14 +342,16 @@ def pickupFromStack(side):
     time.sleep(.5)
     # Grab the top card the rest of the way, now that the stack is out of the way
     motion.setStiffnesses(hand, 1)
-    motion.setAngles(hand, .25, pctMax)
-    time.sleep(.5)
+    #motion.setAngles(hand, .29, pctMax)
+    #time.sleep(.5)
+
     # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
     # This prevents us from dragging the other cards left or right on the tray.
-    offset = [-.03, .01, 0, 0, 0, 0]
-    posn = l2rPosn(motion.getPosition(arm, 0, True))
-    tgt = [posn[i] + offset[i] for i in range(6)]
-    motion.positionInterpolations("LArm", 0, l2rPosn(tgt), 7, .5)
+    motion.angleInterpolationWithSpeed("LArm", l2rJoints(pullBackPos), pctMax)
+    #offset = [-.03, .01, .02, 0, 0, 0]
+    #posn = l2rPosn(motion.getPosition(arm, 0, True))
+    #tgt = [posn[i] + offset[i] for i in range(6)]
+    #motion.positionInterpolations("LArm", 0, l2rPosn(tgt), 7, .5)
     time.sleep(.5)
 
 def playFromLStack():
