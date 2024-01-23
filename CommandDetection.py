@@ -14,7 +14,7 @@ Revised 12/1/2023
 Revised 12/2/2023
     -revised for clarity (Elise Lovell)
 Revised 12-4-2023
-    -revised logical errors in calling the end of players turn
+    -revised logical errors in calling the end of players turn (Shelby Jones)
 """
 
 
