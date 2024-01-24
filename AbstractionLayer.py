@@ -15,6 +15,8 @@ Revised 12/1/2023
     -New events added (Elise Lovell)
 Revised 12/2/2023
     -New events added (Elise Lovell)
+Revised 1/24/2024
+     -edited type of event parameters for startGame to be a list of strings (Elise Lovell)
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -50,7 +52,7 @@ class AbstractionLayer:
     #initialize events
     def __init__(self):
         #begin game
-        self.startGame = Event[Tuple[str, str]]()
+        self.startGame = Event[List[str]]()
         self.drawStartingHand = Event[None]()
         self.returnSH = Event[List[Card]]()
         
