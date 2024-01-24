@@ -10,6 +10,8 @@ Edited 11-20-2023 - Nathan Smith
     -added access to abstraction layer and changes to playCardSpeech to not choose a random suit
 Edited 12/2/2023 - Elise Lovell
     -added abs layer comments
+Edited 1/24/2024 - Elise Lovell
+    - added askNumPlayers
 """
 
 # Import the necessary modules from the qi library
@@ -18,6 +20,7 @@ import hand
 import AbstractionLayer
 import random
 import RobotInfo
+import CommandDetection
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
@@ -39,6 +42,12 @@ def drawCardSpeech():
     # Say the specified drawing card line
     tts.say(selected_phrase)
 
+#has Nao ask aloud how many people, not including himself, are playing the game
+def askNumPlayers():
+    tts.say("How many people are playing?")
+    #call function in command detection to listen for a players response to the question
+    CommandDetection.hearNumPlayers()
+    
 def playCardSpeech(card, heldSuit):
 
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
