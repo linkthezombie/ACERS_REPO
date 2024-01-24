@@ -35,6 +35,8 @@ Edited 11-19-2023 - Elise Lovell
 Edited 12-2-2023 - Elise Lovell
     - connected to commandDecetcion, robotspeech, robotmotion, and other layers
     - functionality to draw five cards at start of game
+Edited 1-24-2024 - Elise Lovell
+    - functionality for mutiple players added
 """
 #!/usr/bin/env python2.7
 
@@ -56,7 +58,7 @@ def win():
 
 #runs to start the program and set up variables and functions
 #takes two string representing the value and suit of the seen card on the discard pile
-def start(v, s):
+def start(np, v, s):
     print("Starting Game: \n\n")
     state = "start"
     #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
@@ -69,8 +71,7 @@ def start(v, s):
         print("\nNao goes first")
     else:
         print("\nOpponent goes first")
-    #Game.Strategy.NumOfPlayers = input("\nHow many players are there (including Nao and yourself): ")
-    GameStrategy.NumOfPlayers = 2
+    GameStrategy.NumOfPlayers = int(np)
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
     print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
