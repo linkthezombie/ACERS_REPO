@@ -17,6 +17,8 @@ Revised 12-4-2023
     -revised logical errors in calling the end of players turn (Shelby Jones)
 Revised 01/24/2024
     -Added commands to recognize and act upon players winning or shuffling the deck (Nathan Smith)
+Revised 1/24/2024
+     - added hearNumPlayers() function and connected to absLayer (Elise Lovell)
 """
 
 
@@ -139,11 +141,24 @@ def endTurnOpp():
     suit =  "" + CTemp[1]
     absLayer.oppEndTurn.Trigger(val, suit)
 
+#listens for opponent to announce they have won the game at the end of their turn
 def playerWins():
+    #implement listening functionality
     CommandDetector.tts.say("Congratulations")
-
+    
+#listen for a player to announce they are shuffling the deck
 def deckShuffle():
+    #implement listening functionality
     CommandDetector.tts.say("Okay")
+
+#Nao listens and records the stated number of players in the game
+#this number will not include the Nao
+def hearNumPlayers():
+##implement abaility to hear a number from 1-6
+    n = 1
+    temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    ns = " " + n
+    absLayer.startgame.trigger(ns, temp[0], temp[1])
 
 #selects a phrase to say if an opponent is going
 def newOpp():
