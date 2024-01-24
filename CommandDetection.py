@@ -15,6 +15,8 @@ Revised 12/2/2023
     -revised for clarity (Elise Lovell)
 Revised 12-4-2023
     -revised logical errors in calling the end of players turn (Shelby Jones)
+Revised 01/24/2024
+    -Added commands to recognize and act upon players winning or shuffling the deck (Nathan Smith)
 """
 
 
@@ -51,7 +53,13 @@ def init():
         "my turn is over": endTurnOpp,
         "end": endTurnOpp, 
         "over": endTurnOpp,
-        "done": endTurnOpp
+        "done": endTurnOpp,
+
+        #commands to announce a player has won
+        "I win": playerWins,
+
+        #commands to announce the deck is being shuffled
+        "I will now shuffle the deck": deckShuffle
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -130,6 +138,12 @@ def endTurnOpp():
     val = "" + CTemp[0]
     suit =  "" + CTemp[1]
     absLayer.oppEndTurn.Trigger(val, suit)
+
+def playerWins():
+    CommandDetector.tts.say("Congratulations")
+
+def deckShuffle():
+    CommandDetector.tts.say("Okay")
 
 #selects a phrase to say if an opponent is going
 def newOpp():
