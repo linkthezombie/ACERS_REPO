@@ -43,7 +43,7 @@ memory = None
 def init():
     global CommandDetector
     
-    commands = {
+    commands = { #WHAT THE ROBOT IS LISTENING FOR
         #test commands
         "Say hi": sayHi,
         "Be nice": compliment,
@@ -59,9 +59,14 @@ def init():
 
         #commands to announce a player has won
         "I win": playerWins,
+        "I have won": playerWins, 
+        "We Win": playerWins,
+        "I am victorious!": playerWins,
 
         #commands to announce the deck is being shuffled
-        "I will now shuffle the deck": deckShuffle
+        "I will now shuffle the deck": deckShuffle,
+        "I am going to shuffle the deck": deckShuffle,
+        "Shuffling": deckShuffle
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
