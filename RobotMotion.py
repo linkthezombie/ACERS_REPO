@@ -18,6 +18,8 @@ Edited 12/2/2023
   - Added function for drawing starting hand - Elise Lovell
 Edited 12/3/2023
   - Added basic animations for 2-stack hand management
+Edited 1/28/2024
+  - Refined 2-stack hand, added virtual hand arrays, implemented play motion
 """
 import time
 from naoqi import ALProxy
@@ -120,15 +122,15 @@ def drawCard():
     motion.setStiffnesses("LElbowRoll", 1)
     time.sleep(.5)
     # Lift the elbow slightly to get the hand in better grabbing position
-    motion.changeAngles("LElbowRoll", -15 * d2r, .1)
-    time.sleep(1)
+    #motion.changeAngles("LElbowRoll", -15 * d2r, .1)
+    #time.sleep(1)
 
     # Move the hand forward to position the thumb under the card so it can grab
     #motion.changePosition("LArm", 0, [.01, 0, 0, 0, 0, 0], pctMax, 7)
     #time.sleep(1)
 
     # grab the card
-    motion.setAngles("LHand", .25, pctMax)
+    motion.setAngles("LHand", .4, pctMax)
     time.sleep(1)
 
     # pull the card the rest of the way out
@@ -140,6 +142,13 @@ def drawCard():
 
     # Rotate the hand 180 degrees to remove the card from the tray completely
     motion.setAngles("LWristYaw", -100 * d2r, pctMax)
+    time.sleep(1)
+
+    # Straighten out elbow and rotate joints to make a smoother transition to the hand tray animations
+    motion.changeAngles("LShoulderPitch", -40*d2r, pctMax)
+    motion.setAngles("LElbowRoll", 0, pctMax)
+    motion.setAngles("LElbowYaw", 90 * d2r, pctMax)
+    motion.setAngles("LWristYaw", -90 * d2r, pctMax)
     time.sleep(1)
 
 # Assuming a card is in Ace's left hand, hand it off to the right hand
@@ -265,6 +274,9 @@ R = False
 # Hand joint position to press thumb against the cards
 medHand = .5
 
+lCards = []
+rCards = []
+
 # Put a card from the bot's hand onto the specified stack
 def playOnStack(side):
     arm = "LArm"
@@ -308,11 +320,20 @@ def playOnStack(side):
     #time.sleep(.5)
     #motion.setAngles(hand, 1, pctMax)
 
+    # We figure out what card we're putting on the stack after the animation is over
+    # because we may not know what card we're holding (e.g. after drawing a card)
+    topCard = None #TODO use ComputerVision to identify top card
+    cards = lCards if side == L else rCards
+    cards.append(topCard)
+
 # Pick up the top card of the specified stack 
 def pickupFromStack(side):
     arm = "LArm"
     hand = "LHand"
     shoulder = "LShoulderPitch"
+
+    cards = lCards if side == L else rCards
+    cards.pop()
 
     if side == L:
         targetPos = lStackPos[:]
@@ -393,7 +414,18 @@ def pickUpFromHolder(offset):
 # TODO implement
 # assuming a card is in Ace's left hand, place it on the discard pile
 def playCard():
-    pass
+    targetPos = realStart[:]
+    targetPos[1] += 10 * d2r
+    targetPos[-2] = -90 * d2r
+
+    motion.setAngles("LArm", targetPos, pctMax)
+    time.sleep(1)
+    motion.changeAngles("LShoulderPitch", 20*d2r, pctMax)
+    time.sleep(1)
+    motion.setAngles("LHand", 1, pctMax)
+    time.sleep(.5)
+    motion.changeAngles("LShoulderPitch", -20*d2r, pctMax)
+    time.sleep(.5)
 
 def onDrawCard():
     drawCard()
