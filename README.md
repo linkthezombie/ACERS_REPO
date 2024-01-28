@@ -23,10 +23,10 @@ Requirement 35: in FSM.py
 
 Sprint 6:  
 Requirement 9.2.3: robotMotion.py  
-Requirement 9.2.4.1: robotMotion.py - completed ahead of time 
+Requirement 9.2.4.1: robotMotion.py - completed ahead of time  
 Requirement 22.2.2: FSM.py, ComputerVision.py  
-Requirement 25: FSM.py, robotSpeech.py
-Requirement 29.1: FSM.py, CommandDetection.py
+Requirement 25: FSM.py, robotSpeech.py  
+Requirement 29.1: FSM.py, CommandDetection.py  
 Requirement 33: FSM.py, robotMotion.py, ComputerVision.py  
 Requirement 37: FSM.py, robotMotion.py, ComputerVision.py, CommandDetection.py  
 
