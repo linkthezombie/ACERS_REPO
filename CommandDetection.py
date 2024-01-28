@@ -19,6 +19,8 @@ Revised 01/24/2024
     -Added commands to recognize and act upon players winning or shuffling the deck (Nathan Smith)
 Revised 1/24/2024
      - added hearNumPlayers() function and connected to absLayer (Elise Lovell)
+Revised 1/24/2024
+     - added phrases to command library (Elise Lovell)
 """
 
 
@@ -66,7 +68,15 @@ def init():
         #commands to announce the deck is being shuffled
         "I will now shuffle the deck": deckShuffle,
         "I am going to shuffle the deck": deckShuffle,
-        "Shuffling": deckShuffle
+        "Shuffling": deckShuffle,
+
+        #commands for number of people playing the game
+        "There is 1 player": hearNumPlayers,
+        "There are 2 players": hearNumPlayers,
+        "There are 3 players": hearNumPlayers, 
+        "There are 4 players": hearNumPlayers, 
+        "There are 5 players": hearNumPlayers,
+        "There are 6 players": hearNumPlayers
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
