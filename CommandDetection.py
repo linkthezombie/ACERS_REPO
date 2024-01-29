@@ -71,12 +71,12 @@ def init():
         "Shuffling": deckShuffle,
 
         #commands for number of people playing the game
-        "There is 1 player": hearNumPlayers,
-        "There are 2 players": hearNumPlayers,
-        "There are 3 players": hearNumPlayers, 
-        "There are 4 players": hearNumPlayers, 
-        "There are 5 players": hearNumPlayers,
-        "There are 6 players": hearNumPlayers
+        "1 player": hearNumPlayers,
+        "2 players": hearNumPlayers,
+        "3 players": hearNumPlayers, 
+        "4 players": hearNumPlayers, 
+        "5 players": hearNumPlayers,
+        "6 players": hearNumPlayers
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -140,15 +140,6 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getRobotIP(),         # parent broker IP
        RobotInfo.getPort())       # parent broker port
 
-def sayHi():
-    CommandDetector.tts.say("Hello")
-
-def compliment():
-    CommandDetector.tts.say("no")
-
-def sayCard():
-    CommandDetector.tts.say("I play the Ace of Spades")
-
 #opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp():
     CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
@@ -158,12 +149,10 @@ def endTurnOpp():
 
 #listens for opponent to announce they have won the game at the end of their turn
 def playerWins():
-    #implement listening functionality
     CommandDetector.tts.say("Congratulations")
     
 #listen for a player to announce they are shuffling the deck
 def deckShuffle():
-    #implement listening functionality
     CommandDetector.tts.say("Okay")
 
 #Nao listens and records the stated number of players in the game
