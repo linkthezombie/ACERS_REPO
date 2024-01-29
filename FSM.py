@@ -37,6 +37,8 @@ Edited 12-2-2023 - Elise Lovell
     - functionality to draw five cards at start of game
 Edited 1-24-2024 - Elise Lovell
     - functionality for mutiple players added
+Revised 1-29-2024 - Elise Lovell
+     - debugging
 """
 #!/usr/bin/env python2.7
 
@@ -66,11 +68,13 @@ def start(np, v, s):
     abslayer.drawStartingHand.trigger()
 
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
-    state = "NaoPlay" #COMMENT OUT WHEN DONE TESTING
+    turn = 0
     if state == "NaoPlay":
+        turn = 1
         print("\nNao goes first")
-    else:
-        print("\nOpponent goes first")
+    #nao will let everyone know who is going to take the frist turn
+    absLayer.firstTurn.trigger(turn)
+    
     GameStrategy.NumOfPlayers = int(np)
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
@@ -203,7 +207,7 @@ def setPlayerArr():
 #takes in array of 5 cards
 def propogateHandOnStart(sh):
     #add the five cards in the array to the virtual hand
-    for x in sH:       
+    for x in sh:       
         hand.addCard(x.value, x.suit)
 
 #when drewCard is triggered by other functions, drawing() will be called here
@@ -212,7 +216,7 @@ def propogateHandOnStart(sh):
 absLayer.drewCard.subscribe(drawing)
 
 #wait for event in abs layer that sends the cards drawn in the starting hand, then calls propogateHandOnStart()
-absLayer.returnSH.sybscribe(propogateHandOnStart)
+absLayer.returnSH.subscribe(propogateHandOnStart)
 
 #wait for abs layer event to be triggered to start the game and call start()
 absLayer.startGame.subscribe(start)
