@@ -12,6 +12,8 @@ Edited 12/2/2023 - Elise Lovell
     -added abs layer comments
 Edited 1/24/2024 - Elise Lovell
     - added askNumPlayers
+Edited 1/29/2024 - Elise Lovell
+     - added whoGoesFirstSpeech()
 """
 
 # Import the necessary modules from the qi library
@@ -45,8 +47,7 @@ def drawCardSpeech():
 #has Nao ask aloud how many people, not including himself, are playing the game
 def askNumPlayers():
     tts.say("How many people are playing?")
-    #call function in command detection to listen for a players response to the question
-    CommandDetection.hearNumPlayers()
+    #command function to hear the number of players should be triggered after he says this
     
 def playCardSpeech(card, heldSuit):
 
@@ -58,6 +59,13 @@ def playCardSpeech(card, heldSuit):
         # If the rank is not "8", use the provided suit
         phrase = f"I will play the {hand.card.value} of {hand.card.suit}."
 
+def whoGoesFirstSpeech(n)
+{
+    if n == 1:
+        tts.say("I'm going first.")
+    else if n == 0:
+        tts.say("The player to my right can go first.")
+}
 
 def endTurnSpeech():
     # Create an array of various ways to announce NAO is ending it's turn
@@ -107,3 +115,5 @@ absLayer.drawCard.subscribe(drawCardSpeech)
 absLayer.NaoWon.subscribe(gameWinSpeech)
 #if abs layer is told an opponent won, call gameLostSpeech()
 absLayer.oppWon.subscribe(gameLostSpeech)
+#if firstTurn is triggered, whoGoesFirst() will be called
+absLayer.firstTurn.subscribe(whoGoesFirstSpeech)
