@@ -17,6 +17,8 @@ Revised 12/2/2023
     -New events added (Elise Lovell)
 Revised 1/24/2024
      -edited type of event parameters for startGame to be a list of strings (Elise Lovell)
+Revised 1/29/2024
+     - added event for robot speech (Elise Lovell)
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -74,3 +76,4 @@ class AbstractionLayer:
         #speech triggers
         self.NaoNext = Event[None]()
         self.oppNext = Event[None]()
+        self.firstTurn = Event[int]()
