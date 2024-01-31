@@ -56,32 +56,25 @@ def win():
     print("\nWin! Woo hoo")
     abslayer.NaoWon.trigger()
     #end the game
+    #need way to end game and allow for restart
     return 0
 
 #runs to start the program and set up variables and functions
-#takes two string representing the value and suit of the seen card on the discard pile
-def start(np, v, s):
+#takes list with the value and suit of the seen card on the discard pile in index 1 and 2 and the num of players in index 0
+def start(list):
     print("Starting Game: \n\n")
     state = "start"
     #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
     #first five starting cards
-    abslayer.drawStartingHand.trigger()
-
-    state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
-    turn = 0
-    if state == "NaoPlay":
-        turn = 1
-        print("\nNao goes first")
-    #nao will let everyone know who is going to take the frist turn
-    absLayer.firstTurn.trigger(turn)
+    absLayer.drawStartingHand.trigger()
     
-    GameStrategy.NumOfPlayers = int(np)
+    GameStrategy.NumOfPlayers = int(list[0])
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
     print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
 
     #using passed in values, update the stored discard card to the one seen
-    C = hand.Card(v, s)
+    C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
                 
     ##Nao needs to store correct number of players
@@ -90,6 +83,17 @@ def start(np, v, s):
     #propoagate the array representing who's turn it is
     setPlayerArr()
 
+    #determine who will go first
+    state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
+    turn = 0
+    if state == "NaoPlay":
+        turn = 1
+        print("\nNao goes first")
+        absLayer.firstTurn.trigger(turn)
+        NaoPlay()
+    else:
+        absLayer.firstTurn.trigger(turn)
+    
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s):
