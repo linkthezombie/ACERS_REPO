@@ -46,10 +46,6 @@ def init():
     global CommandDetector
     
     commands = { #WHAT THE ROBOT IS LISTENING FOR
-        #test commands
-        "Say hi": sayHi,
-        "Be nice": compliment,
-        "Play a card": sayCard,
 
         #commands to end a player's turn
         "I end my turn": endTurnOpp,
