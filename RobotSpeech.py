@@ -48,7 +48,7 @@ def drawCardSpeech():
 def askNumPlayers():
     tts.say("How many people are playing?")
     #command function to hear the number of players should be triggered after he says this
-    
+
 def playCardSpeech(card, heldSuit):
 
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
@@ -59,13 +59,11 @@ def playCardSpeech(card, heldSuit):
         # If the rank is not "8", use the provided suit
         phrase = f"I will play the {hand.card.value} of {hand.card.suit}."
 
-def whoGoesFirstSpeech(n)
-{
+def whoGoesFirstSpeech(n):
     if n == 1:
         tts.say("I'm going first.")
-    else if n == 0:
+    elif n == 0:
         tts.say("The player to my right can go first.")
-}
 
 def endTurnSpeech():
     # Create an array of various ways to announce NAO is ending it's turn
