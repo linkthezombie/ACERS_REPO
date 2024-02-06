@@ -37,6 +37,8 @@ Edited 12-2-2023 - Elise Lovell
     - functionality to draw five cards at start of game
 Edited 1-24-2024 - Elise Lovell
     - functionality for mutiple players added
+Revised 1-29-2024 - Elise Lovell
+     - debugging
 """
 #!/usr/bin/env python2.7
 
@@ -54,30 +56,25 @@ def win():
     print("\nWin! Woo hoo")
     abslayer.NaoWon.trigger()
     #end the game
+    #need way to end game and allow for restart
     return 0
 
 #runs to start the program and set up variables and functions
-#takes two string representing the value and suit of the seen card on the discard pile
-def start(np, v, s):
+#takes list with the value and suit of the seen card on the discard pile in index 1 and 2 and the num of players in index 0
+def start(list):
     print("Starting Game: \n\n")
     state = "start"
     #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
     #first five starting cards
-    abslayer.drawStartingHand.trigger()
-
-    state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
-    state = "NaoPlay" #COMMENT OUT WHEN DONE TESTING
-    if state == "NaoPlay":
-        print("\nNao goes first")
-    else:
-        print("\nOpponent goes first")
-    GameStrategy.NumOfPlayers = int(np)
+    absLayer.drawStartingHand.trigger()
+    
+    GameStrategy.NumOfPlayers = int(list[0])
     print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
     print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
 
     #using passed in values, update the stored discard card to the one seen
-    C = hand.Card(v, s)
+    C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
                 
     ##Nao needs to store correct number of players
@@ -86,6 +83,17 @@ def start(np, v, s):
     #propoagate the array representing who's turn it is
     setPlayerArr()
 
+    #determine who will go first
+    state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
+    turn = 0
+    if state == "NaoPlay":
+        turn = 1
+        print("\nNao goes first")
+        absLayer.firstTurn.trigger(turn)
+        NaoPlay()
+    else:
+        absLayer.firstTurn.trigger(turn)
+    
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s):
@@ -203,7 +211,7 @@ def setPlayerArr():
 #takes in array of 5 cards
 def propogateHandOnStart(sh):
     #add the five cards in the array to the virtual hand
-    for x in sH:       
+    for x in sh:       
         hand.addCard(x.value, x.suit)
 
 #when drewCard is triggered by other functions, drawing() will be called here
@@ -212,7 +220,7 @@ def propogateHandOnStart(sh):
 absLayer.drewCard.subscribe(drawing)
 
 #wait for event in abs layer that sends the cards drawn in the starting hand, then calls propogateHandOnStart()
-absLayer.returnSH.sybscribe(propogateHandOnStart)
+absLayer.returnSH.subscribe(propogateHandOnStart)
 
 #wait for abs layer event to be triggered to start the game and call start()
 absLayer.startGame.subscribe(start)

@@ -25,10 +25,19 @@ Sprint 6:
 Requirement 9.2.3: robotMotion.py  
 Requirement 9.2.4.1: robotMotion.py - completed ahead of time  
 Requirement 22.2.2: FSM.py, ComputerVision.py  
-Requirement 25: FSM.py, robotSpeech.py
-Requirement 29.1: FSM.py, CommandDetection.py
+Requirement 25: FSM.py, robotSpeech.py  
+Requirement 29.1: FSM.py, CommandDetection.py  
 Requirement 33: FSM.py, robotMotion.py, ComputerVision.py  
 Requirement 37: FSM.py, robotMotion.py, ComputerVision.py, CommandDetection.py  
+
+Sprint 7:  
+Requirement 9.2.4.2: robotMotion.py  
+Requirement 13.2: robotMotion.py  
+Requirement 29.2: CommandDetection.py  
+Requirement 29.3: CommandDetection.py  
+Requirement 31: CommandDetection.py, FSM.py, gameStrategy.py, RobotSpeech.py  
+Requirement 32: gameStrategy.py - completed early  
+Requirement 37.2: CommandDetection.py, FSM.py, gameStrategy.py, RobotSpeech.py  
 
 Requirement 6:
    - Intro: 

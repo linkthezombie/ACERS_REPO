@@ -490,7 +490,9 @@ def startingHand():
     drawCard()
     playOnStack(R)
     #recognize and turn into card object
-    values = []#ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
+    values = []
+    #commented out for pythoc 3 usability
+    #values = ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
     v = "" + values[0]
     s = "" + values[1]
     c = hand.Card(v, s)

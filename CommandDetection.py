@@ -52,10 +52,6 @@ def init():
     moves.setExpressiveListeningEnabled(False)
 
     commands = { #WHAT THE ROBOT IS LISTENING FOR
-        #test commands
-        "Say hi": sayHi,
-        "Be nice": compliment,
-        "Play a card": sayCard,
 
         #commands to end a player's turn
         "I end my turn": endTurnOpp,
@@ -77,12 +73,12 @@ def init():
         "Shuffling": deckShuffle,
 
         #commands for number of people playing the game
-        "There is 1 player": hearNumPlayers,
-        "There are 2 players": hearNumPlayers,
-        "There are 3 players": hearNumPlayers, 
-        "There are 4 players": hearNumPlayers, 
-        "There are 5 players": hearNumPlayers,
-        "There are 6 players": hearNumPlayers,
+        "1 player": hearNumPlayers,
+        "2 players": hearNumPlayers,
+        "3 players": hearNumPlayers, 
+        "4 players": hearNumPlayers, 
+        "5 players": hearNumPlayers,
+        "6 players": hearNumPlayers,
 
         #commands to start/continue the board setup/calibration process
         "Begin calibration": startCalib,
@@ -150,15 +146,6 @@ myBroker = ALBroker("myBroker",
        0,           # find a free port and use it
        RobotInfo.getRobotIP(),         # parent broker IP
        RobotInfo.getPort())       # parent broker port
-
-def sayHi():
-    tts.say("Hello")
-
-def compliment():
-    tts.say("no")
-
-def sayCard():
-    tts.say("I play the Ace of Spades")
 
 #opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp():
