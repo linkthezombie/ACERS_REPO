@@ -30,8 +30,9 @@ from naoqi import ALModule
 from naoqi import ALBroker
 import RobotInfo
 import atexit
-import FSM
+import AbstractionLayer
 import ComputerVision
+import random
 
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
@@ -41,10 +42,15 @@ absLayer = AbstractionLayer.AbstractionLayer()
 # Global variable to store the CommandDetector module instance
 CommandDetector = None
 memory = None
+tts = None
 
 def init():
     global CommandDetector
     
+    # the only thing we need this module for is to disable a "listening animation"
+    moves = ALProxy("ALAutonomousMoves", RobotInfo.getRobotIP(), RobotInfo.getPort())
+    moves.setExpressiveListeningEnabled(False)
+
     commands = { #WHAT THE ROBOT IS LISTENING FOR
         #test commands
         "Say hi": sayHi,
@@ -76,7 +82,11 @@ def init():
         "There are 3 players": hearNumPlayers, 
         "There are 4 players": hearNumPlayers, 
         "There are 5 players": hearNumPlayers,
-        "There are 6 players": hearNumPlayers
+        "There are 6 players": hearNumPlayers,
+
+        #commands to start/continue the board setup/calibration process
+        "Begin calibration": startCalib,
+        "Next step": continueCalib
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -97,8 +107,9 @@ class CommandDetectorModule(ALModule):
         # Create proxies for speech recognition and text to speech (for debugging)
         self.asr = ALProxy("ALSpeechRecognition", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
-        self.tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
-
+        global tts
+        tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
+        
         # set list of recognized commands
         self.asr.setVocabulary(commands.keys(), False)
 
@@ -141,13 +152,13 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getPort())       # parent broker port
 
 def sayHi():
-    CommandDetector.tts.say("Hello")
+    tts.say("Hello")
 
 def compliment():
-    CommandDetector.tts.say("no")
+    tts.say("no")
 
 def sayCard():
-    CommandDetector.tts.say("I play the Ace of Spades")
+    tts.say("I play the Ace of Spades")
 
 #opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp():
@@ -159,12 +170,12 @@ def endTurnOpp():
 #listens for opponent to announce they have won the game at the end of their turn
 def playerWins():
     #implement listening functionality
-    CommandDetector.tts.say("Congratulations")
+    tts.say("Congratulations")
     
 #listen for a player to announce they are shuffling the deck
 def deckShuffle():
     #implement listening functionality
-    CommandDetector.tts.say("Okay")
+    tts.say("Okay")
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
@@ -194,6 +205,12 @@ def NaoGoes():
     ]
     selected_phrase = random.choice(NextPlayerTurnPhrases)
     tts.say(selected_phrase)
+
+def startCalib(_ = None):
+    absLayer.startCalib.trigger()
+
+def continueCalib(_ = None):
+    absLayer.nextCalibStep.trigger()
 
 init()
 
