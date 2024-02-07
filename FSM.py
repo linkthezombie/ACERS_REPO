@@ -56,7 +56,7 @@ state = ""
 #called when the Nao has won
 def win():
     print("\nWin! Woo hoo")
-    abslayer.NaoWon.trigger()
+    absLayer.NaoWon.trigger()
     #end the game
     #need way to end game and allow for restart
     return 0
