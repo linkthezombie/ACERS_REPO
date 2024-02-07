@@ -19,6 +19,8 @@ Revised 1/24/2024
      - added phrases to command library (Elise Lovell)
 Revised 1/31/2024
      - added game_state variable, which locks certain functions based on innappropriate game states (Nathan Smith)
+Revised 2/6/24
+    -added phrases to command library, added bones to allow game setup
 """
 
 
@@ -82,7 +84,15 @@ def init():
 
         #commands to start/continue the board setup/calibration process
         "Begin calibration": startCalib,
-        "Next step": continueCalib
+        "Next step": continueCalib,
+
+        #commands to start a new game or play again at the end of a game
+        "Play Again": setupGame,
+        "Start Game": setupGame,
+        "Play Crazy Eights": setupGame,
+        "Play Game": setupGame,
+        "Play Cards": setupGame
+        
         }
 
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -157,6 +167,12 @@ def deckShuffle():
     global game_state
     if game_state == "midgame":
         CommandDetector.tts.say("Okay")
+
+# this starts the setup
+def setupGame():
+    tts.say("Starting a new game")
+    #trigger setup of a new game, initialize variables
+    #reset parameters, shuffle deck, ask num players, etc
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
