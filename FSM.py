@@ -69,9 +69,7 @@ def start(list):
     absLayer.drawStartingHand.trigger()
     
     GameStrategy.NumOfPlayers = int(list[0])
-    print("\nNumber of Players: " + str(GameStrategy.NumOfPlayers))
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
-    print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
 
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
