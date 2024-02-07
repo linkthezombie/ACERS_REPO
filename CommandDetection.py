@@ -82,7 +82,15 @@ def init():
 
         #commands to start/continue the board setup/calibration process
         "Begin calibration": startCalib,
-        "Next step": continueCalib
+        "Next step": continueCalib,
+
+        #commands to start a new game or play again at the end of a game
+        "Play Again": setupGame,
+        "Start Game": setupGame,
+        "Play Crazy Eights": setupGame,
+        "Play Game": setupGame,
+        "Play Cards": setupGame
+        
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -163,6 +171,12 @@ def playerWins():
 def deckShuffle():
     #implement listening functionality
     tts.say("Okay")
+
+# this starts the setup
+def setupGame():
+    tts.say("Starting a new game")
+    #trigger setup of a new game, initialize variables
+    #reset parameters, shuffle deck, ask num players, etc
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
