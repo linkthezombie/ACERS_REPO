@@ -39,6 +39,8 @@ Edited 1-24-2024 - Elise Lovell
     - functionality for mutiple players added
 Revised 1-29-2024 - Elise Lovell
      - debugging
+Revised 2/7/2024 - Elise Lovell
+     - debugging and managing control flow
 """
 #!/usr/bin/env python2.7
 
@@ -68,7 +70,7 @@ def start(list):
     #first five starting cards
     absLayer.drawStartingHand.trigger()
     
-    GameStrategy.NumOfPlayers = int(list[0])
+    GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
 
     #using passed in values, update the stored discard card to the one seen
@@ -78,12 +80,12 @@ def start(list):
     ##Nao needs to store correct number of players
     GameStrategy.CardsInDiscardPile = 1
     print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
-    #propoagate the array representing who's turn it is
-    setPlayerArr()
 
     #determine who will go first
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     turn = 0
+    #propoagate the array representing who's turn it is
+    setPlayerArr()
     if state == "NaoPlay":
         turn = 1
         print("\nNao goes first")
@@ -107,7 +109,7 @@ def opponentPlay(v, s):
         #opp played a card
         #update all variables
         temp = False
-        CardsInDrawPile = CardsInDrawPile - 1
+        GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile - 1
         GameStrategy.TopCard = NewCard #store the new card on the pile
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
@@ -210,7 +212,7 @@ def setPlayerArr():
 def propogateHandOnStart(sh):
     #add the five cards in the array to the virtual hand
     for x in sh:       
-        hand.addCard(x.value, x.suit)
+        hand.addCard(x.vs, x.ss)
 
 #when drewCard is triggered by other functions, drawing() will be called here
 #this will mean a card has been drawn physically and must be added virtually
