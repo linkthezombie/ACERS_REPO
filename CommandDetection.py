@@ -147,7 +147,7 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getPort())       # parent broker port
 
 #opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
-def endTurnOpp():
+def endTurnOpp(_):
     global game_state
     if game_state == "midgame":
         CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
@@ -156,45 +156,44 @@ def endTurnOpp():
         absLayer.oppEndTurn.Trigger(val, suit)
 
 #listens for opponent to announce they have won the game at the end of their turn
-def playerWins():
+def playerWins(_):
     global game_state
     if game_state == "midgame":
         CommandDetector.tts.say("Congratulations")
         game_state = "pregame"
 
 #listen for a player to announce they are shuffling the deck
-def deckShuffle():
+def deckShuffle(_):
     global game_state
     if game_state == "midgame":
         CommandDetector.tts.say("Okay")
 
 # this starts the setup
-def setupGame():
+def setupGame(_):
     tts.say("Starting a new game")
     #trigger setup of a new game, initialize variables
     #reset parameters, shuffle deck, ask num players, etc
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
-def hearNumPlayers():
+def hearNumPlayers(num):
 ##implement ability to hear a number from 1-6
     global game_state
     if game_state == "gamecount":
-        n = 1
+        n = num[:1]
         temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        ns = " " + str(n)
-        absLayer.startgame.trigger(ns, temp[0], temp[1])
+        absLayer.startgame.trigger(n, temp[0], temp[1])
         game_state = "midgame"
 
 #Nao listens for the command to start a new game of Crazy 8's
-def hearStartGame():
+def hearStartGame(_):
     global game_state
     if game_state == "pregame":
         CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
         game_state = "gamecount"
 
 #selects a phrase to say if an opponent is going
-def newOpp():
+def newOpp(_):
     NextPlayerTurnPhrases = [
         "Okay, your turn",
         "Next player please!",
@@ -204,7 +203,7 @@ def newOpp():
     tts.say(selected_phrase)
 
 #selects a phrase for the Nao to say if it is now his turn
-def NaoGoes():
+def NaoGoes(_):
     NaoTurnPhrases = [
         "Okay, my turn now",
         "I get to go now",
