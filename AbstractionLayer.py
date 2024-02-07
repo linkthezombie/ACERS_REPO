@@ -44,15 +44,16 @@ class Event(Generic[T]):
         self.subscribers.append(callback)
 
 # singleton class to hold all game events
-class AbstractionLayer:
+class AbstractionLayer(object):
     #make sure all constructor calls return the same instance
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(AbstractionLayer, cls).__new__(cls)
+            cls.instance.initEvents()
         return cls.instance
 
     #initialize events
-    def __init__(self):
+    def initEvents(self):
         #begin game
         self.startGame = Event[List[str]]()
         self.drawStartingHand = Event[None]()
@@ -76,4 +77,9 @@ class AbstractionLayer:
         #speech triggers
         self.NaoNext = Event[None]()
         self.oppNext = Event[None]()
+
+        #calibration process
+        self.startCalib = Event[None]()
+        self.nextCalibStep = Event[None]()
+        
         self.firstTurn = Event[int]()

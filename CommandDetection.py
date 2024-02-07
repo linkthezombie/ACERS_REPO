@@ -21,8 +21,6 @@ Revised 1/24/2024
      - added hearNumPlayers() function and connected to absLayer (Elise Lovell)
 Revised 1/24/2024
      - added phrases to command library (Elise Lovell)
-Revised 1/31/2024
-     - added game_state variable, which locks certain functions based on innappropriate game states (Nathan Smith)
 """
 
 
@@ -32,8 +30,9 @@ from naoqi import ALModule
 from naoqi import ALBroker
 import RobotInfo
 import atexit
-import FSM
+import AbstractionLayer
 import ComputerVision
+import random
 
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
@@ -43,20 +42,17 @@ absLayer = AbstractionLayer.AbstractionLayer()
 # Global variable to store the CommandDetector module instance
 CommandDetector = None
 memory = None
-
-#Global variable to track the gamestate for command activation purposes
-game_state = "pregame"
+tts = None
 
 def init():
     global CommandDetector
     
-    
+    # the only thing we need this module for is to disable a "listening animation"
+    moves = ALProxy("ALAutonomousMoves", RobotInfo.getRobotIP(), RobotInfo.getPort())
+    moves.setExpressiveListeningEnabled(False)
+
     commands = { #WHAT THE ROBOT IS LISTENING FOR
 
-        #commands to start a game
-        "Start game": hearStartGame, 
-        "Let's start a game": hearStartGame,
-        
         #commands to end a player's turn
         "I end my turn": endTurnOpp,
         "end turn": endTurnOpp,
@@ -82,7 +78,11 @@ def init():
         "3 players": hearNumPlayers, 
         "4 players": hearNumPlayers, 
         "5 players": hearNumPlayers,
-        "6 players": hearNumPlayers
+        "6 players": hearNumPlayers,
+
+        #commands to start/continue the board setup/calibration process
+        "Begin calibration": startCalib,
+        "Next step": continueCalib
         }
     
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -103,8 +103,9 @@ class CommandDetectorModule(ALModule):
         # Create proxies for speech recognition and text to speech (for debugging)
         self.asr = ALProxy("ALSpeechRecognition", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
-        self.tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
-
+        global tts
+        tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
+        
         # set list of recognized commands
         self.asr.setVocabulary(commands.keys(), False)
 
@@ -146,46 +147,31 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getRobotIP(),         # parent broker IP
        RobotInfo.getPort())       # parent broker port
 
+#opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp():
-    global game_state
-    if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        val = "" + CTemp[0]
-        suit =  "" + CTemp[1]
-        absLayer.oppEndTurn.Trigger(val, suit)
+    CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    val = "" + CTemp[0]
+    suit =  "" + CTemp[1]
+    absLayer.oppEndTurn.Trigger(val, suit)
 
 #listens for opponent to announce they have won the game at the end of their turn
 def playerWins():
-    global game_state
-    if game_state == "midgame":
-        CommandDetector.tts.say("Congratulations")
-        game_state = "pregame"
+    #implement listening functionality
+    tts.say("Congratulations")
     
 #listen for a player to announce they are shuffling the deck
 def deckShuffle():
-    global game_state
-    if game_state == "midgame":
-        CommandDetector.tts.say("Okay")
+    #implement listening functionality
+    tts.say("Okay")
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
 def hearNumPlayers():
-##implement ability to hear a number from 1-6
-    global game_state
-    if game_state == "gamecount":
-        n = 1
-        temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        ns = " " + str(n)
-        absLayer.startgame.trigger(ns, temp[0], temp[1])
-        game_state = "midgame"
-
-
-#Nao listens for the command to start a new game of Crazy 8's
-def hearStartGame():
-    global game_state
-    if game_state == "pregame":
-        CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
-        game_state = "gamecount"
+##implement abaility to hear a number from 1-6
+    n = 1
+    temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+    ns = " " + n
+    absLayer.startgame.trigger(ns, temp[0], temp[1])
 
 #selects a phrase to say if an opponent is going
 def newOpp():
@@ -206,6 +192,12 @@ def NaoGoes():
     ]
     selected_phrase = random.choice(NextPlayerTurnPhrases)
     tts.say(selected_phrase)
+
+def startCalib(_ = None):
+    absLayer.startCalib.trigger()
+
+def continueCalib(_ = None):
+    absLayer.nextCalibStep.trigger()
 
 init()
 

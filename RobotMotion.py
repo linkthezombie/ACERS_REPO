@@ -51,6 +51,9 @@ pctMax = .35
 motion = ALProxy("ALMotion", RobotInfo.getRobotIP(), RobotInfo.getPort())
 temp = ALProxy("ALBodyTemperature", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
+#TODO abstract tts into its own module that RobotMotion and CommandDetection can share
+tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
+
 # predefined positions for drawing/playing Cards
 
 # Joint order: ['LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
@@ -349,8 +352,7 @@ def pickupFromStack(side):
     pullBackPos[0] -= 20 * d2r
     pullBackPos[-1] = .4
 
-    motion.setAngles(arm, l2rJoints(targetPos), pctMax)
-    time.sleep(1)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
     # Move arm down to put hand around cards
     motion.changeAngles(shoulder, 33 * d2r, pctMax)
     time.sleep(.5)
@@ -368,7 +370,7 @@ def pickupFromStack(side):
 
     # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
     # This prevents us from dragging the other cards left or right on the tray.
-    motion.angleInterpolationWithSpeed("LArm", l2rJoints(pullBackPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(pullBackPos), pctMax)
     #offset = [-.03, .01, .02, 0, 0, 0]
     #posn = l2rPosn(motion.getPosition(arm, 0, True))
     #tgt = [posn[i] + offset[i] for i in range(6)]
@@ -415,26 +417,31 @@ def pickUpFromHolder(offset):
 # assuming a card is in Ace's left hand, place it on the discard pile
 def playCard():
     targetPos = realStart[:]
-    targetPos[1] += 10 * d2r
+    targetPos[1] -= 15 * d2r
     targetPos[-2] = -90 * d2r
 
-    motion.setAngles("LArm", targetPos, pctMax)
-    time.sleep(1)
+    motion.angleInterpolationWithSpeed("LArm", targetPos, pctMax)
+    motion.setStiffnesses("LElbowRoll", 0)
     motion.changeAngles("LShoulderPitch", 20*d2r, pctMax)
     time.sleep(1)
     motion.setAngles("LHand", 1, pctMax)
     time.sleep(.5)
+    motion.setAngles("LHand", 0, pctMax)
+    time.sleep(.5)
+    motion.setStiffnesses("LElbowRoll", 1)
     motion.changeAngles("LShoulderPitch", -20*d2r, pctMax)
     time.sleep(.5)
 
 def onDrawCard():
     drawCard()
-    handOffLtoR()
+    playOnStack(R)
+
+    absLayer.drewCard.trigger(rCards[-1])
     # we can't put the card into the tray yet, we wait for the drewCard Event
     # to know what we drew to update the hand and know where to put the card.
 
 # once we know which card we drew, find a slot for it in the hand and put it there
-def onDrewCard(card):
+"""def onDrewCard(card):
     # type: (AbstractionLayer.Card)->None
     # scan for an empty slot, put the card there if we find one.
     for offset in range(len(hand)):
@@ -446,31 +453,42 @@ def onDrewCard(card):
         offset = len(hand)
         hand.append(card)
     
-    placeCardInHolder(offset)
+    placeCardInHolder(offset)"""
 
 def onPlayCard(cardToPlay, _):
     #type: (AbstractionLayer.Card, str)->None
-    for offset, cardInHand in enumerate(hand):
-        if(cardInHand == cardToPlay):
-            cardInHand = None
+    #search for card
+    inLStack = False
+    for card in lCards:
+        if card == cardToPlay:
+            inLStack = True
             break
-    # we couldn't find the card we want to play in our hand
-    else:
-        # TODO panic
-        pass
 
-    pickUpFromHolder(offset)
-    handOffRtoL()
+    fromStack = L if inLStack else R
+    toStack = R if inLStack else L
+    cards = lCards if inLStack else rCards
+
+    while(len(cards)>0 and cards[-1] != cardToPlay):
+        pickupFromStack(fromStack)
+        playOnStack(toStack)
+    
+    if(len(cards) == 0):
+        #panic
+        return
+    
+    pickupFromStack(fromStack)
     playCard()
+
     absLayer.playedCard.trigger()
 
 #draw five cards on the start of the game
 def startingHand():
   arr = []
   #loop to draw five cards
-  for x in range(6):
+  for x in range(5):
     #draw card
     drawCard()
+    playOnStack(R)
     #recognize and turn into card object
     values = []
     #commented out for pythoc 3 usability
@@ -484,12 +502,38 @@ def startingHand():
     handOffLtoR()
   #give abs layer list of cards drawn
   absLayer.returnSH.trigger(arr)
-    
-    
 
+calibStep = 0
+calibInstructions = [
+    "Place a card tray under my hand, against my thumb",
+    "Place a card tray under my hand, against my thumb",
+    "Place the deck holder against my fingers"
+]
+calibPositions = [
+    l2rJoints(lStackPos),
+    l2rJoints(rStackPos),
+    realStart
+]
+def onStartCalibration():
+    calibPositions[0][0] -= 10*d2r
+    calibPositions[1][0] -= 10*d2r
+    global calibStep
+    calibStep = 0
+    onNextCalibStep()
+
+def onNextCalibStep():
+    global calibStep
+    if(calibStep >= len(calibPositions)):
+        tts.say("Calibration Complete.")
+        return
+    motion.setAngles("LArm", calibPositions[calibStep], pctMax)
+    tts.say(calibInstructions[calibStep])
+    calibStep += 1
 # Set up abstraction layer callbacks
 
 absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)
-absLayer.drewCard.subscribe(onDrewCard)
 absLayer.playCard.subscribe(onPlayCard)
+
+absLayer.startCalib.subscribe(onStartCalibration)
+absLayer.nextCalibStep.subscribe(onNextCalibStep)
