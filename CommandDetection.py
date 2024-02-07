@@ -21,6 +21,8 @@ Revised 1/24/2024
      - added hearNumPlayers() function and connected to absLayer (Elise Lovell)
 Revised 1/24/2024
      - added phrases to command library (Elise Lovell)
+Revised 2/6/24
+    -added phrases to command library, added bones to allow game setup
 """
 
 
