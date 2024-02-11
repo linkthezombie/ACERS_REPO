@@ -45,7 +45,7 @@ Requirement 41: FSM.py, GameStrategy.py, CommandDetection.py
 Requirement 44: CommandDetection.py  
 Requirement 45.1: CommandDetection.py 
 Requirement 45.2: CommandDetection.py (finshed ahead of schedule)
-Requirement 46: Spring Requirements Folder  
+Requirement 46.1: Spring Requirements Folder  
 
 Requirement 6:
    - Intro: 
