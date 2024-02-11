@@ -134,7 +134,7 @@ class CommandDetectorModule(ALModule):
         #if confidence is high enough, run the command
         if(value[1] >= .5):
             cb = self.commands[value[0]]
-            cb()
+            cb(value[0])
         # Resume speech recognition
         self.asr.pause(False)
         #memory.subscribeToEvent(EVENT_NAME,
