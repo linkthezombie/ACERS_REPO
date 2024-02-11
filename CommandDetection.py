@@ -54,10 +54,6 @@ def init():
 
     commands = { #WHAT THE ROBOT IS LISTENING FOR
 
-        #commands to start a game
-        "Start game": hearStartGame, 
-        "Let's start a game": hearStartGame,
-
         #commands to end a player's turn
         "I end my turn": endTurnOpp,
         "end turn": endTurnOpp,
@@ -87,11 +83,11 @@ def init():
         "Next step": continueCalib,
 
         #commands to start a new game or play again at the end of a game
-        "Play Again": setupGame,
-        "Start Game": setupGame,
-        "Play Crazy Eights": setupGame,
-        "Play Game": setupGame,
-        "Play Cards": setupGame
+        "Play Again": hearStartGame,
+        "Start Game": hearStartGame,
+        "Play Crazy Eights": hearStartGame,
+        "Play Game": hearStartGame,
+        "Play Cards": hearStartGame
         
         }
 
@@ -167,12 +163,6 @@ def deckShuffle(_):
     global game_state
     if game_state == "midgame":
         CommandDetector.tts.say("Okay")
-
-# this starts the setup
-def setupGame(_):
-    tts.say("Starting a new game")
-    #trigger setup of a new game, initialize variables
-    #reset parameters, shuffle deck, ask num players, etc
 
 #Nao listens and records the stated number of players in the game
 #this number will not include the Nao
