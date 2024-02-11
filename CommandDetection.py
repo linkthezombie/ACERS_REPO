@@ -23,6 +23,8 @@ Revised 2/6/24
     -added phrases to command library, added bones to allow game setup
 Revised 2/11/24
     - added naoWins function to account for game_state variable not being updated in situations where Nao wins the game (Nathan Smith)
+Revised 2/11/2024
+    - moved functions to RobotSpeech (Elise Lovell)
 """
 
 
@@ -189,26 +191,6 @@ def hearStartGame(_):
         CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
         game_state = "gamecount"
 
-#selects a phrase to say if an opponent is going
-def newOpp(_):
-    NextPlayerTurnPhrases = [
-        "Okay, your turn",
-        "Next player please!",
-        "Your turn now!"
-    ]
-    selected_phrase = random.choice(NaoTurnPhrases)
-    tts.say(selected_phrase)
-
-#selects a phrase for the Nao to say if it is now his turn
-def NaoGoes(_):
-    NaoTurnPhrases = [
-        "Okay, my turn now",
-        "I get to go now",
-        "Cool, my turn"
-    ]
-    selected_phrase = random.choice(NextPlayerTurnPhrases)
-    tts.say(selected_phrase)
-
 def startCalib(_ = None):
     absLayer.startCalib.trigger()
 
@@ -218,9 +200,6 @@ def continueCalib(_ = None):
 init()
 
 atexit.register(deinit)
-#if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
-absLayer.NaoNext.subscribe(NaoGoes)
-#if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
-absLayer.oppNext.subscribe(newOpp)
+
 # If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
 absLayer.NaoWon.subscribe(naoWins)
