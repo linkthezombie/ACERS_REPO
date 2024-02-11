@@ -133,7 +133,7 @@ def drawCard():
     #time.sleep(1)
 
     # grab the card
-    motion.setAngles("LHand", .4, pctMax)
+    motion.setAngles("LHand", .35, pctMax)
     time.sleep(1)
 
     # pull the card the rest of the way out
@@ -509,14 +509,36 @@ calibInstructions = [
     "Place a card tray under my hand, against my thumb",
     "Place the deck holder against my fingers"
 ]
+intermedPositions = [
+    l2rJoints(lStackPos),
+    l2rJoints(rStackPos),
+    realStart[:]
+]
 calibPositions = [
     l2rJoints(lStackPos),
     l2rJoints(rStackPos),
-    realStart
+    [1.1090400218963623, -0.09668397903442383, -1.659830093383789, -0.9418339729309082, -1.5355758666992188, 0.9847999811172485]
 ]
 def onStartCalibration():
-    calibPositions[0][0] -= 10*d2r
-    calibPositions[1][0] -= 10*d2r
+    # Populate calibPositions with correct poses based on l/rStackPos
+    calibPositions[0] = l2rJoints(lStackPos)
+    calibPositions[0][0] -= 5*d2r
+    calibPositions[0][-1] = .8
+
+    intermedPositions[0] = l2rJoints(lStackPos)
+    intermedPositions[0][0] -= 15*d2r
+
+    calibPositions[1] = l2rJoints(rStackPos)
+    calibPositions[1][0] -= 5*d2r
+    calibPositions[1][-1] = .8
+
+    intermedPositions[1] = l2rJoints(rStackPos)
+    intermedPositions[1][0] -= 15*d2r
+
+    intermedPositions[2] = realStart[:]
+    intermedPositions[2][0] -= 15*d2r
+    intermedPositions[2][-2] = -90*d2r
+
     global calibStep
     calibStep = 0
     onNextCalibStep()
@@ -525,10 +547,27 @@ def onNextCalibStep():
     global calibStep
     if(calibStep >= len(calibPositions)):
         tts.say("Calibration Complete.")
+        finishCalibration()
         return
+    motion.angleInterpolationWithSpeed("LArm", intermedPositions[calibStep], pctMax)
     motion.setAngles("LArm", calibPositions[calibStep], pctMax)
     tts.say(calibInstructions[calibStep])
     calibStep += 1
+
+#Move nao's arm from final calibration step to the initial draw position without disrupting the deck
+def finishCalibration():
+    motion.setStiffnesses("LElbowRoll", 0)
+    time.sleep(.5)
+    motion.changeAngles("LShoulderPitch", 8*d2r, pctMax)
+    time.sleep(.5)
+    motion.setAngles("LHand", 0, pctMax)
+    motion.setStiffnesses("LElbowRoll", 1)
+    time.sleep(.5)
+    motion.changeAngles("LShoulderPitch", -50*d2r, pctMax)
+    time.sleep(1)
+
+    motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
+
 # Set up abstraction layer callbacks
 
 absLayer.drawStartingHand.subscribe(startingHand)
