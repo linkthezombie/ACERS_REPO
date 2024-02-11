@@ -39,6 +39,13 @@ Requirement 31: CommandDetection.py, FSM.py, gameStrategy.py, RobotSpeech.py
 Requirement 32: gameStrategy.py - completed early  
 Requirement 37.2: CommandDetection.py, FSM.py, gameStrategy.py, RobotSpeech.py  
 
+Sprint 8:  
+Requirement 38: RobotMotion.py  
+Requirement 41: FSM.py, GameStrategy.py, CommandDetection.py  
+Requirement 44: CommandDetection.py  
+Requirement 45: CommandDetection.py  
+Requirement 46:  
+
 Requirement 6:
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
