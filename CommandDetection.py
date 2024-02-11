@@ -21,6 +21,8 @@ Revised 1/31/2024
      - added game_state variable, which locks certain functions based on innappropriate game states (Nathan Smith)
 Revised 2/6/24
     -added phrases to command library, added bones to allow game setup
+Revised 2/11/24
+    - added naoWins function to account for game_state variable not being updated in situations where Nao wins the game (Nathan Smith)
 """
 
 
@@ -158,6 +160,11 @@ def playerWins(_):
         CommandDetector.tts.say("Congratulations")
         game_state = "pregame"
 
+# When NaoWon is triggered from the FSM, sets game state to pregame
+def naoWins(_):
+    global game_state
+    game_state = "pregame"
+
 #listen for a player to announce they are shuffling the deck
 def deckShuffle(_):
     global game_state
@@ -215,3 +222,5 @@ atexit.register(deinit)
 absLayer.NaoNext.subscribe(NaoGoes)
 #if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
 absLayer.oppNext.subscribe(newOpp)
+# If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
+absLayer.NaoWon.subscribe(naoWins)
