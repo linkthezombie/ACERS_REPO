@@ -14,6 +14,8 @@ Edited 1/24/2024 - Elise Lovell
     - added askNumPlayers
 Edited 1/29/2024 - Elise Lovell
      - added whoGoesFirstSpeech()
+Edited 2/11/2024 - Elise Lovell
+     - moved functions from CommandDetection, removed askNumPlayers, subscribed to playedCard
 """
 
 # Import the necessary modules from the qi library
@@ -44,11 +46,6 @@ def drawCardSpeech():
     # Say the specified drawing card line
     tts.say(selected_phrase)
 
-#has Nao ask aloud how many people, not including himself, are playing the game
-def askNumPlayers():
-    tts.say("How many people are playing?")
-    #command function to hear the number of players should be triggered after he says this
-
 def playCardSpeech(card, heldSuit):
 
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
@@ -68,7 +65,6 @@ def whoGoesFirstSpeech(n):
 def endTurnSpeech():
     # Create an array of various ways to announce NAO is ending it's turn
     alternative_phrases = [
-        "I pass the turn.",
         "That's the end of my turn.",
         "I finish my turn.",
         "My move is done.",
@@ -105,6 +101,30 @@ def gameLostSpeech():
     # Say the specified defeat line
     tts.say(selected_phrase)
 
+#selects a phrase for the Nao to say if it is now his turn
+def NaoGoes(_):
+    NaoTurnPhrases = [
+        "Okay, my turn now",
+        "I get to go now",
+        "Cool, my turn"
+    ]
+    selected_phrase = random.choice(NextPlayerTurnPhrases)
+    tts.say(selected_phrase)
+
+#selects a phrase to say if an opponent is going
+def newOpp(_):
+    NextPlayerTurnPhrases = [
+        "Okay, your turn",
+        "Next player please!",
+        "Your turn now!"
+    ]
+    selected_phrase = random.choice(NaoTurnPhrases)
+    tts.say(selected_phrase)
+
+#if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
+absLayer.oppNext.subscribe(newOpp)
+#if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
+absLayer.NaoNext.subscribe(NaoGoes)
 #if abs layer is told a card will be played, call playCardSpeech()
 absLayer.playCard.subscribe(playCardSpeech)
 #if abs layer is told a card should be drawn, call drawCardSpeech()
@@ -115,3 +135,5 @@ absLayer.NaoWon.subscribe(gameWinSpeech)
 absLayer.oppWon.subscribe(gameLostSpeech)
 #if firstTurn is triggered, whoGoesFirst() will be called
 absLayer.firstTurn.subscribe(whoGoesFirstSpeech)
+#event playedCard will be triggered and call endTurnSpeeach once the Nao has played a card
+absLayer.playedCard.subscribe(endTurnSpeech)
