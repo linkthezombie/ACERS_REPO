@@ -72,7 +72,8 @@ def start(list):
     
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
-
+    GameStrategy.Players = []
+    
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
@@ -210,6 +211,7 @@ def setPlayerArr():
 #adds 5 cards drawn by the NAO to its hand to start the game
 #takes in array of 5 cards
 def propogateHandOnStart(sh):
+    hand.NaoHand = []
     #add the five cards in the array to the virtual hand
     for x in sh:       
         hand.addCard(x.vs, x.ss)
@@ -226,4 +228,4 @@ absLayer.returnSH.subscribe(propogateHandOnStart)
 absLayer.startGame.subscribe(start)
 
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
-absLayer.oppEndTurn.subscribe(OpponentPlay)
+absLayer.oppEndTurn.subscribe(opponentPlay)
