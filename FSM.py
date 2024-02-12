@@ -65,6 +65,7 @@ def win():
 #takes list with the value and suit of the seen card on the discard pile in index 1 and 2 and the num of players in index 0
 def start(list):
     print("Starting Game: \n\n")
+    hand.NaoHand = []
     state = "start"
     #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
     #first five starting cards
@@ -72,7 +73,8 @@ def start(list):
     
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
-
+    GameStrategy.Players = []
+    
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
