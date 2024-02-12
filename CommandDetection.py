@@ -41,40 +41,44 @@ import random
 EVENT_NAME = "WordRecognized"
 MODULE_NAME = "CommandDetector"
 absLayer = AbstractionLayer.AbstractionLayer()
+
 # Global variable to store the CommandDetector module instance
 CommandDetector = None
 memory = None
 
-#Global variable to track the gamestate for command activation purposes
+# Global variable to track the gamestate for command activation purposes
 game_state = "pregame"
 tts = None
 
 def init():
     global CommandDetector
 
-    # the only thing we need this module for is to disable a "listening animation"
+    # The only thing we need this module for is to disable a "listening animation"
     moves = ALProxy("ALAutonomousMoves", RobotInfo.getRobotIP(), RobotInfo.getPort())
     moves.setExpressiveListeningEnabled(False)
 
-    commands = { #WHAT THE ROBOT IS LISTENING FOR
+    commands = { # List of verbal commands Nao listens out for and the functions triggered after identifying a command
 
-        #commands to end a player's turn
+        #Commands to end a player's turn
         "I end my turn": endTurnOpp,
         "end turn": endTurnOpp,
         "my turn is over": endTurnOpp,
         "end": endTurnOpp, 
         "over": endTurnOpp,
         "done": endTurnOpp,
-        #commands to announce a player has won
+
+        #Commands to announce a player has won
         "I win": playerWins,
         "I have won": playerWins, 
         "We Win": playerWins,
         "I am victorious!": playerWins,
-        #commands to announce the deck is being shuffled
+
+        #Commands to announce the deck is being shuffled
         "I will now shuffle the deck": deckShuffle,
         "I am going to shuffle the deck": deckShuffle,
         "Shuffling": deckShuffle,
-        #commands for number of people playing the game
+
+        #Commands to determine how many people are playing the game with Nao
         "1 player": hearNumPlayers,
         "2 players": hearNumPlayers,
         "3 players": hearNumPlayers, 
@@ -82,11 +86,11 @@ def init():
         "5 players": hearNumPlayers,
         "6 players": hearNumPlayers,
 
-        #commands to start/continue the board setup/calibration process
+        #Commands to start/continue the board setup/calibration process
         "Begin calibration": startCalib,
         "Next step": continueCalib,
 
-        #commands to start a new game or play again at the end of a game
+        #Commands to start a new game or play again at the end of a game
         "Play Again": hearStartGame,
         "Start Game": hearStartGame,
         "Play Crazy Eights": hearStartGame,
@@ -131,7 +135,7 @@ class CommandDetectorModule(ALModule):
         #memory.unsubscribeToEvent(EVENT_NAME,
         #    MODULE_NAME)
         print(value)
-        #if confidence is high enough, run the command
+        # If confidence is high enough, run the command
         if(value[1] >= .5):
             cb = self.commands[value[0]]
             cb(value[0])
@@ -146,7 +150,7 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getRobotIP(),         # parent broker IP
        RobotInfo.getPort())       # parent broker port
 
-#opponent has verablly announced the end of their turn, get top card on discard pile and trigger FSM events
+# When a player verbally confirms the end of their turn, get top card on discard pile and trigger FSM events
 def endTurnOpp(_):
     global game_state
     if game_state == "midgame":
@@ -155,11 +159,10 @@ def endTurnOpp(_):
         suit =  "" + CTemp[1]
         absLayer.oppEndTurn.Trigger(val, suit)
 
-#listens for opponent to announce they have won the game at the end of their turn
+# When a player verbally confirms their victory, update game state
 def playerWins(_):
     global game_state
     if game_state == "midgame":
-        CommandDetector.tts.say("Congratulations")
         game_state = "pregame"
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
@@ -167,29 +170,28 @@ def naoWins(_):
     global game_state
     game_state = "pregame"
 
-#listen for a player to announce they are shuffling the deck
+# When a player verbally calls for a deck shuffle, Nao registers this
 def deckShuffle(_):
     global game_state
     if game_state == "midgame":
         CommandDetector.tts.say("Okay")
+        # TODO: Implement logic for shuffling deck and trigger it from here
 
-#Nao listens and records the stated number of players in the game
-#this number will not include the Nao
+# When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
-##implement ability to hear a number from 1-6
     global game_state
-    if game_state == "gamecount":
-        n = num[:1]
+    if game_state == "setupgame":
+        n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
         temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
         absLayer.startgame.trigger(n, temp[0], temp[1])
         game_state = "midgame"
 
-#Nao listens for the command to start a new game of Crazy 8's
+# When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
         CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
-        game_state = "gamecount"
+        game_state = "setupgame"
 
 def startCalib(_ = None):
     absLayer.startCalib.trigger()
