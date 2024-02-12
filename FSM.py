@@ -228,4 +228,4 @@ absLayer.returnSH.subscribe(propogateHandOnStart)
 absLayer.startGame.subscribe(start)
 
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
-absLayer.oppEndTurn.subscribe(OpponentPlay)
+absLayer.oppEndTurn.subscribe(opponentPlay)
