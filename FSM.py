@@ -72,7 +72,6 @@ def start(list):
     
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
-    GameStrategy.Players = []
     
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
@@ -86,7 +85,7 @@ def start(list):
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     turn = 0
     #propoagate the array representing who's turn it is
-    setPlayerArr()
+    setPlayerArr(state)
     if state == "NaoPlay":
         turn = 1
         print("\nNao goes first")
@@ -197,12 +196,13 @@ def winGame(): #checks if NAO has won the game
         win()
 
 #set up the player array at the start of the game for all players and who will be going first
-def setPlayerArr():
+def setPlayerArr(n):
+    GameStrategy.Players = []
     #make spot for each player in the game
     for player in range(GameStrategy.NumOfPlayers):
         GameStrategy.Players.append(0)
     #set Nao to go first
-    if(state == "NaoPlay"):
+    if(n == "NaoPlay"):
         GameStrategy.Players[0] = 1
     #other player goes first
     else:
