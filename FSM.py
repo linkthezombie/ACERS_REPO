@@ -109,7 +109,6 @@ def opponentPlay(v, s):
         #opp played a card
         #update all variables
         temp = False
-        GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile - 1
         GameStrategy.TopCard = NewCard #store the new card on the pile
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
