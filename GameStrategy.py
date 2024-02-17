@@ -89,7 +89,7 @@ def choice(a, b):
     #a is of a lower value
     else:
         print(a.ss +", " + a.vs + " is lower\n")
-        return False
+        return True
 
 #checks if there are any playablel cards at all in Nao's hand and returns true if there are
 #a card is playable if it matches the suit or value of the top card in the stack
