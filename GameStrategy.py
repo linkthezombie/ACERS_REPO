@@ -151,7 +151,7 @@ def playable(c):
     
 def suitChoice():
     suit_counts = defaultdict(int) # Initialize defaultdict to store suit counts
-    for card in hand: 
+    for card in hand.NaoHand: 
         suit_counts[card.suit] += 1 # Increment the count for the current card's suit in defaultdict
     most_common_suit = max(suit_counts, key=suit_counts.get) # Find the suit with the maximum count using the max function and key argument
     return most_common_suit 
