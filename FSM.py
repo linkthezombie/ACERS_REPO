@@ -41,6 +41,8 @@ Revised 1-29-2024 - Elise Lovell
      - debugging
 Revised 2/7/2024 - Elise Lovell
      - debugging and managing control flow
+Revised 2/17-2/18 - Elise Lovell
+     - debugging after running test games
 """
 #!/usr/bin/env python2.7
 
@@ -155,6 +157,8 @@ def playing():
     if card.value == 8:
         #pick new suit if the card is an 8
         newSuit = GameStrategy.suitChoice()
+        newTC = hand.Card(GameStrategy.TopCard.vs, newSuit)
+        GameStrategy.TopCard = newTC
     absLayer.playCard.trigger(card, newSuit)
 
 
