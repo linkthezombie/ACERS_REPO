@@ -22,6 +22,8 @@ Edited 11-17-2023 - Shelby Jones
     -added python 2.7 compatibility
 Revised 11-17-2023 - Elise Lovell
      -debugging
+Revised 2/17/2024 - Elise Lovell
+     - debugging
 """
 
 #from DataTypes import *
@@ -150,11 +152,29 @@ def playable(c):
         return False
     
 def suitChoice():
-    suit_counts = defaultdict(int) # Initialize defaultdict to store suit counts
-    for card in hand.NaoHand: 
-        suit_counts[card.suit] += 1 # Increment the count for the current card's suit in defaultdict
-    most_common_suit = max(suit_counts, key=suit_counts.get) # Find the suit with the maximum count using the max function and key argument
-    return most_common_suit 
+    def suitChoice():
+    suit_counts = [0, 0, 0, 0] # Initialize defaultdict to store suit counts
+    for card in hand.NaoHand:
+        if card.ss == "spade":
+            suit_counts[0] = suit_counts[0] + 1
+        elif card.ss == "heart":
+            suit_counts[1] = suit_counts[1] + 1
+        elif card.ss == "club":
+            suit_counts[2] = suit_counts[2] + 1
+        else: 
+            suit_counts[3] = suit_counts[3] + 1
+    most_common_suit =  "spade"
+    max = suit_counts[0]
+    if max < suit_counts[1]:
+        most_common_suit =  "heart"
+        max = suit_counts[1]
+    if max < suit_counts[2]:
+        most_common_suit =  "spade"
+        max = suit_counts[2]
+    if max < suit_counts[3]:
+        most_common_suit =  "diamond"
+        max = suit_counts[3]
+    return most_common_suit
 
 
 #return the number of cards in the Nao's hand
