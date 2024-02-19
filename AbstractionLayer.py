@@ -19,6 +19,8 @@ Revised 1/24/2024
      -edited type of event parameters for startGame to be a list of strings (Elise Lovell)
 Revised 1/29/2024
      - added event for robot speech (Elise Lovell)
+Revised 2-19-2024 (Shelby Jones)
+     -added an event to say anything inputted as a string
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple

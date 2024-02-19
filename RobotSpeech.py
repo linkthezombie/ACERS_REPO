@@ -16,6 +16,8 @@ Edited 1/29/2024 - Elise Lovell
      - added whoGoesFirstSpeech()
 Edited 2/11/2024 - Elise Lovell
      - moved functions from CommandDetection, removed askNumPlayers, subscribed to playedCard
+Revised 2-19-2024 - Shelby Jones
+     - added function to say anything passed in as a string, added abstraction layer subscriptions
 """
 
 # Import the necessary modules from the qi library

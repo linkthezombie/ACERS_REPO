@@ -27,6 +27,7 @@ Revised 2/11/2024
     - moved functions to RobotSpeech (Elise Lovell)
 Revised 2/19/2023
      - added event calls to suffle
+     - removed random TTS calls, replaced with abstraction layer calls (Shelby Jones)
 """
 
 
@@ -176,8 +177,8 @@ def naoWins(_):
 def deckShuffle(_):
     global game_state
     if game_state == "midgame":
-        absLayer.isShuffled.trigger()
-        absLayer.sayThis.trigger("Thank you for shuffling, lets continue.")
+        absLayer.SayWords.trigger("Okay")
+        # TODO: Implement logic for shuffling deck and trigger it from here
 
 # When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
@@ -185,14 +186,13 @@ def hearNumPlayers(num):
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
         temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        absLayer.startgame.trigger([n, temp[0], temp[1]])
+        absLayer.startgame.trigger(n, temp[0], temp[1])
         game_state = "midgame"
 
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
-        CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
         absLayer.SayWords.trigger("Alright, starting game! How many people will be playing with me?")
         game_state = "setupgame"
 
