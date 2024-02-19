@@ -77,6 +77,9 @@ class AbstractionLayer(object):
         #speech triggers
         self.NaoNext = Event[None]()
         self.oppNext = Event[None]()
+        
+
+        self.SayWords = Event[str]() #trigger to say a string
 
         #calibration process
         self.startCalib = Event[None]()

@@ -191,6 +191,7 @@ def hearStartGame(_):
     global game_state
     if game_state == "pregame":
         CommandDetector.tts.say("Alright, starting game! How many people will be playing with me?")
+        absLayer.SayWords.trigger("Alright, starting game! How many people will be playing with me?")
         game_state = "setupgame"
 
 def startCalib(_ = None):
@@ -205,3 +206,4 @@ atexit.register(deinit)
 
 # If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
 absLayer.NaoWon.subscribe(naoWins)
+

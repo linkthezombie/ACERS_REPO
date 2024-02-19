@@ -121,6 +121,12 @@ def newOpp(_):
     selected_phrase = random.choice(NaoTurnPhrases)
     tts.say(selected_phrase)
 
+def anySpeech(wordsToSay):
+    #say things passed through SayWords in AbsLayer
+    tts.say(wordsToSay)
+
+
+
 #if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
 absLayer.oppNext.subscribe(newOpp)
 #if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
@@ -137,3 +143,6 @@ absLayer.oppWon.subscribe(gameLostSpeech)
 absLayer.firstTurn.subscribe(whoGoesFirstSpeech)
 #event playedCard will be triggered and call endTurnSpeeach once the Nao has played a card
 absLayer.playedCard.subscribe(endTurnSpeech)
+
+#if abslayer gets SayWords, it will trigger AnySpeech
+absLayer.SayWords.subscribe(anySpeech)
