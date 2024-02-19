@@ -177,7 +177,7 @@ def deckShuffle(_):
     global game_state
     if game_state == "midgame":
         absLayer.isShuffled.trigger()
-        absLayer.sayThis.trigger("Thank you for shuffling, lets continue.")
+        absLayer.SayWords.trigger("Thank you for shuffling, lets continue.")
 
 # When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
