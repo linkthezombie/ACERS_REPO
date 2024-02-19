@@ -35,7 +35,7 @@ from collections import defaultdict
 
 TopCard = hand.Card("6", "spade") #stores last known top card
 CardsInDrawPile = 52 #tracks cards left in draw pile
-NumOfPlayers = 2 #stores total number of players
+NumOfPlayers = 0 #stores total number of players
 Players = [] #stores players in array
 CardsInDiscardPile = 1 #initializes discard pile, puts top card in pile
 
