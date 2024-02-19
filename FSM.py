@@ -157,9 +157,8 @@ def playing():
     if card.value == 8:
         #pick new suit if the card is an 8
         newSuit = GameStrategy.suitChoice()
-        newTC = hand.Card(GameStrategy.TopCard.vs, newSuit)
-        GameStrategy.TopCard = newTC
     absLayer.playCard.trigger(card, newSuit)
+    GameStrategy.TopCard.suit = newSuit
 
 
 #what the Nao does if it must draw a card
