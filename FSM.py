@@ -116,19 +116,12 @@ def opponentPlay(v, s):
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
    
-    playerinput = input("\nIf player won, please enter won, else enter next:" )
-        
     print("\nThank you for waiting, the next player may go now\n")
         
     GameStrategy.NextPlayer() #transition to next player
 
-    #take voice command at end of player turn, either be turn complete or won, see beinging of statement for where implmenation should be
-    #current implementaion to allow for command line interaction
-    if playerinput.lower() == "won":
-        state = "win"
-        abslayer.oppWon.trigger()
     #check if it is Nao's turn
-    elif (GameStrategy.Players[0] == 1):
+    if (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
         #trigger abs layer event that will let Nao say he has won in commandDetection.py
         absLayer.NaoNext.trigger()
