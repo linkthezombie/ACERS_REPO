@@ -25,6 +25,8 @@ Revised 2/11/24
     - added naoWins function to account for game_state variable not being updated in situations where Nao wins the game (Nathan Smith)
 Revised 2/11/2024
     - moved functions to RobotSpeech (Elise Lovell)
+Revised 2/19/2023
+     - added event calls to suffle
 """
 
 
@@ -174,8 +176,8 @@ def naoWins(_):
 def deckShuffle(_):
     global game_state
     if game_state == "midgame":
-        CommandDetector.tts.say("Okay")
-        # TODO: Implement logic for shuffling deck and trigger it from here
+        absLayer.isShuffled.trigger()
+        absLayer.sayThis.trigger("Thank you for shuffling, lets continue.")
 
 # When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
