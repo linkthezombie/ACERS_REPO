@@ -37,7 +37,7 @@ TopCard = hand.Card("6", "spade") #stores last known top card
 CardsInDrawPile = 52 #tracks cards left in draw pile
 NumOfPlayers = 2 #stores total number of players
 Players = [] #stores players in array
-CardsInDiscardPile = 1
+CardsInDiscardPile = 1 #initializes discard pile, puts top card in pile
 
 
 #decison making for robot on it's own turn and select a card to play
@@ -152,7 +152,6 @@ def playable(c):
         return False
     
 def suitChoice():
-    def suitChoice():
     suit_counts = [0, 0, 0, 0] # Initialize defaultdict to store suit counts
     for card in hand.NaoHand:
         if card.ss == "spade":
