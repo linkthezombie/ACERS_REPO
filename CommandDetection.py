@@ -64,6 +64,8 @@ def init():
 
         #Commands to end a player's turn
         "I end my turn": endTurnOpp,
+        "I'm done": endTurnOpp,
+        "Your turn": endTurnOpp,
         "end turn": endTurnOpp,
         "my turn is over": endTurnOpp,
         "end": endTurnOpp, 
@@ -72,6 +74,7 @@ def init():
 
         #Commands to announce a player has won
         "I win": playerWins,
+        "I won": playerWins,
         "I have won": playerWins, 
         "We Win": playerWins,
         "I am victorious!": playerWins,
@@ -79,6 +82,8 @@ def init():
         #Commands to announce the deck is being shuffled
         "I will now shuffle the deck": deckShuffle,
         "I am going to shuffle the deck": deckShuffle,
+        "I'm shuffling": deckShuffle,
+        "Time to shuffle": deckShuffle,
         "Shuffling": deckShuffle,
 
         #Commands to determine how many people are playing the game with Nao
@@ -167,11 +172,13 @@ def playerWins(_):
     global game_state
     if game_state == "midgame":
         game_state = "pregame"
+        absLayer.SayWords.trigger("Congratulations, good game.")
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
 def naoWins(_):
     global game_state
     game_state = "pregame"
+    absLayer.SayWords.trigger("I've Won, yay!")
 
 # When a player verbally calls for a deck shuffle, Nao registers this
 def deckShuffle(_):
@@ -186,9 +193,9 @@ def hearNumPlayers(num):
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
         temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        absLayer.startgame.trigger(n, temp[0], temp[1])
         game_state = "midgame"
-
+        absLayer.startgame.trigger(n, temp[0], temp[1])
+        
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
     global game_state
