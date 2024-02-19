@@ -219,6 +219,11 @@ def propogateHandOnStart(sh):
     for x in sh:       
         hand.addCard(x.vs, x.ss)
 
+#called upon isShuffled from commandDetection and AbstractionLayer
+def nowShuffle():
+    GameStrategy.CardsInDrawPile = (CardsInDiscardPile -1) + CardsInDrawPile
+    GameStrategy.CardsInDiscardPile = 1
+
 #when drewCard is triggered by other functions, drawing() will be called here
 #this will mean a card has been drawn physically and must be added virtually
 #it passes a card object
@@ -229,6 +234,9 @@ absLayer.returnSH.subscribe(propogateHandOnStart)
 
 #wait for abs layer event to be triggered to start the game and call start()
 absLayer.startGame.subscribe(start)
+
+#subscribe to shuffle event to update variables when shuffled
+absLayer.isShuffled.subscribe(nowShuffle)
 
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 absLayer.oppEndTurn.subscribe(opponentPlay)
