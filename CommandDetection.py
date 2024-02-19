@@ -183,7 +183,7 @@ def hearNumPlayers(num):
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
         temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        absLayer.startgame.trigger(n, temp[0], temp[1])
+        absLayer.startgame.trigger([n, temp[0], temp[1]])
         game_state = "midgame"
 
 # When a player verbally requests to start a game, Nao enters the setup phase 
