@@ -20,6 +20,8 @@ Edited 12/3/2023
   - Added basic animations for 2-stack hand management
 Edited 1/28/2024
   - Refined 2-stack hand, added virtual hand arrays, implemented play motion
+Revised 2-19-2024 (Shelby Jones)
+    - removed tts calls, replaced with absLayer triggers
 """
 import time
 from naoqi import ALProxy
@@ -52,7 +54,7 @@ motion = ALProxy("ALMotion", RobotInfo.getRobotIP(), RobotInfo.getPort())
 temp = ALProxy("ALBodyTemperature", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 #TODO abstract tts into its own module that RobotMotion and CommandDetection can share
-tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
+#tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 # predefined positions for drawing/playing Cards
 
@@ -546,12 +548,12 @@ def onStartCalibration():
 def onNextCalibStep():
     global calibStep
     if(calibStep >= len(calibPositions)):
-        tts.say("Calibration Complete.")
+        absLayer.SayWords.trigger("Calibration Complete.")
         finishCalibration()
         return
     motion.angleInterpolationWithSpeed("LArm", intermedPositions[calibStep], pctMax)
     motion.setAngles("LArm", calibPositions[calibStep], pctMax)
-    tts.say(calibInstructions[calibStep])
+    absLayer.SayWords.trigger(calibInstructions[calibStep])
     calibStep += 1
 
 #Move nao's arm from final calibration step to the initial draw position without disrupting the deck
