@@ -75,7 +75,8 @@ class AbstractionLayer(object):
 
         # Player actions
         self.oppEndTurn = Event[Tuple[str, str]]()
-
+        self.isShuffled = Event[None]()
+        
         #speech triggers
         self.NaoNext = Event[None]()
         self.oppNext = Event[None]()
