@@ -67,15 +67,15 @@ def turn():
 #takes in two card objects, a and b
 def choice(a, b):
     #check if a is of higher value
-    if a.Value > b.Value:
+    if a.value > b.value:
         print(b.ss +", " + b.vs + " is lower\n")
         return False
     # same value, different suits
-    elif b.Value == a.Value:
+    elif b.value == a.value:
         bSuitNum = 0
         aSuitNum = 0
         #tally up how many of each suit are present in the hand for card a and b
-        for c in hand:
+        for c in hand.NaoHand:
             if c.suit == b.suit:
                 bSuitNum = bSuitNum + 1
             elif c.suit == a.suit:
