@@ -100,7 +100,7 @@ def start(list):
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s):
-    print("Opponent's turn, please compelete turn\n")
+    print("Opponent's turn, please complete turn\n")
     NewCard = hand.Card(v, s)
         
     if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
@@ -218,9 +218,9 @@ def nowShuffle():
     GameStrategy.CardsInDrawPile = (CardsInDiscardPile -1) + CardsInDrawPile
     GameStrategy.CardsInDiscardPile = 1
 
-#calls upon oppWon from AbstractionLayer to provide functionality when a player wins
+#calls upon oppWon from AbstractionLayer to reset crucial variables when a player wins
 def oppWins():
-    state = "lose"
+    state = ""
     # TODO: Add further logic for opponent winning
 
 #when drewCard is triggered by other functions, drawing() will be called here
