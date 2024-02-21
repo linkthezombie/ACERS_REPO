@@ -240,4 +240,5 @@ absLayer.isShuffled.subscribe(nowShuffle)
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 absLayer.oppEndTurn.subscribe(opponentPlay)
 
+#if opponent wins, oppwins() is triggered to reset state variable to empty
 absLayer.oppWon.subscribe(oppWins)
