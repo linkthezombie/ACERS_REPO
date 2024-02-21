@@ -85,16 +85,14 @@ def start(list):
 
     #determine who will go first
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
-    turn = 0
     #propoagate the array representing who's turn it is
     setPlayerArr(state)
     if state == "NaoPlay":
-        turn = 1
         print("\nNao goes first")
-        absLayer.firstTurn.trigger(turn)
+        absLayer.SayWords.trigger("I will go first.")
         NaoPlay()
     else:
-        absLayer.firstTurn.trigger(turn)
+        absLayer.SayWords.trigger("The player to my right can play first.")
     
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
