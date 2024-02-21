@@ -43,6 +43,9 @@ Revised 2/7/2024 - Elise Lovell
      - debugging and managing control flow
 Revised 2/17-2/18 - Elise Lovell
      - debugging after running test games
+Revised 2/21 - Nathan Smith
+     - implementation of functionality after players win a game
+     - added lose state
 """
 #!/usr/bin/env python2.7
 
@@ -215,6 +218,11 @@ def nowShuffle():
     GameStrategy.CardsInDrawPile = (CardsInDiscardPile -1) + CardsInDrawPile
     GameStrategy.CardsInDiscardPile = 1
 
+#calls upon oppWon from AbstractionLayer to provide functionality when a player wins
+def oppWins():
+    state = "lose"
+    # TODO: Add further logic for opponent winning
+
 #when drewCard is triggered by other functions, drawing() will be called here
 #this will mean a card has been drawn physically and must be added virtually
 #it passes a card object
@@ -231,3 +239,5 @@ absLayer.isShuffled.subscribe(nowShuffle)
 
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 absLayer.oppEndTurn.subscribe(opponentPlay)
+
+absLayer.oppWon.subscribe(oppWins)
