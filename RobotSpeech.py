@@ -53,16 +53,10 @@ def playCardSpeech(card, heldSuit):
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if hand.card.value == 8:
         # If the rank is "8", choose a new suit
-        phrase = f"I will play the {hand.card.value} of {hand.card.suit}, and I will make the suit {heldSuit}."
+        phrase = f"I will play the {hand.card.value} of {hand.card.suit}, and I will make the new suit {heldSuit}."
     else:
         # If the rank is not "8", use the provided suit
         phrase = f"I will play the {hand.card.value} of {hand.card.suit}."
-
-def whoGoesFirstSpeech(n):
-    if n == 1:
-        tts.say("I'm going first.")
-    elif n == 0:
-        tts.say("The player to my right can go first.")
 
 def endTurnSpeech():
     # Create an array of various ways to announce NAO is ending it's turn
@@ -141,8 +135,6 @@ absLayer.drawCard.subscribe(drawCardSpeech)
 absLayer.NaoWon.subscribe(gameWinSpeech)
 #if abs layer is told an opponent won, call gameLostSpeech()
 absLayer.oppWon.subscribe(gameLostSpeech)
-#if firstTurn is triggered, whoGoesFirst() will be called
-absLayer.firstTurn.subscribe(whoGoesFirstSpeech)
 #event playedCard will be triggered and call endTurnSpeeach once the Nao has played a card
 absLayer.playedCard.subscribe(endTurnSpeech)
 
