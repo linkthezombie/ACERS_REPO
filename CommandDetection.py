@@ -172,13 +172,12 @@ def playerWins(_):
     global game_state
     if game_state == "midgame":
         game_state = "pregame"
-        absLayer.SayWords.trigger("Congratulations, good game.")
+        absLayer.gameLostSpeech.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
 def naoWins(_):
     global game_state
     game_state = "pregame"
-    absLayer.SayWords.trigger("I've Won, yay!")
 
 # When a player verbally calls for a deck shuffle, Nao registers this
 def deckShuffle(_):
@@ -200,7 +199,7 @@ def hearNumPlayers(num):
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
-        absLayer.SayWords.trigger("Alright, starting game! How many people will be playing with me?")
+        absLayer.SayWords.trigger("Alright, starting game! How many players will there be playing with me?")
         game_state = "setupgame"
 
 def startCalib(_ = None):
