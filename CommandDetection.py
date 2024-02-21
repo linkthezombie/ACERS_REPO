@@ -172,7 +172,7 @@ def playerWins(_):
     global game_state
     if game_state == "midgame":
         game_state = "pregame"
-        absLayer.gameLostSpeech.trigger()
+        absLayer.oppWon.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
 def naoWins(_):
