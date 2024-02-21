@@ -64,6 +64,7 @@ def win():
     absLayer.NaoWon.trigger()
     #end the game
     #need way to end game and allow for restart
+    state = ""
     return 0
 
 #runs to start the program and set up variables and functions
