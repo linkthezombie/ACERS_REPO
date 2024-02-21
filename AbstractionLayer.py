@@ -87,5 +87,3 @@ class AbstractionLayer(object):
         #calibration process
         self.startCalib = Event[None]()
         self.nextCalibStep = Event[None]()
-        
-        self.firstTurn = Event[int]()
