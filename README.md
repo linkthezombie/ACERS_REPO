@@ -52,6 +52,7 @@ Requirement 40: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.p
 Requirement 42: tested on 2/19 and 2/21  
 Requirement 43: FSM.py, CommandDetection.py, AbstractionLayer.py (finished early)  
 Requirement 46.2: printed and tested on 2/21  
+Requirement 47: tested on 2/21 (done early)  
 Requirement 49: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeecg.py and tested on 2/19 and 2/21  
 Requirement 51: FSM.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
 Requirement 52: FSM.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
