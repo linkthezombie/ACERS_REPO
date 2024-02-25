@@ -18,6 +18,8 @@ Edited 2/11/2024 - Elise Lovell
      - moved functions from CommandDetection, removed askNumPlayers, subscribed to playedCard
 Revised 2-19-2024 - Shelby Jones
      - added function to say anything passed in as a string, added abstraction layer subscriptions
+Revised 2-21-2024 - Nathan Smith
+     - added gameRestartSpeech so that after Nao wins or loses, they ask the player if they wish to play again
 """
 
 # Import the necessary modules from the qi library
@@ -84,6 +86,7 @@ def gameWinSpeech():
     selected_phrase = random.choice(alternative_phrases)
     # Say the specified victory line
     tts.say(selected_phrase)
+    gameRestartSpeech()
 
 def gameLostSpeech():
     # Create an array of various ways to announce NAO has lost
@@ -92,6 +95,20 @@ def gameLostSpeech():
         "Well played!",
         "Nicely done!",
         "Congratulations!"
+    ]
+    # Choose a random phrase for the NAO to say
+    selected_phrase = random.choice(alternative_phrases)
+    # Say the specified defeat line
+    tts.say(selected_phrase)
+    gameRestartSpeech()
+
+def gameRestartSpeech():
+    # Create an array of various ways to ask the player if they want to play again
+    alternative_phrases = [
+        "Would you like to play again?",
+        "Do you want to play another round?",
+        "How about another round?",
+        "Do you want to play again?"
     ]
     # Choose a random phrase for the NAO to say
     selected_phrase = random.choice(alternative_phrases)

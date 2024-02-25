@@ -64,6 +64,7 @@ def win():
     absLayer.NaoWon.trigger()
     #end the game
     #need way to end game and allow for restart
+    state = ""
     return 0
 
 #runs to start the program and set up variables and functions
@@ -152,8 +153,6 @@ def playing():
         GameStrategy.TopCard.suit = newSuit
     absLayer.playCard.trigger(card, newSuit)
     
-
-
 #what the Nao does if it must draw a card
 #takes in the card object it drew to add to its virtual hand
 def drawing(card1):
@@ -219,6 +218,7 @@ def nowShuffle():
 #calls upon oppWon from AbstractionLayer to reset crucial variables when a player wins
 def oppWins():
     state = ""
+    hand.NaoHand = []
     # TODO: Add further logic for opponent winning
 
 #when drewCard is triggered by other functions, drawing() will be called here
@@ -238,4 +238,5 @@ absLayer.isShuffled.subscribe(nowShuffle)
 #if opponent announces they have ended their turn, opponentPlay() is subsribed to the abstration layer call to run when that happens
 absLayer.oppEndTurn.subscribe(opponentPlay)
 
+#if opponent wins, oppwins() is triggered to reset state variable to empty
 absLayer.oppWon.subscribe(oppWins)
