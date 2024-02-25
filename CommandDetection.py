@@ -28,6 +28,8 @@ Revised 2/11/2024
 Revised 2/19/2023
      - added event calls to suffle
      - removed random TTS calls, replaced with abstraction layer calls (Shelby Jones)
+Revised 2/21/2023
+     - Fixed bugs to allow games to be played with command detection
 """
 
 

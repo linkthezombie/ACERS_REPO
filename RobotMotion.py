@@ -24,6 +24,8 @@ Edited 2/8/2024
   - Added and refined calibration routine
 Revised 2-19-2024 (Shelby Jones)
     - removed tts calls, replaced with absLayer triggers
+Edited 2/20/2024
+  - Adjusted calibration animations, added vision for tray animations
 """
 import time
 from naoqi import ALProxy
