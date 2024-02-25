@@ -47,6 +47,18 @@ Requirement 45.1: CommandDetection.py
 Requirement 45.2: CommandDetection.py (finshed ahead of schedule)  
 Requirement 46.1: Spring Requirements Folder  
 
+Sprint 9:  
+Requirement 40: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py  
+Requirement 42: tested on 2/19 and 2/21  
+Requirement 43: FSM.py, CommandDetection.py, AbstractionLayer.py (finished early)  
+Requirement 46.2: printed and tested on 2/21  
+Requirement 47: tested on 2/21 (done early)  
+Requirement 49: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeecg.py and tested on 2/19 and 2/21  
+Requirement 51: FSM.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 52: FSM.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 53: CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 54: CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+
 Requirement 6:
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
