@@ -20,6 +20,8 @@ Edited 12/3/2023
   - Added basic animations for 2-stack hand management
 Edited 1/28/2024
   - Refined 2-stack hand, added virtual hand arrays, implemented play motion
+Edited 2/8/2024
+  - Added and refined calibration routine
 Revised 2-19-2024 (Shelby Jones)
     - removed tts calls, replaced with absLayer triggers
 """
@@ -30,7 +32,7 @@ import AbstractionLayer
 import numpy as np
 import almath
 #from positioning.Pose import *
-#import ComputerVision
+import ComputerVision
 
 # translate a 3d point or Position6D to work with the other arm
 def l2rPosn(vec):
@@ -156,6 +158,9 @@ def drawCard():
     motion.setAngles("LWristYaw", -90 * d2r, pctMax)
     time.sleep(1)
 
+    motion.changeAngles("LShoulderPitch", -50 * d2r, pctMax)
+    motion.changeAngles("LElbowRoll", -100*d2r, pctMax)
+
 # Assuming a card is in Ace's left hand, hand it off to the right hand
 def handOffLtoR():
     # Move the left hand to center the card in front of Ace's chest
@@ -277,7 +282,7 @@ L = True
 R = False
 
 # Hand joint position to press thumb against the cards
-medHand = .5
+medHand = .45
 
 lCards = []
 rCards = []
@@ -327,7 +332,7 @@ def playOnStack(side):
 
     # We figure out what card we're putting on the stack after the animation is over
     # because we may not know what card we're holding (e.g. after drawing a card)
-    topCard = None #TODO use ComputerVision to identify top card
+    topCard = ComputerVision.getStackTop(side)
     cards = lCards if side == L else rCards
     cards.append(topCard)
 
@@ -352,18 +357,18 @@ def pickupFromStack(side):
     targetPos[-1] = 1
 
     pullBackPos[0] -= 20 * d2r
-    pullBackPos[-1] = .4
+    pullBackPos[-1] = .35
 
     motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
     # Move arm down to put hand around cards
     motion.changeAngles(shoulder, 33 * d2r, pctMax)
     time.sleep(.5)
     # Lightly press against the front of the cards
-    motion.setStiffnesses(hand, .2)
-    motion.setAngles(hand, medHand, pctMax)
+    motion.setStiffnesses(hand, .3)
+    motion.setAngles(hand, .4, pctMax)
     time.sleep(1.5)
     # Raise hand upwards, dragging the top card with it
-    motion.changeAngles(shoulder, -20 * d2r, pctMax)
+    motion.changeAngles(shoulder, -20 * d2r, .1)
     time.sleep(.5)
     # Grab the top card the rest of the way, now that the stack is out of the way
     motion.setStiffnesses(hand, 1)
@@ -494,7 +499,7 @@ def startingHand():
     #recognize and turn into card object
     values = []
     #commented out for pythoc 3 usability
-    #values = ComputerVision.getDrawnCard(ComputerVision.getVisibleCards())
+    values = ComputerVision.getStackTop(R)
     v = "" + values[0]
     s = "" + values[1]
     c = hand.Card(v, s)
@@ -512,9 +517,9 @@ calibInstructions = [
     "Place the deck holder against my fingers"
 ]
 intermedPositions = [
-    l2rJoints(lStackPos),
-    l2rJoints(rStackPos),
-    realStart[:]
+    [l2rJoints(lStackPos)],
+    [l2rJoints(lStackPos), l2rJoints(rStackPos)],
+    [l2rJoints(rStackPos), realStart[:]]
 ]
 calibPositions = [
     l2rJoints(lStackPos),
@@ -527,19 +532,25 @@ def onStartCalibration():
     calibPositions[0][0] -= 5*d2r
     calibPositions[0][-1] = .8
 
-    intermedPositions[0] = l2rJoints(lStackPos)
-    intermedPositions[0][0] -= 15*d2r
+    intermedPositions[0][0] = l2rJoints(lStackPos)
+    intermedPositions[0][0][0] -= 15*d2r
 
     calibPositions[1] = l2rJoints(rStackPos)
     calibPositions[1][0] -= 5*d2r
     calibPositions[1][-1] = .8
 
-    intermedPositions[1] = l2rJoints(rStackPos)
-    intermedPositions[1][0] -= 15*d2r
+    intermedPositions[1][0] = l2rJoints(lStackPos)
+    intermedPositions[1][0][0] -= 25*d2r
 
-    intermedPositions[2] = realStart[:]
-    intermedPositions[2][0] -= 15*d2r
-    intermedPositions[2][-2] = -90*d2r
+    intermedPositions[1][1] = l2rJoints(rStackPos)
+    intermedPositions[1][1][0] -= 25*d2r
+
+    intermedPositions[2][0] = l2rJoints(rStackPos)
+    intermedPositions[2][0][0] -= 25*d2r
+
+    intermedPositions[2][1] = realStart[:]
+    intermedPositions[2][1][0] -= 25*d2r
+    intermedPositions[2][1][-2] = -90*d2r
 
     global calibStep
     calibStep = 0
@@ -551,7 +562,8 @@ def onNextCalibStep():
         absLayer.SayWords.trigger("Calibration Complete.")
         finishCalibration()
         return
-    motion.angleInterpolationWithSpeed("LArm", intermedPositions[calibStep], pctMax)
+    for posn in intermedPositions[calibStep]:
+        motion.angleInterpolationWithSpeed("LArm", posn, pctMax)
     motion.setAngles("LArm", calibPositions[calibStep], pctMax)
     absLayer.SayWords.trigger(calibInstructions[calibStep])
     calibStep += 1

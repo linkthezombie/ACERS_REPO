@@ -116,8 +116,6 @@ def opponentPlay(v, s):
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
-   
-    print("\nThank you for waiting, the next player may go now\n")
         
     GameStrategy.NextPlayer() #transition to next player
 
@@ -215,7 +213,7 @@ def propogateHandOnStart(sh):
 
 #called upon isShuffled from commandDetection and AbstractionLayer
 def nowShuffle():
-    GameStrategy.CardsInDrawPile = (CardsInDiscardPile -1) + CardsInDrawPile
+    GameStrategy.CardsInDrawPile = (GameStrategy.CardsInDiscardPile -1) + GameStrategy.CardsInDrawPile
     GameStrategy.CardsInDiscardPile = 1
 
 #calls upon oppWon from AbstractionLayer to reset crucial variables when a player wins

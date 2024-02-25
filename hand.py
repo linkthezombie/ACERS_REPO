@@ -191,6 +191,12 @@ class Card():
             elif v == "k":
                     self.value = 13
 
+        def __str__(self):
+               return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
+        
+        def __eq__(self, other):
+               return self.suit == other.suit and self.value == other.value
+
 #test functions for each method - result in output to console
 '''addCard( "2", "spade")
 addCard( "A", "Diamond")

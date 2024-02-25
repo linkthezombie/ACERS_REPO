@@ -68,9 +68,9 @@ def init():
         "Your turn": endTurnOpp,
         "end turn": endTurnOpp,
         "my turn is over": endTurnOpp,
-        "end": endTurnOpp, 
-        "over": endTurnOpp,
-        "done": endTurnOpp,
+        #"end": endTurnOpp, 
+        #"over": endTurnOpp,
+        #"done": endTurnOpp,
 
         #Commands to announce a player has won
         "I win": playerWins,
@@ -144,7 +144,7 @@ class CommandDetectorModule(ALModule):
         #    MODULE_NAME)
         print(value)
         # If confidence is high enough, run the command
-        if(value[1] >= .5):
+        if(value[1] >= .55):
             cb = self.commands[value[0]]
             cb(value[0])
         # Resume speech recognition
@@ -159,23 +159,25 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getPort())       # parent broker port
 
 # When a player verbally confirms the end of their turn, get top card on discard pile and trigger FSM events
+topCard = None
 def endTurnOpp(_):
+    global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        CTemp = topCard#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
         val = "" + CTemp[0]
         suit =  "" + CTemp[1]
-        absLayer.oppEndTurn.Trigger(val, suit)
+        absLayer.oppEndTurn.trigger(val, suit)
 
 # When a player verbally confirms their victory, update game state
 def playerWins(_):
     global game_state
     if game_state == "midgame":
         game_state = "pregame"
-        absLayer.gameLostSpeech.trigger()
+        absLayer.oppWon.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
-def naoWins(_):
+def naoWins():
     global game_state
     game_state = "pregame"
 
@@ -191,9 +193,9 @@ def hearNumPlayers(num):
     global game_state
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
-        temp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        temp = ["J", "diamond"]#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
         game_state = "midgame"
-        absLayer.startgame.trigger(n, temp[0], temp[1])
+        absLayer.startGame.trigger([n, temp[0], temp[1]])
         
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):

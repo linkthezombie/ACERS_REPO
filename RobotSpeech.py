@@ -51,12 +51,13 @@ def drawCardSpeech():
 def playCardSpeech(card, heldSuit):
 
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
-    if hand.card.value == 8:
+    if card.value == 8:
         # If the rank is "8", choose a new suit
-        phrase = f"I will play the {hand.card.value} of {hand.card.suit}, and I will make the new suit {heldSuit}."
+        phrase = "I will play the %s of %s, and I will make the suit %s." % (card.vs, card.ss, heldSuit)
     else:
         # If the rank is not "8", use the provided suit
-        phrase = f"I will play the {hand.card.value} of {hand.card.suit}."
+        phrase = "I will play the %s of %s." % (card.vs, card.ss)
+    tts.say(phrase)
 
 def endTurnSpeech():
     # Create an array of various ways to announce NAO is ending it's turn
@@ -98,23 +99,23 @@ def gameLostSpeech():
     tts.say(selected_phrase)
 
 #selects a phrase for the Nao to say if it is now his turn
-def NaoGoes(_):
+def NaoGoes():
     NaoTurnPhrases = [
         "Okay, my turn now",
         "I get to go now",
         "Cool, my turn"
     ]
-    selected_phrase = random.choice(NextPlayerTurnPhrases)
+    selected_phrase = random.choice(NaoTurnPhrases)
     tts.say(selected_phrase)
 
 #selects a phrase to say if an opponent is going
-def newOpp(_):
+def newOpp():
     NextPlayerTurnPhrases = [
         "Okay, your turn",
         "Next player please!",
         "Your turn now!"
     ]
-    selected_phrase = random.choice(NaoTurnPhrases)
+    selected_phrase = random.choice(NextPlayerTurnPhrases)
     tts.say(selected_phrase)
 
 def anySpeech(wordsToSay):

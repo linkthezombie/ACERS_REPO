@@ -6,12 +6,18 @@ Defines the areas of play in ArUco marker coordinates
 Created by Dylan Polson
 
 Created 11/14/2023
+
+Edited 2/12/24 - Liam McKinney
+  - Added Left and Right Stack zones.
 """
 
 from positioning.Orientation import Orientation
 from positioning.Pose import Pose
 from positioning.RectangularVolume import RectangularVolume
 from positioning.Vector3D import Vector3D
+
+# bottom left: [array([ 0.17011172,  0.19805465, -0.03381562]), array([ 0.12591172,  0.25621441, -0.03891594])]
+# top right: [array([0.19824349, 0.17826645, 0.02497191]), array([0.16223792, 0.24173862, 0.01945529])]
 
 # These areas have NOT been tested with an actual robot. Since they're dependent
 # on ArUco coordinates, they may even change between runs. We may want to eventually
@@ -38,6 +44,22 @@ areas = [
         ),
         Vector3D([0.0, 0.0, 0.0])) # Size NOT SET, I have no guess as to the size of this
     ),
+
+    ("L Stack", RectangularVolume(
+        Pose(
+            Vector3D([ 0.1,  0.22, -0.06]), # Position
+            Orientation()
+        ),
+        Vector3D([ .08, .06, .08])
+    )),
+
+    ("R Stack", RectangularVolume(
+        Pose(
+            Vector3D([ 0.15,  0.15, -0.05]), # Position
+            Orientation()
+        ),
+        Vector3D([ .07, .07, .09])
+    )),
 ]
 
 # Finds which area this pose is in

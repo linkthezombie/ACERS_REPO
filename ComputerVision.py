@@ -140,12 +140,14 @@ def getTopCard(marker_ids, xs, Rs):
             return(tempArr)
     return None
 
-# Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 34)
+# Takes the marker ids from the camera, and determines the suit and rank of the card that id represents (Req. 34)
 #returns array with int suit and value
-def getDrawnCard(marker_ids, xs, Rs):
+def getStackTop(side):
+    zoneName = "L Stack" if side else "R Stack"
+    marker_ids, xs, Rs = getVisibleCards()
     for id in marker_ids:
         pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
-        if areas.findPlayArea(pose) == "in your face":
+        if areas.findPlayArea(pose) == zoneName:
             rank = (id % 13) + 1
             suit = id // 13
             tempArr = [rank, suit]

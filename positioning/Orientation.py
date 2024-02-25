@@ -28,6 +28,7 @@ class Orientation:
     # axis: Vector3D, the axis around which the rotation occurs
     # angle: float, the angle of the rotation
     # returns a new Orientation
+    @staticmethod
     def fromAxisAngle(axis, angle):
         a = axis.normalize().getList()
         x = a[0] * sin(angle / 2)
@@ -44,6 +45,7 @@ class Orientation:
     #
     # rvec: list[list[float]], the rotation matrix
     # returns a new Orientation
+    @staticmethod
     def fromRotationMatrix(m):
         w = sqrt(1.0 + m[0][0] + m[1][1] + m[2][2]) / 2.0
         x = (m[2][1] - m[1][2]) / ( 4.0 * w)
@@ -58,6 +60,7 @@ class Orientation:
     #
     # rvec: list[list[float]], the rvec
     # returns a new Orientation
+    @staticmethod
     def fromRvec(rvec):
         return Orientation.fromRotationMatrix(rvec)
 
