@@ -30,6 +30,8 @@ Revised 2/19/2023
      - removed random TTS calls, replaced with abstraction layer calls (Shelby Jones)
 Revised 2/21/2023
      - Fixed bugs to allow games to be played with command detection
+Revised 2/26/2023
+     - added speech lines and functions for opponent playing crazy 8 (Elise Lovell)
 """
 
 
@@ -105,7 +107,27 @@ def init():
         "Start Game": hearStartGame,
         "Play Crazy Eights": hearStartGame,
         "Play Game": hearStartGame,
-        "Play Cards": hearStartGame
+        "Play Cards": hearStartGame,
+
+        #Commands for human player changing the suit to spades
+        "The suit is now spades": newSuitSpade,
+        "I'm making it spades": newSuitSpade,
+        "It is spades now": newSuitSpade,
+
+        #Commands for human player changing the suit to clubs
+        "The suit is now clubs": newSuitClub,
+        "I'm making it clubs": newSuitClub,
+        "It is clubs now": newSuitClub,
+
+        #Commands for human player changing the suit to diamonds
+        "The suit is now diamonds": newSuitDiamond,
+        "I'm making it dimaonds": newSuitDiamond,
+        "It is dimaonds now": newSuitDiamond,
+
+        #Commands for human player changing the suit to hearts
+        "The suit is now hearts": newSuitHeart,
+        "I'm making it hearts": newSuitHeart,
+        "It is hearts now": newSuitHeart
         
         }
 
@@ -198,7 +220,23 @@ def hearNumPlayers(num):
         temp = ["J", "diamond"]#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
         game_state = "midgame"
         absLayer.startGame.trigger([n, temp[0], temp[1]])
-        
+
+#function to set off chain of events if opponent announces they have played an 8 and are changing the suit to hearts
+def newSuitHeart():
+    absLayer.oppCrazy8.trigger("Heart")
+
+#function to set off chain of events if opponent announces they have played an 8 and are changing the suit to clubs
+def newSuitClub():
+    absLayer.oppCrazy8.trigger("Club")
+
+#function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
+def newSuitDiamond():
+    absLayer.oppCrazy8.trigger("Diamond")
+
+#function to set off chain of events if opponent announces they have played an 8 and are changing the suit to spades
+def newSuitSpade():
+    absLayer.oppCrazy8.trigger("Spade")
+
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
     global game_state
