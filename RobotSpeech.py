@@ -20,6 +20,8 @@ Revised 2-19-2024 - Shelby Jones
      - added function to say anything passed in as a string, added abstraction layer subscriptions
 Revised 2-21-2024 - Nathan Smith
      - added gameRestartSpeech so that after Nao wins or loses, they ask the player if they wish to play again
+Edited 2-27-2024 - Elise Lovell
+     - added functionality to make saying the card played more natural
 """
 
 # Import the necessary modules from the qi library
@@ -51,14 +53,27 @@ def drawCardSpeech():
     tts.say(selected_phrase)
 
 def playCardSpeech(card, heldSuit):
+    #changes variables to be more naturally spoken form
+    value = card.vs
+    suit = card.ss + "s"
+    if (value = "a"):
+        value = "ace"
+    elif(value = "q"):
+        value = "queen"
+    elif(value = "j"):
+        value = "jack"
+    elif(value = "k"):
+        value = "king"
 
+    heldsuit = heldsuit + "s"
+    
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
         # If the rank is "8", choose a new suit
-        phrase = "I will play the %s of %s, and I will make the suit %s." % (card.vs, card.ss, heldSuit)
+        phrase = "I will play the %s of %s, and I will make the new suit %s." % (value, suit, heldSuit)
     else:
         # If the rank is not "8", use the provided suit
-        phrase = "I will play the %s of %s." % (card.vs, card.ss)
+        phrase = "I will play the %s of %s." % (value, suit)
     tts.say(phrase)
 
 def endTurnSpeech():
