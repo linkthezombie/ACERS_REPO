@@ -26,6 +26,8 @@ Revised 2-19-2024 (Shelby Jones)
     - removed tts calls, replaced with absLayer triggers
 Edited 2/20/2024
   - Adjusted calibration animations, added vision for tray animations
+Edited 2/26/2024 (Elise Lovell)
+  - added skeletal turnHead functions 
 """
 import time
 from naoqi import ALProxy
@@ -584,7 +586,20 @@ def finishCalibration():
 
     motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
 
+def turnHead(currPlayer, totalPlayers):
+  #total players includes Nao
+  if (currPlayer == 0):
+    #it is Nao's turn 
+    #turn head straight forward
+    #90 degrees for axis
+  else:
+    #first player
+    #turn (180/totalPlayers) * currPlayers
+    #must start from 0, far left (not from current direction)
+
 # Set up abstraction layer callbacks
+
+absLayer.turn.subscribe(turnHead)
 
 absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)
