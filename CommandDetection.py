@@ -223,19 +223,31 @@ def hearNumPlayers(num):
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to hearts
 def newSuitHeart():
-    absLayer.oppCrazy8.trigger("Heart")
+    global topCard
+    global game_state
+    if game_state == "midgame":
+        absLayer.oppEndTurn.trigger("8", "heart")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to clubs
 def newSuitClub():
-    absLayer.oppCrazy8.trigger("Club")
+    global topCard
+    global game_state
+    if game_state == "midgame":
+        absLayer.oppEndTurn.trigger("8", "club")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
 def newSuitDiamond():
-    absLayer.oppCrazy8.trigger("Diamond")
+    global topCard
+    global game_state
+    if game_state == "midgame":
+        absLayer.oppEndTurn.trigger("8", "diamond")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to spades
 def newSuitSpade():
-    absLayer.oppCrazy8.trigger("Spade")
+    global topCard
+    global game_state
+    if game_state == "midgame":
+        absLayer.oppEndTurn.trigger("8", "spade")
 
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
