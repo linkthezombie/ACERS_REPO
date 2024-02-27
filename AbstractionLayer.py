@@ -21,6 +21,8 @@ Revised 1/29/2024
      - added event for robot speech (Elise Lovell)
 Revised 2-19-2024 (Shelby Jones)
      -added an event to say anything inputted as a string
+Revised 2/26/2023
+     - added oppCrazy8 event (Elise Lovell)
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -76,6 +78,7 @@ class AbstractionLayer(object):
         # Player actions
         self.oppEndTurn = Event[Tuple[str, str]]()
         self.isShuffled = Event[None]()
+        self.oppCrazy8 = Event[str]()
         
         #speech triggers
         self.NaoNext = Event[None]()
