@@ -70,7 +70,7 @@ class AbstractionLayer(object):
         #Robot commands
         self.playCard = Event[Tuple[Card, str]]()
         self.drawCard = Event[None]()
-        self.turn = Event[Tuple[int, int]]()
+        self.turnHead = Event[Tuple[int, int]]()
 
         # Game events - Robot's actions
         self.drewCard = Event[Card]()
