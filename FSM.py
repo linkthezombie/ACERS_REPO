@@ -112,11 +112,15 @@ def opponentPlay(v, s):
     else:
         #opp played a card
         #update all variables
-        temp = False
+        temp = False #WHAT IS THIS VAR
         GameStrategy.TopCard = NewCard #store the new card on the pile
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
+        if(NewCard.value == 8):
+            print("Opponent played a CrAzY eIgHt!")
+            #handle this
+        
         
     GameStrategy.NextPlayer() #transition to next player
 
