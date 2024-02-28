@@ -23,6 +23,8 @@ Revised 2-19-2024 (Shelby Jones)
      -added an event to say anything inputted as a string
 Revised 2-28-2024 (Elise Lovell)
      - added event for turning head
+Revised 2-28-2024 (Nathan Smith)
+     -added oppDraw, oppWonClaim, and oppWonLie events to improve opponent winning logic 
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -64,7 +66,7 @@ class AbstractionLayer(object):
         self.returnSH = Event[List[Card]]()
         
         #game over commands
-        self.oppWon = Event[None]()
+        self.OppWon = Event[None]()
         self.NaoWon = Event[None]()
         
         #Robot commands
@@ -78,6 +80,9 @@ class AbstractionLayer(object):
 
         # Player actions
         self.oppEndTurn = Event[Tuple[str, str]]()
+        self.oppDraw = Event[None]()
+        self.oppWonClaim = Event[None]()
+        self.oppWonLie = Event[None]()
         self.isShuffled = Event[None]()
         
         #speech triggers

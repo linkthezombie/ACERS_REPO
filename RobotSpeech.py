@@ -168,7 +168,6 @@ def anySpeech(wordsToSay):
     tts.say(wordsToSay)
 
 
-
 #if oppNext is triggered in FSM, abs layer will make sure newOpp() is called
 absLayer.oppNext.subscribe(newOpp)
 #if NaoNext is triggered in FSM, abs layer will make sure NaoGoes() is called
@@ -180,9 +179,11 @@ absLayer.drawCard.subscribe(drawCardSpeech)
 #if abs layer is told Nao won, call gameWonSpeech()
 absLayer.NaoWon.subscribe(gameWinSpeech)
 #if abs layer is told an opponent won, call gameLostSpeech()
-absLayer.oppWon.subscribe(gameLostSpeech)
-#event playedCard will be triggered and call endTurnSpeeach once the Nao has played a card
+absLayer.OppWon.subscribe(gameLostSpeech)
+#event playedCard will be triggered and call endTurnSpeach once the Nao has played a card
 absLayer.playedCard.subscribe(endTurnSpeech)
+#if abs layer is told player said they win early, call accusePlayer to tell them they are wrong
+absLayer.oppWonClaim.subscribe(accusePlayer)
 
 #if abslayer gets SayWords, it will trigger AnySpeech
 absLayer.SayWords.subscribe(anySpeech)

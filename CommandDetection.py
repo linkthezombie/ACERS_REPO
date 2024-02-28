@@ -33,7 +33,8 @@ Revised 2/21/2023
 Revised 2/26/2023
      - added speech lines and functions for opponent playing crazy 8 (Elise Lovell)
 Revised 2/28/2024
-     - added a function for opponents to announce they are drawing a card
+     - added a function for opponents to announce they are drawing a card (Nathan Smith)
+     - altered playerWins to playerWinsClaim, which triggers logic to check if that is true
 """
 
 
@@ -79,11 +80,11 @@ def init():
         #"done": endTurnOpp,
 
         #Commands to announce a player has won
-        "I win": playerWins,
-        "I won": playerWins,
-        "I have won": playerWins, 
-        "We Win": playerWins,
-        "I am victorious!": playerWins,
+        "I win": playerWinsClaim,
+        "I won": playerWinsClaim,
+        "I have won": playerWinsClaim, 
+        "We Win": playerWinsClaim,
+        "I am victorious!": playerWinsClaim,
 
         #Commands to announce a player is drawing a card
         "I will draw": playerDraws,
@@ -130,7 +131,7 @@ def init():
 
         #Commands for human player changing the suit to diamonds
         "The suit is now diamonds": newSuitDiamond,
-        "I'm making it dimaonds": newSuitDiamond,
+        "I'm making it diamonds": newSuitDiamond,
         "It is dimaonds now": newSuitDiamond,
 
         #Commands for human player changing the suit to hearts
@@ -202,21 +203,25 @@ def endTurnOpp(_):
         suit =  "" + CTemp[1]
         absLayer.oppEndTurn.trigger(val, suit)
 
-# When a player verbally confirms their victory, update game state
-def playerWins(_):
+# When a player verbally confirms their victory, check if this is true
+def playerWinsClaim(_):
     global game_state
     if game_state == "midgame":
-        game_state = "pregame"
-        absLayer.oppWon.trigger()
+        absLayer.oppWonClaim.trigger()
 
 # When a player verbally confirms they are drawing a card, update their card count value
 def playerDraws(_):
     global game_state
     if game_state == "midgame":
-        # TODO: Implement method to update card count value, call it here
+        absLayer.oppDraw.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
 def naoWins():
+    global game_state
+    game_state = "pregame"
+
+# When PlayerWon is triggered from the FSM, sets game state to pregame
+def oppWins():
     global game_state
     game_state = "pregame"
 
@@ -283,4 +288,6 @@ atexit.register(deinit)
 
 # If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
 absLayer.NaoWon.subscribe(naoWins)
+# If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
+absLayer.OppWon.subscribe(oppWins)
 

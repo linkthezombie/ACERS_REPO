@@ -24,6 +24,8 @@ Revised 11-17-2023 - Elise Lovell
      -debugging
 Revised 2/17/2024 - Elise Lovell
      - debugging
+Revised 2/28/2024 - Nathan Smith
+     - added PlayerCardCount and current_player for tracking the number of cards in each player's hand
 """
 
 #from DataTypes import *
@@ -38,7 +40,8 @@ CardsInDrawPile = 52 #tracks cards left in draw pile
 NumOfPlayers = 0 #stores total number of players
 Players = [] #stores players in array
 CardsInDiscardPile = 1 #initializes discard pile, puts top card in pile
-
+PlayerCardCount = [] #tracks number of cards in each player's hand
+current_player = 0 #tracks the currently active player
 
 #decison making for robot on it's own turn and select a card to play
 #function only called if there are playable cards in Nao's hand
