@@ -28,6 +28,8 @@ Edited 2/20/2024
   - Adjusted calibration animations, added vision for tray animations
 Edited 2/26/2024 (Elise Lovell)
   - added skeletal turnHead functions 
+Edited 2/28/2024 (Elise Lovell)
+   - finished turnHead with appropriate funciton calls
 """
 import time
 from naoqi import ALProxy
@@ -591,11 +593,15 @@ def turnHead(currPlayer, totalPlayers):
   if (currPlayer == 0):
     #it is Nao's turn 
     #turn head straight forward
-    #90 degrees for axis
+    #90 degrees from axis
+    motion.setAngles("HeadYaw", 0*d2r,pctMax)
   else:
-    #first player
     #turn (180/totalPlayers) * currPlayers
-    #must start from 0, far left (not from current direction)
+    #0 = straight infront
+    #+ is to the left, - to the right
+    degreeSegments = 180/totalPlayers
+    currPlayerAngle = 90- (degreeSegments * currPlayer)
+    motion.setAngles("HeadYaw", currPlayerAngle*d2r,pctMax)
 
 # Set up abstraction layer callbacks
 
