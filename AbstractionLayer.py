@@ -21,6 +21,8 @@ Revised 1/29/2024
      - added event for robot speech (Elise Lovell)
 Revised 2-19-2024 (Shelby Jones)
      -added an event to say anything inputted as a string
+Revised 2-28-2024 (Elise Lovell)
+     - added event for turning head
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -68,6 +70,7 @@ class AbstractionLayer(object):
         #Robot commands
         self.playCard = Event[Tuple[Card, str]]()
         self.drawCard = Event[None]()
+        self.turn = Event[Tuple[int, int]]()
 
         # Game events - Robot's actions
         self.drewCard = Event[Card]()
