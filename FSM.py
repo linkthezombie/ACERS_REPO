@@ -119,7 +119,10 @@ def opponentPlay(v, s):
         print("Opponent played card\n")
         if(NewCard.value == 8):
             print("Opponent played a CrAzY eIgHt!")
-            #handle this
+            #have nao ask what suit the player wants
+            #retreive the suit as a command
+            #set the suit to given command
+            #update topCard
         
         
     GameStrategy.NextPlayer() #transition to next player
