@@ -588,7 +588,7 @@ def finishCalibration():
 
     motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
 
-def turnHead(currPlayer, totalPlayers):
+def turnHeadMove(currPlayer, totalPlayers):
   #total players includes Nao
   if (currPlayer == 0):
     #it is Nao's turn 
@@ -605,7 +605,7 @@ def turnHead(currPlayer, totalPlayers):
 
 # Set up abstraction layer callbacks
 
-absLayer.turn.subscribe(turnHead)
+absLayer.turnHead.subscribe(turnHeadMove)
 
 absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)
