@@ -46,6 +46,8 @@ Revised 2/17-2/18 - Elise Lovell
 Revised 2/21 - Nathan Smith
      - implementation of functionality after players win a game
      - added lose state
+Revised 2/28/2024 - Elise Lovell
+    - added function call to turn event 
 """
 #!/usr/bin/env python2.7
 
@@ -91,12 +93,13 @@ def start(list):
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     #propoagate the array representing who's turn it is
     setPlayerArr(state)
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     if state == "NaoPlay":
         print("\nNao goes first")
         absLayer.SayWords.trigger("I will go first.")
         NaoPlay()
     else:
-        absLayer.SayWords.trigger("The player to my right can play first.")
+        absLayer.SayWords.trigger("The player to my left can play first.")
     
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
@@ -120,7 +123,7 @@ def opponentPlay(v, s):
         
         
     GameStrategy.NextPlayer() #transition to next player
-
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     #check if it is Nao's turn
     if (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
@@ -153,6 +156,7 @@ def playing():
         newSuit = GameStrategy.suitChoice()
         GameStrategy.TopCard.suit = newSuit
     absLayer.playCard.trigger(card, newSuit)
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     
 #what the Nao does if it must draw a card
 #takes in the card object it drew to add to its virtual hand
@@ -169,6 +173,7 @@ def drawing(card1):
         #moves onto next player
         GameStrategy.NextPlayer()
         #triggers abs layer event that will let commandDetection.py know to say something before an opponent goes
+        absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
         absLayer.oppNext.trigger()
 
 #starts the Nao's turn and moves flow on turn along
