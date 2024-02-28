@@ -22,6 +22,8 @@ Revised 2-21-2024 - Nathan Smith
      - added gameRestartSpeech so that after Nao wins or loses, they ask the player if they wish to play again
 Edited 2-27-2024 - Elise Lovell
      - added functionality to make saying the card played more natural
+Edited 2-28-2024 - Nathan Smith
+     - added playerAccuse so that if a player announces their victory before Nao thinks they are out of cards, Nao says so
 """
 
 # Import the necessary modules from the qi library
@@ -148,6 +150,17 @@ def newOpp():
         "Your turn now!"
     ]
     selected_phrase = random.choice(NextPlayerTurnPhrases)
+    tts.say(selected_phrase)
+
+#selects a phrase to say if an opponent is caught trying to announce their victory prematurely
+def accusePlayer():
+    AccusePlayerPhrases = [
+        "Hey, you don't have 0 cards left!"
+        "Wait, that's not true!"
+        "Are you sure about that?"
+        "Sorry, but I think you still have cards left"
+    ]
+    selected_phrase = random.choice(AccusePlayerPhrases)
     tts.say(selected_phrase)
 
 def anySpeech(wordsToSay):

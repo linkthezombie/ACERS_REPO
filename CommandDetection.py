@@ -32,6 +32,8 @@ Revised 2/21/2023
      - Fixed bugs to allow games to be played with command detection
 Revised 2/26/2023
      - added speech lines and functions for opponent playing crazy 8 (Elise Lovell)
+Revised 2/28/2024
+     - added a function for opponents to announce they are drawing a card
 """
 
 
@@ -82,6 +84,13 @@ def init():
         "I have won": playerWins, 
         "We Win": playerWins,
         "I am victorious!": playerWins,
+
+        #Commands to announce a player is drawing a card
+        "I will draw": playerDraws,
+        "I will draw a card": playerDraws,
+        "I am drawing": playerDraws,
+        "I am drawing a card": playerDraws,
+        "I will take a card": playerDraws,
 
         #Commands to announce the deck is being shuffled
         "I will now shuffle the deck": deckShuffle,
@@ -199,6 +208,12 @@ def playerWins(_):
     if game_state == "midgame":
         game_state = "pregame"
         absLayer.oppWon.trigger()
+
+# When a player verbally confirms they are drawing a card, update their card count value
+def playerDraws(_):
+    global game_state
+    if game_state == "midgame":
+        # TODO: Implement method to update card count value, call it here
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
 def naoWins():
