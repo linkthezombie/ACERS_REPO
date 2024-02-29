@@ -25,16 +25,18 @@ Revised 2/11/24
     - added naoWins function to account for game_state variable not being updated in situations where Nao wins the game (Nathan Smith)
 Revised 2/11/2024
     - moved functions to RobotSpeech (Elise Lovell)
-Revised 2/19/2023
+Revised 2/19/2024
      - added event calls to suffle
      - removed random TTS calls, replaced with abstraction layer calls (Shelby Jones)
-Revised 2/21/2023
+Revised 2/21/2024
      - Fixed bugs to allow games to be played with command detection
-Revised 2/26/2023
+Revised 2/26/2024
      - added speech lines and functions for opponent playing crazy 8 (Elise Lovell)
 Revised 2/28/2024
      - added a function for opponents to announce they are drawing a card (Nathan Smith)
      - altered playerWins to playerWinsClaim, which triggers logic to check if that is true
+Revised 2/29/2024
+     - added additional voice commands for opp Crazy 8 (Elise Lovell)
 """
 
 
@@ -122,21 +124,29 @@ def init():
         #Commands for human player changing the suit to spades
         "The suit is now spades": newSuitSpade,
         "I'm making it spades": newSuitSpade,
+        "The new suit is spades": newSuitSpade,
+        "I pick spades": newSuitSpade,
         "It is spades now": newSuitSpade,
 
         #Commands for human player changing the suit to clubs
         "The suit is now clubs": newSuitClub,
         "I'm making it clubs": newSuitClub,
+        "The new suit is clubs": newSuitClub,
+        "I pick clubs": newSuitClub,
         "It is clubs now": newSuitClub,
 
         #Commands for human player changing the suit to diamonds
         "The suit is now diamonds": newSuitDiamond,
         "I'm making it diamonds": newSuitDiamond,
+        "The new suit is diamonds": newSuitDiamond,
+        "I pick diamonds": newSuitDiamond,
         "It is dimaonds now": newSuitDiamond,
 
         #Commands for human player changing the suit to hearts
         "The suit is now hearts": newSuitHeart,
         "I'm making it hearts": newSuitHeart,
+        "The new suit is hearts": newSuitHeart,
+        "I pick hearts": newSuitHeart,
         "It is hearts now": newSuitHeart
         
         }
