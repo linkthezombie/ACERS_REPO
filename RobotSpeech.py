@@ -183,7 +183,7 @@ absLayer.OppWon.subscribe(gameLostSpeech)
 #event playedCard will be triggered and call endTurnSpeach once the Nao has played a card
 absLayer.playedCard.subscribe(endTurnSpeech)
 #if abs layer is told player said they win early, call accusePlayer to tell them they are wrong
-absLayer.oppWonClaim.subscribe(accusePlayer)
+absLayer.oppWonLie.subscribe(accusePlayer)
 
 #if abslayer gets SayWords, it will trigger AnySpeech
 absLayer.SayWords.subscribe(anySpeech)
