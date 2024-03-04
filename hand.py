@@ -197,6 +197,22 @@ class Card():
         def __eq__(self, other):
                return self.suit == other.suit and self.value == other.value
 
+	def setSuit(newS):
+		if newS == "club":
+			suit =  1
+			ss = "club"
+		elif newS == "diamond":
+			suit =  2
+			ss = "diamond"
+		elif newS == "spade":
+			suit =  4
+			ss = "spade"
+		elif newS == "heart":
+			suit =  3
+			ss = "heart"
+	
+		
+
 #test functions for each method - result in output to console
 '''addCard( "2", "spade")
 addCard( "A", "Diamond")
