@@ -259,7 +259,7 @@ absLayer.drewCard.subscribe(drawing)
 #wait for event in abs layer that sends the cards drawn in the starting hand, then calls propogateHandOnStart()
 absLayer.returnSH.subscribe(propogateHandOnStart)
 
-x#wait for abs layer event to be triggered to start the game and call start()
+#wait for abs layer event to be triggered to start the game and call start()
 absLayer.startGame.subscribe(start)
 
 #subscribe to shuffle event to update variables when shuffled
