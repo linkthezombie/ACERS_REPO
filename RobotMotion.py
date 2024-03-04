@@ -275,7 +275,8 @@ def placeCardInHolder(offset):
 
 # Position where the bot grabs cards from the left or right stack
 lStackPos = [0.1548919677734375, -0.705974278834025, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.7583341121673584, 0.2, 0.03490658476948738, 0, 1]
-rStackPos = [0.10253213444010417, -0.37981154785325794, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.41471810340881348, 0.2, 0.03490658476948738, 0, 1]
+rStackPos = [0.10253213444010417, -0.3, -1.370795, 0.03490658476948738, 1.570795, 1]
+#rStackPos = [0.10253213444010417, -0.37981154785325794, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.41471810340881348, 0.2, 0.03490658476948738, 0, 1]
 
 lPlayStart = [-0.7256240844726562, -0.49697399139404297, -2.023303985595703, 1.0783600807189941, 1.5938677787780762, 0.25]
 rPlayStart = [-0.5476799011230469, -0.21011614799499512, -1.8729721307754517, 1.0660879611968994, 1.8116960525512695, 0.25]
@@ -307,7 +308,7 @@ def playOnStack(side):
     # Keep hand closed, raise shoulder to put hand above the cards
     targetPos[-1] = .4
 
-    pitchUp = (25 if side==L else 20) * d2r
+    pitchUp = (30 if side==L else 20) * d2r
     targetPos[0] -= pitchUp
 
     # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
@@ -322,9 +323,9 @@ def playOnStack(side):
     targetPos[0] -= 10 * d2r
     targetPos[-3] += 20 * d2r
 
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), .2)
     time.sleep(.5)
-    motion.angleInterpolation(arm, l2rJoints(targetPos), .5, True)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
     time.sleep(.5)
     motion.changeAngles(shoulder, pitchUp, pctMax)
     time.sleep(.5)
@@ -354,9 +355,11 @@ def pickupFromStack(side):
     if side == L:
         targetPos = lStackPos[:]
         pullBackPos = lPlayStart[:]
+        wristTwist = 10 * d2r
     else:
         targetPos = rStackPos[:]
         pullBackPos = rPlayStart[:]
+        wristTwist = 0
 
     # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
     targetPos[0] -= 30 * d2r
@@ -375,6 +378,7 @@ def pickupFromStack(side):
     time.sleep(1.5)
     # Raise hand upwards, dragging the top card with it
     motion.changeAngles(shoulder, -20 * d2r, .1)
+    motion.changeAngles("LWristYaw", wristTwist, .1)
     time.sleep(.5)
     # Grab the top card the rest of the way, now that the stack is out of the way
     motion.setStiffnesses(hand, 1)
@@ -432,6 +436,7 @@ def playCard():
     targetPos = realStart[:]
     targetPos[1] -= 15 * d2r
     targetPos[-2] = -90 * d2r
+    targetPos[-1] = .35
 
     motion.angleInterpolationWithSpeed("LArm", targetPos, pctMax)
     motion.setStiffnesses("LElbowRoll", 0)

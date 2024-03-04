@@ -208,9 +208,9 @@ def endTurnOpp(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = topCard#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        val = "" + CTemp[0]
-        suit =  "" + CTemp[1]
+        CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
+        val = str(CTemp[0])
+        suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger(val, suit)
 
 # When a player verbally confirms their victory, check if this is true
@@ -247,9 +247,9 @@ def hearNumPlayers(num):
     global game_state
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
-        temp = ["J", "diamond"]#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        temp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         game_state = "midgame"
-        absLayer.startGame.trigger([n, temp[0], temp[1]])
+        absLayer.startGame.trigger([n, str(temp[0]), str(temp[1])])
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to hearts
 def newSuitHeart():
