@@ -58,13 +58,13 @@ def playCardSpeech(card, heldSuit):
     #changes variables to be more naturally spoken form
     value = card.vs
     suit = card.ss + "s"
-    if (value = "a"):
+    if (value == "a"):
         value = "ace"
-    elif(value = "q"):
+    elif(value == "q"):
         value = "queen"
-    elif(value = "j"):
+    elif(value == "j"):
         value = "jack"
-    elif(value = "k"):
+    elif(value == "k"):
         value = "king"
 
     heldsuit = heldsuit + "s"
