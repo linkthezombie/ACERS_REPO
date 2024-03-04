@@ -152,13 +152,13 @@ class Card():
             self.ss = s.lower()
             self.vs = v.lower()
         #sets int for suit based on inputted string version of suit
-            if s.lower() == "club" or s == "1":
+            if s.lower() == "club" or s == "0":
                     self.suit = 1
-            elif s.lower() == "diamond" or s == "2":
+            elif s.lower() == "diamond" or s == "3":
                     self.suit = 2
-            elif s.lower() == "heart" or s == "3":
+            elif s.lower() == "heart" or s == "1":
                     self.suit = 3
-            elif s.lower() == "spade" or s == "4":
+            elif s.lower() == "spade" or s == "2":
                 self.suit = 4
         #sets string value to lowercase
             v = v.lower()
