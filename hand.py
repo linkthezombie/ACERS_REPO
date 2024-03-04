@@ -152,43 +152,43 @@ class Card():
             self.ss = s.lower()
             self.vs = v.lower()
         #sets int for suit based on inputted string version of suit
-            if s.lower() == "club":
+            if s.lower() == "club" or s == "1":
                     self.suit = 1
-            elif s.lower() == "diamond":
+            elif s.lower() == "diamond" or s == "2":
                     self.suit = 2
-            elif s.lower() == "heart":
+            elif s.lower() == "heart" or s == "3":
                     self.suit = 3
-            elif s.lower() == "spade":
+            elif s.lower() == "spade" or s == "4":
                 self.suit = 4
         #sets string value to lowercase
             v = v.lower()
 
         #sets int for value based on inputted string version of value
-            if v == "a":
+            if v == "a" or v == "1":
                     self.value = 1
-            elif v == "2":
+            elif v == "2" or v == "2":
                     self.value = 2
-            elif v == "3":
+            elif v == "3" or v == "3":
                     self.value = 3
-            elif v == "4":
+            elif v == "4" or v == "4":
                     self.value = 4
-            elif v == "5":
+            elif v == "5" or v == "5":
                     self.value = 5
-            elif v == "6":
+            elif v == "6" or v == "6":
                     self.value = 6
-            elif v == "7":
+            elif v == "7" or v == "7":
                     self.value = 7
-            elif v == "8":
+            elif v == "8" or v == "8":
                     self.value = 8
-            elif v == "9":
+            elif v == "9" or v == "9":
                     self.value = 9
-            elif v == "10":
+            elif v == "10" or v == "10":
                     self.value = 10
-            elif v == "j":
+            elif v == "j" or v == "11":
                     self.value = 11
-            elif v == "q":
+            elif v == "q" or v == "12":
                     self.value = 12
-            elif v == "k":
+            elif v == "k" or v == "13":
                     self.value = 13
 
         def __str__(self):
