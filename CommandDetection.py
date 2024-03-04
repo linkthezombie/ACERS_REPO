@@ -223,6 +223,7 @@ def playerWinsClaim(_):
 def playerDraws(_):
     global game_state
     if game_state == "midgame":
+        absLayer.SayWords.trigger("Okay, draw a card!")
         absLayer.oppDraw.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
