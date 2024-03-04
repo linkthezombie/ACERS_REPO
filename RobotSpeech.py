@@ -24,6 +24,8 @@ Edited 2-27-2024 - Elise Lovell
      - added functionality to make saying the card played more natural
 Edited 2-28-2024 - Nathan Smith
      - added playerAccuse so that if a player announces their victory before Nao thinks they are out of cards, Nao says so
+Edited 3-4-2024 - Shelby Jones
+    - added basic casual interactions for Nao to say
 """
 
 # Import the necessary modules from the qi library
@@ -162,6 +164,26 @@ def accusePlayer():
     ]
     selected_phrase = random.choice(AccusePlayerPhrases)
     tts.say(selected_phrase)
+
+def casualSpeech():
+    num = random.randint(1, 10)#chose random number between 1 and 10
+    CasualPhrases = [
+        "You're pretty good at this game"
+        "Don't worry, I'm not a cheater!"
+        "Isn't this game fun?"
+        "I'm not gonna lose"
+    ]
+    if(num%3 == 0): # gives it 3/10 chance to say random phrase
+        if(GameStrategy.getNumOfCards() > 6):
+            tts.say("Boy, I have a lot of cards")
+        elif(GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0):
+            tts.say("I only have one card left")
+        else:
+            selected_phrase = random.choice(CasualPhrases)
+            tts.say(selected_phrase)
+        
+
+
 
 def anySpeech(wordsToSay):
     #say things passed through SayWords in AbsLayer
