@@ -107,7 +107,6 @@ def start(list):
         NaoPlay()
     else:
         absLayer.SayWords.trigger("The player to my left can play first.")
-        absLayer.SayWords.trigger("The player to my right can play first.")
 
 #updates relevant information after another player has announced they will draw a card
 def opponentDrew():
