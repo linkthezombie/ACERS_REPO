@@ -172,6 +172,7 @@ def casualSpeech():
         "Don't worry, I'm not a cheater!"
         "Isn't this game fun?"
         "I'm not gonna lose"
+        "You better not be a cheater!"
     ]
     if(num%3 == 0): # gives it 3/10 chance to say random phrase
         if(GameStrategy.getNumOfCards() > 6):
@@ -182,8 +183,6 @@ def casualSpeech():
             selected_phrase = random.choice(CasualPhrases)
             tts.say(selected_phrase)
         
-
-
 
 def anySpeech(wordsToSay):
     #say things passed through SayWords in AbsLayer
