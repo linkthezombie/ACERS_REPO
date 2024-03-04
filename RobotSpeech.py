@@ -67,7 +67,7 @@ def playCardSpeech(card, heldSuit):
     elif(value == "k"):
         value = "king"
 
-    heldsuit = heldsuit + "s"
+    heldSuit = str(heldSuit) + "s"
     
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
