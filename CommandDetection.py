@@ -37,6 +37,8 @@ Revised 2/28/2024
      - altered playerWins to playerWinsClaim, which triggers logic to check if that is true
 Revised 2/29/2024
      - added additional voice commands for opp Crazy 8 (Elise Lovell)
+Revised 3/5/2024
+     - changed funtion parameters when player ends a turn to allow for new handeling of 8's
 """
 
 
@@ -209,9 +211,10 @@ def endTurnOpp(_):
     global game_state
     if game_state == "midgame":
         CTemp = topCard#ComputerVision.getTopCard(ComputerVision.getVisibleCards())
-        val = "" + CTemp[0]
-        suit =  "" + CTemp[1]
-        absLayer.oppEndTurn.trigger(val, suit)
+        val = str(CTemp[0])
+        suit =  str(CTemp[1])
+        temp = ""
+        absLayer.oppEndTurn.trigger(val, suit, temp)
 
 # When a player verbally confirms their victory, check if this is true
 def playerWinsClaim(_):
@@ -257,28 +260,36 @@ def newSuitHeart():
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "heart")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "heart")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to clubs
 def newSuitClub():
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "club")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "club")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
 def newSuitDiamond():
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "diamond")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "diamond")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to spades
 def newSuitSpade():
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "spade")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "spade")
 
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
