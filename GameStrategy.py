@@ -26,6 +26,8 @@ Revised 2/17/2024 - Elise Lovell
      - debugging
 Revised 2/28/2024 - Nathan Smith
      - added PlayerCardCount and current_player for tracking the number of cards in each player's hand
+Revised 3/5 - Elise Lovell
+     - altered tracking suit when 8
 """
 
 #from DataTypes import *
@@ -42,6 +44,7 @@ Players = [] #stores players in array
 CardsInDiscardPile = 1 #initializes discard pile, puts top card in pile
 PlayerCardCount = [] #tracks number of cards in each player's hand
 current_player = 0 #tracks the currently active player
+suitOnEight = ""
 
 #decison making for robot on it's own turn and select a card to play
 #function only called if there are playable cards in Nao's hand
@@ -103,8 +106,11 @@ def canPlayCard():
     var = False
     #loop through every card in the stack
     for card in hand.NaoHand:
+        if(TopCard.value == 8):
+            if(card.ss == suitOnEight or card.value == TopCard.value):
+                var = True
         #is the card has a matching suit or value, set to True since it would be a playable card
-        if(card.suit == TopCard.suit or card.value == TopCard.value):
+        elif(card.suit == TopCard.suit or card.value == TopCard.value):
             var = True
             print("There are playable cards\n")
         # if the card is an eight, it is a playable card
@@ -143,7 +149,11 @@ def compare(c):
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile
 def playable(c): 
     #check if suit or value mactch
-    if(c.value == TopCard.value or c.suit == TopCard.suit):
+    if(TopCard.value == 8):
+        if(c.value == TopCard.value or c.ss == suitOnEight):
+            print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
+            return True
+    elif(c.value == TopCard.value or c.suit == TopCard.suit):
         print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
         return True
     #check if card in an eight
