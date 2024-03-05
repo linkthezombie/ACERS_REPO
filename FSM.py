@@ -51,6 +51,8 @@ Revised 2/28/2024 - Elise Lovell
 Revised 2/28 - Nathan Smith
      - removed player drawing functionality from opponentPlay, moved to opponentDrew
      - altered opponentPlay to now keep track of the number of cards in players hand
+Revised 3/5 - Elise Lovell
+     - altered tracking suit when 8
 """
 #!/usr/bin/env python2.7
 
@@ -91,7 +93,11 @@ def start(list):
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
-                
+    
+    #handle/set suitOnEight if crazy 8 is first card in discard pile
+    if (GameStrategy.TopCard.value == 8):
+        GameStrategy.suitOnEight = GameStrategy.TopCard.ss
+        
     ##Nao needs to store correct number of players
     GameStrategy.CardsInDiscardPile = 1
     print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
@@ -124,18 +130,19 @@ def opponentWinClaim():
     
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
-def opponentPlay(v, s):
+def opponentPlay(v, s, eightS):
     print("Opponent's turn, please complete turn\n")
     NewCard = hand.Card(v, s)
-        
+
     if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
         #update all varaibles
         print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
         print("Opponent didn't play a card\n")
     else:
+        if (v == "8"):
+            GameStrategy.suitOnEight = eightS
         #opp played a card
         #update all variables
-        temp = False #WHAT IS THIS VAR
         GameStrategy.TopCard = NewCard #store the new card on the pile
         GameStrategy.PlayerCardCount[GameStrategy.current_player] = GameStrategy.PlayerCardCount[GameStrategy.current_player] - 1 # Decrease player hand size by 1
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
@@ -173,12 +180,10 @@ def playing():
     #call abstraction layer function to let program know there is a card to be played
     #sets of physical interactions with NAO
     #passes the card object that will be played
-    newSuit = card.suit
     if card.value == 8:
         #pick new suit if the card is an 8
-        newSuit = GameStrategy.suitChoice()
-        GameStrategy.TopCard.suit = newSuit
-    absLayer.playCard.trigger(card, newSuit)
+        GameStrategy.suitOnEight = GameStrategy.suitChoice()
+    absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     
 #what the Nao does if it must draw a card
