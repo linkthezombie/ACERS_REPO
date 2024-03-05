@@ -97,6 +97,8 @@ def start(list):
     #handle/set suitOnEight if crazy 8 is first card in discard pile
     if (GameStrategy.TopCard.value == 8):
         GameStrategy.suitOnEight = GameStrategy.TopCard.ss
+    else:
+        GameStrategy.suitOnEight = ""
         
     ##Nao needs to store correct number of players
     GameStrategy.CardsInDiscardPile = 1
