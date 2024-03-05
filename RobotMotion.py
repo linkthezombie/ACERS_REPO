@@ -590,12 +590,7 @@ def finishCalibration():
 
 def turnHeadMove(currPlayer, totalPlayers):
   #total players includes Nao
-  if (currPlayer == 0):
-    #it is Nao's turn 
-    #turn head straight forward
-    #90 degrees from axis
-    motion.setAngles("HeadYaw", 0*d2r,pctMax)
-  else:
+  if (currPlayer != 0):
     #turn (180/totalPlayers) * currPlayers
     #0 = straight infront
     #+ is to the left, - to the right
