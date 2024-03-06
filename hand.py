@@ -148,18 +148,29 @@ class Card():
 
         #method for initalizing a card with 2 input variables
         def __init__(self, v, s):
-        #sets the strings the the inputed values
+            self.setSuit(s)
+            self.setValue(v)
+
+        def __str__(self):
+            return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
+        
+        def __eq__(self, other):
+            return self.suit == other.suit and self.value == other.value
+        
+        def setSuit(self, s):
             self.ss = s.lower()
-            self.vs = v.lower()
-        #sets int for suit based on inputted string version of suit
+            #sets int for suit based on inputted string version of suit
             if s.lower() == "club" or s == "0":
-                    self.suit = 1
+                self.suit = 1
             elif s.lower() == "diamond" or s == "3":
-                    self.suit = 2
+                self.suit = 2
             elif s.lower() == "heart" or s == "1":
-                    self.suit = 3
+                self.suit = 3
             elif s.lower() == "spade" or s == "2":
                 self.suit = 4
+                
+        def setValue(self, v):
+            self.vs = v.lower()
         #sets string value to lowercase
             v = v.lower()
 
@@ -190,12 +201,6 @@ class Card():
                     self.value = 12
             elif v == "k" or v == "13":
                     self.value = 13
-
-        def __str__(self):
-               return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
-        
-        def __eq__(self, other):
-               return self.suit == other.suit and self.value == other.value
 
 #test functions for each method - result in output to console
 '''addCard( "2", "spade")

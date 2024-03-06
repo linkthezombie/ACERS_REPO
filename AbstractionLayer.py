@@ -25,6 +25,8 @@ Revised 2-28-2024 (Elise Lovell)
      - added event for turning head
 Revised 2-28-2024 (Nathan Smith)
      -added oppDraw, oppWonClaim, and oppWonLie events to improve opponent winning logic 
+Revised 3/5-2024 (Elise Lovell)
+     - changed data type taken by oppEndTurn
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -79,7 +81,7 @@ class AbstractionLayer(object):
         self.playedCard = Event[None]()
 
         # Player actions
-        self.oppEndTurn = Event[Tuple[str, str]]()
+        self.oppEndTurn = Event[List[str]]()
         self.oppDraw = Event[None]()
         self.oppWonClaim = Event[None]()
         self.oppWonLie = Event[None]()

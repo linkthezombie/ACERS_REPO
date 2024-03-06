@@ -37,6 +37,8 @@ Revised 2/28/2024
      - altered playerWins to playerWinsClaim, which triggers logic to check if that is true
 Revised 2/29/2024
      - added additional voice commands for opp Crazy 8 (Elise Lovell)
+Revised 3/5/2024
+     - changed funtion parameters when player ends a turn to allow for new handeling of 8's
 """
 
 
@@ -188,7 +190,7 @@ class CommandDetectorModule(ALModule):
         #    MODULE_NAME)
         print(value)
         # If confidence is high enough, run the command
-        if(value[1] >= .55):
+        if(value[1] >= .4):
             cb = self.commands[value[0]]
             cb(value[0])
         # Resume speech recognition
@@ -203,7 +205,6 @@ myBroker = ALBroker("myBroker",
        RobotInfo.getPort())       # parent broker port
 
 # When a player verbally confirms the end of their turn, get top card on discard pile and trigger FSM events
-topCard = None
 def endTurnOpp(_):
     global topCard
     global game_state
@@ -211,7 +212,8 @@ def endTurnOpp(_):
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         val = str(CTemp[0])
         suit =  str(CTemp[1])
-        absLayer.oppEndTurn.trigger(val, suit)
+        temp = ""
+        absLayer.oppEndTurn.trigger(val, suit, temp)
 
 # When a player verbally confirms their victory, check if this is true
 def playerWinsClaim(_):
@@ -223,15 +225,16 @@ def playerWinsClaim(_):
 def playerDraws(_):
     global game_state
     if game_state == "midgame":
+        absLayer.SayWords.trigger("Okay, draw a card!")
         absLayer.oppDraw.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
-def naoWins():
+def naoWins(_):
     global game_state
     game_state = "pregame"
 
 # When PlayerWon is triggered from the FSM, sets game state to pregame
-def oppWins():
+def oppWins(_):
     global game_state
     game_state = "pregame"
 
@@ -252,32 +255,40 @@ def hearNumPlayers(num):
         absLayer.startGame.trigger([n, str(temp[0]), str(temp[1])])
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to hearts
-def newSuitHeart():
+def newSuitHeart(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "heart")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "heart")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to clubs
-def newSuitClub():
+def newSuitClub(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "club")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "club")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
-def newSuitDiamond():
+def newSuitDiamond(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "diamond")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "diamond")
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to spades
-def newSuitSpade():
+def newSuitSpade(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        absLayer.oppEndTurn.trigger("8", "spade")
+        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        suit =  str(CTemp[1])
+        absLayer.oppEndTurn.trigger("8", suit, "spade")
 
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):

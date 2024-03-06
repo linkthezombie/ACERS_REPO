@@ -24,6 +24,8 @@ Edited 2-27-2024 - Elise Lovell
      - added functionality to make saying the card played more natural
 Edited 2-28-2024 - Nathan Smith
      - added playerAccuse so that if a player announces their victory before Nao thinks they are out of cards, Nao says so
+Edited 3-4-2024 - Shelby Jones
+    - added basic casual interactions for Nao to say
 """
 
 # Import the necessary modules from the qi library
@@ -67,7 +69,7 @@ def playCardSpeech(card, heldSuit):
     elif(value == "k"):
         value = "king"
 
-    heldsuit = heldsuit + "s"
+    heldSuit = str(heldSuit) + "s"
     
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
@@ -155,13 +157,32 @@ def newOpp():
 #selects a phrase to say if an opponent is caught trying to announce their victory prematurely
 def accusePlayer():
     AccusePlayerPhrases = [
-        "Hey, you don't have 0 cards left!"
-        "Wait, that's not true!"
-        "Are you sure about that?"
+        "Hey, you don't have 0 cards left!",
+        "Wait, that's not true!",
+        "Are you sure about that?",
         "Sorry, but I think you still have cards left"
     ]
     selected_phrase = random.choice(AccusePlayerPhrases)
     tts.say(selected_phrase)
+
+def casualSpeech():
+    num = random.randint(1, 10)#chose random number between 1 and 10
+    CasualPhrases = [
+        "You're pretty good at this game"
+        "Don't worry, I'm not a cheater!"
+        "Isn't this game fun?"
+        "I'm not gonna lose"
+        "You better not be a cheater!"
+    ]
+    if(num%3 == 0): # gives it 3/10 chance to say random phrase
+        if(GameStrategy.getNumOfCards() > 6):
+            tts.say("Boy, I have a lot of cards")
+        elif(GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0):
+            tts.say("I only have one card left")
+        else:
+            selected_phrase = random.choice(CasualPhrases)
+            tts.say(selected_phrase)
+        
 
 def anySpeech(wordsToSay):
     #say things passed through SayWords in AbsLayer

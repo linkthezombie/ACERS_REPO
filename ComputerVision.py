@@ -131,11 +131,11 @@ def getVisibleCards():
 # Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 22.2.1)
 #returns array with int suit and value
 def getTopCard(marker_ids, xs, Rs):
-    for id in marker_ids:
-        pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
+    for i in range(len(marker_ids)):
+        pose = Pose.Pose(Vector3D.Vector3D(xs[i]), Orientation.Orientation.fromRotationMatrix(Rs[i]))
         if areas.findPlayArea(pose) == "discard pile":
-            rank = (id % 13) + 1
-            suit = id // 13
+            rank = (marker_ids[i][0] % 13) + 1
+            suit = marker_ids[i][0] // 13
             tempArr = [rank, suit]
             return(tempArr)
     return None
@@ -145,11 +145,11 @@ def getTopCard(marker_ids, xs, Rs):
 def getStackTop(side):
     zoneName = "L Stack" if side else "R Stack"
     marker_ids, xs, Rs = getVisibleCards()
-    for id in marker_ids:
-        pose = Pose.Pose(Vector3D.Vector3D(xs[id]), Orientation.Orientation.fromRotationMatrix(Rs[id]))
+    for i in range(len(marker_ids)):
+        pose = Pose.Pose(Vector3D.Vector3D(xs[i]), Orientation.Orientation.fromRotationMatrix(Rs[i]))
         if areas.findPlayArea(pose) == zoneName:
-            rank = (id % 13) + 1
-            suit = id // 13
+            rank = (marker_ids[i][0] % 13) + 1
+            suit = marker_ids[i][0] // 13
             tempArr = [rank, suit]
             return(tempArr)
     return None
