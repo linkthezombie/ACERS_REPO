@@ -157,9 +157,9 @@ def newOpp():
 #selects a phrase to say if an opponent is caught trying to announce their victory prematurely
 def accusePlayer():
     AccusePlayerPhrases = [
-        "Hey, you don't have 0 cards left!"
-        "Wait, that's not true!"
-        "Are you sure about that?"
+        "Hey, you don't have 0 cards left!",
+        "Wait, that's not true!",
+        "Are you sure about that?",
         "Sorry, but I think you still have cards left"
     ]
     selected_phrase = random.choice(AccusePlayerPhrases)
@@ -168,10 +168,10 @@ def accusePlayer():
 def casualSpeech():
     num = random.randint(1, 10)#chose random number between 1 and 10
     CasualPhrases = [
-        "You're pretty good at this game"
-        "Don't worry, I'm not a cheater!"
-        "Isn't this game fun?"
-        "I'm not gonna lose"
+        "You're pretty good at this game",
+        "Don't worry, I'm not a cheater!",
+        "Isn't this game fun?",
+        "I'm not gonna lose",
         "You better not be a cheater!"
     ]
     if(num%3 == 0): # gives it 3/10 chance to say random phrase
