@@ -12,6 +12,8 @@ Edited 10/21/2023  -Elise Lovell
         Added comments to clarify code
 Edited 10/27/2023  - Elise Lovell
 	Added main functionality and reordering of instertion into array
+Edited 3/10/2024
+        Fleshed out hand class to handle integer arguments
 """
 #import needed functionality for arrays and classes
 #import array 

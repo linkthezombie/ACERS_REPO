@@ -39,6 +39,8 @@ Revised 2/29/2024
      - added additional voice commands for opp Crazy 8 (Elise Lovell)
 Revised 3/5/2024
      - changed funtion parameters when player ends a turn to allow for new handeling of 8's
+Revised 3/10/2024
+     - Fixed parameter counts of getTopCard calls and abs layer subscriptions
 """
 
 
