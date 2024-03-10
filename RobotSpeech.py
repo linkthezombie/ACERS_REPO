@@ -168,10 +168,10 @@ def accusePlayer():
 def casualSpeech():
     num = random.randint(1, 10)#chose random number between 1 and 10
     CasualPhrases = [
-        "You're pretty good at this game"
-        "Don't worry, I'm not a cheater!"
-        "Isn't this game fun?"
-        "I'm not gonna lose"
+        "You're pretty good at this game",
+        "Don't worry, I'm not a cheater!",
+        "Isn't this game fun?",
+        "I'm not gonna lose",
         "You better not be a cheater!"
     ]
     if(num%3 == 0): # gives it 3/10 chance to say random phrase
