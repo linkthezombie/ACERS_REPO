@@ -121,7 +121,6 @@ def init():
         "Start Game": hearStartGame,
         "Play Crazy Eights": hearStartGame,
         "Play Game": hearStartGame,
-        "Play Cards": hearStartGame,
 
         #Commands for human player changing the suit to spades
         "The suit is now spades": newSuitSpade,
@@ -229,12 +228,12 @@ def playerDraws(_):
         absLayer.oppDraw.trigger()
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
-def naoWins(_):
+def naoWins():
     global game_state
     game_state = "pregame"
 
 # When PlayerWon is triggered from the FSM, sets game state to pregame
-def oppWins(_):
+def oppWins():
     global game_state
     game_state = "pregame"
 
@@ -259,7 +258,7 @@ def newSuitHeart(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "heart")
 
@@ -268,7 +267,7 @@ def newSuitClub(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "club")
 
@@ -277,7 +276,7 @@ def newSuitDiamond(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "diamond")
 
@@ -286,7 +285,7 @@ def newSuitSpade(_):
     global topCard
     global game_state
     if game_state == "midgame":
-        CTemp = ComputerVision.getTopCard(ComputerVision.getVisibleCards())
+        CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "spade")
 

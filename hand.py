@@ -25,7 +25,7 @@ NaoHand  = []
 #takes string for value and suit to add to the array
 def addCard(v, s):
         #checks if new card is a valid card, if yes, create the card
-        if checkValidity(v, s) == True:
+        #if checkValidity(v, s) == True:
             c = Card(v, s)
             #checks if the card is already in the hand, if it is, can't add a repeat to the hand
             if findCardInHand(c) == True:
@@ -51,9 +51,9 @@ def addCard(v, s):
                             return 0
                         i= i+1
                 print("\nAdded to hand")
-        else:
-            print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
-        return 0
+        #else:
+        #    print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
+            return 0
 
 
 #determine which card is "greater"
@@ -79,7 +79,7 @@ def greater(c1, c2):
 #takes a string value and suit for the card that should be removed
 def removeCard(v, s):
         #check if inputed variables make a valid card
-        if checkValidity(v, s) == True:
+        #if checkValidity(v, s) == True:
         #make a card object
             c = Card(v, s)
             #check if the card in the the hand, if it is not, exit because you can't remove something that isn't there
@@ -96,9 +96,9 @@ def removeCard(v, s):
                 print("\nRemoved from hand")
             else:
                 print("\nCard isn't in hand")
-        else:
-            print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
-        return 0
+        #else:
+        #    print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
+            return 0
 
 #check for valid input matching a real playing card
 #inputed value and suit must match a real suit and value for a playing card
@@ -162,12 +162,16 @@ class Card():
             #sets int for suit based on inputted string version of suit
             if s.lower() == "club" or s == "0":
                 self.suit = 1
+                self.ss = "club"
             elif s.lower() == "diamond" or s == "3":
                 self.suit = 2
+                self.ss = "diamond"
             elif s.lower() == "heart" or s == "1":
                 self.suit = 3
+                self.ss = "heart"
             elif s.lower() == "spade" or s == "2":
                 self.suit = 4
+                self.ss = "spade"
                 
         def setValue(self, v):
             self.vs = v.lower()
@@ -177,6 +181,7 @@ class Card():
         #sets int for value based on inputted string version of value
             if v == "a" or v == "1":
                     self.value = 1
+                    self.vs = "a"
             elif v == "2" or v == "2":
                     self.value = 2
             elif v == "3" or v == "3":
@@ -197,10 +202,13 @@ class Card():
                     self.value = 10
             elif v == "j" or v == "11":
                     self.value = 11
+                    self.vs = "j"
             elif v == "q" or v == "12":
                     self.value = 12
+                    self.vs = "q"
             elif v == "k" or v == "13":
                     self.value = 13
+                    self.vs = "k"
 
 #test functions for each method - result in output to console
 '''addCard( "2", "spade")
