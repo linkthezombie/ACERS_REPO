@@ -28,6 +28,8 @@ Revised 2/28/2024 - Nathan Smith
      - added PlayerCardCount and current_player for tracking the number of cards in each player's hand
 Revised 3/5 - Elise Lovell
      - altered tracking suit when 8
+Revised 3/14 - Elise Lovell
+     - added easy mode functions and mode deciding functions
 """
 
 #from DataTypes import *
@@ -45,7 +47,7 @@ CardsInDiscardPile = 1 #initializes discard pile, puts top card in pile
 PlayerCardCount = [] #tracks number of cards in each player's hand
 current_player = 0 #tracks the currently active player
 suitOnEight = ""
-
+gameLevel = 2
 #decison making for robot on it's own turn and select a card to play
 #function only called if there are playable cards in Nao's hand
 def turn(): 
@@ -62,6 +64,33 @@ def turn():
             if(choice(currCard, card) == True):
                 currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
+    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
+    TopCard = currCard
+    return currCard
+    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+
+#determines how to play turn based on set difficulty
+def preTurn():
+    if (gameLevel = 1):
+        turnEasy()
+    elif (gameLevel = 2):
+        turnMedium()
+    else:
+        turnHard()
+
+#strategy to pick turn on easy mode games
+def turnEasy(): 
+    global TopCard
+    currCard = None
+    playableCards = []
+    #loop through each card in hand
+    for card in hand.NaoHand:
+        #call method to check if the card is legal to play on to the stack return true
+        if (playable(card) == True):
+            #make list of all allowed cards
+            playableCards.append(card)
+    #randomly pick a card to play from playable cards
+    currCard = random.choice(playableCards)
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
     TopCard = currCard
     return currCard
@@ -163,7 +192,21 @@ def playable(c):
     else:
         print("Card " + str(c.value) + ", " + str(c.suit) + " is not playable\n")
         return False
-    
+
+#makes sure right logic is called for the difficulty level of the game
+def preSuitChoice():
+    if(gameLevel = 1):
+        suitChoiceEasy()
+    elif(gameLevel = 2):
+        suitChoiceMedium()
+    else():
+        suitChoiceHard()
+
+#randomly picks an suit if Nao plays an 8, on easy mode
+def suitChoiceEasy():
+    arr = ["spade","heart","diamond","club"]
+    return random.choice(arr)
+
 def suitChoice():
     suit_counts = [0, 0, 0, 0] # Initialize defaultdict to store suit counts
     for card in hand.NaoHand:
