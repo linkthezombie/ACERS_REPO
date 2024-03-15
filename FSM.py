@@ -171,7 +171,7 @@ def opponentPlay(v, s, eightS):
 def playing():
     state = "playing"
     #handles selecting card to play and communciating with other layers
-    card = GameStrategy.turn()
+    card = GameStrategy.preTurn()
     #remove the played card from virtual hand
     hand.removeCard(card.vs, card.ss)
     #update variables
@@ -184,7 +184,7 @@ def playing():
     #passes the card object that will be played
     if card.value == 8:
         #pick new suit if the card is an 8
-        GameStrategy.suitOnEight = GameStrategy.suitChoice()
+        GameStrategy.suitOnEight = GameStrategy.preSuitChoice()
     absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     
