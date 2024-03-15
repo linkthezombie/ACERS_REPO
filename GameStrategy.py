@@ -30,6 +30,8 @@ Revised 3/5 - Elise Lovell
      - altered tracking suit when 8
 Revised 3/14 - Elise Lovell
      - added easy mode functions and mode deciding functions
+Revised 3/15 - Elise Lovell
+     - added medium mode funcitonality
 """
 
 #from DataTypes import *
@@ -48,26 +50,6 @@ PlayerCardCount = [] #tracks number of cards in each player's hand
 current_player = 0 #tracks the currently active player
 suitOnEight = ""
 gameLevel = 2
-#decison making for robot on it's own turn and select a card to play
-#function only called if there are playable cards in Nao's hand
-def turn(): 
-    global TopCard
-    currCard = None
-    #loop through each card in hand
-    for card in hand.NaoHand:
-        #call method to check if the card is legal to play on to the stack return true
-        if (playable(card) == True):
-            #if first card that is playable
-            if currCard is None:
-                currCard = card
-            #if the card is a better option to play, set as current card
-            if(choice(currCard, card) == True):
-                currCard = card
-    #physical motion to play the card, will pass selected card to a higher abstraction level
-    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
-    TopCard = currCard
-    return currCard
-    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
 
 #determines how to play turn based on set difficulty
 def preTurn():
@@ -91,6 +73,27 @@ def turnEasy():
             playableCards.append(card)
     #randomly pick a card to play from playable cards
     currCard = random.choice(playableCards)
+    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
+    TopCard = currCard
+    return currCard
+    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+
+#gamePlay of turn if difficulty = Medium
+#playest highest value card in hand
+def turnMedium(): 
+    global TopCard
+    currCard = None
+    #loop through each card in hand
+    for card in hand.NaoHand:
+        #call method to check if the card is legal to play on to the stack return true
+        if (playable(card) == True):
+            #if first card that is playable
+            if currCard is None:
+                currCard = card
+            #if the card is a better option to play, set as current card
+            if(choice(currCard, card) == True):
+                currCard = card
+    #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
     TopCard = currCard
     return currCard
@@ -207,8 +210,24 @@ def suitChoiceEasy():
     arr = ["spade","heart","diamond","club"]
     return random.choice(arr)
 
-def suitChoice():
+#decide suit to play on 8 for medium level difficulty
+#picks suit of highest numbered card in hand
+def suitChoiceMedium():
+    currCard = None
+    #loop through every card in hand
+    for card in hand.NaoHand:
+        if currCard is None:
+            currCard = card
+        #if the card is a better option to play, set as current card
+        elif(currCard.value < card.value):
+            currCard = card
+    return currCard.ss
+
+#pick suit on 8 for hard difficulty
+#pick suit with most cards in hand
+def suitChoiceHard():
     suit_counts = [0, 0, 0, 0] # Initialize defaultdict to store suit counts
+    #count each suit in hand
     for card in hand.NaoHand:
         if card.ss == "spade":
             suit_counts[0] = suit_counts[0] + 1
@@ -220,6 +239,7 @@ def suitChoice():
             suit_counts[3] = suit_counts[3] + 1
     most_common_suit =  "spade"
     max = suit_counts[0]
+    #find suit with most cards
     if max < suit_counts[1]:
         most_common_suit =  "heart"
         max = suit_counts[1]
