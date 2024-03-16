@@ -89,7 +89,7 @@ def start(list):
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
 
-    GameStrategy.gameLevel = list[3]
+    GameStrategy.gameLevel = int(list[3])
     
     #populates the player card count array with the number of cards each player starts with
     for _ in range(int(list[0])):
