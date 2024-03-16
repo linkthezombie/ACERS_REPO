@@ -42,7 +42,7 @@ Revised 3/5/2024
 Revised 3/10/2024
      - Fixed parameter counts of getTopCard calls and abs layer subscriptions
 Revised 3/16/2024
-     - added setDifficulty to allow for different levels of play
+     - added setDifficulty to allow for different levels of play (Elise Lovell)
 """
 
 
