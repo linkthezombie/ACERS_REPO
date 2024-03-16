@@ -53,6 +53,8 @@ Revised 2/28 - Nathan Smith
      - altered opponentPlay to now keep track of the number of cards in players hand
 Revised 3/5 - Elise Lovell
      - altered tracking suit when 8
+Revised 3/16 - Elise Lovell
+     - changes for difficulty levels
 """
 #!/usr/bin/env python2.7
 
@@ -76,6 +78,7 @@ def win():
 
 #runs to start the program and set up variables and functions
 #takes list with the value and suit of the seen card on the discard pile in index 1 and 2 and the num of players in index 0
+#index 3 it the game difficulty level
 def start(list):
     print("Starting Game: \n\n")
     state = "start"
@@ -86,6 +89,8 @@ def start(list):
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
 
+    GameStrategy.gameLevel = list[3]
+    
     #populates the player card count array with the number of cards each player starts with
     for _ in range(int(list[0])):
         GameStrategy.PlayerCardCount.append(5)
