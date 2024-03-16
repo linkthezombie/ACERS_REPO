@@ -32,6 +32,8 @@ Revised 3/14 - Elise Lovell
      - added easy mode functions and mode deciding functions
 Revised 3/15 - Elise Lovell
      - added medium mode funcitonality
+Revised 3/16 - Elise Lovell
+     - added hard mode functionality 
 """
 
 #from DataTypes import *
@@ -93,6 +95,32 @@ def turnMedium():
             #if the card is a better option to play, set as current card
             if(choice(currCard, card) == True):
                 currCard = card
+    #physical motion to play the card, will pass selected card to a higher abstraction level
+    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
+    TopCard = currCard
+    return currCard
+    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+
+#actions on Nao turn if game level set to 3
+#play highest card value, but save 8's
+def turnHard():
+    global TopCard
+    currCard = None
+    #loop through each card in hand
+    for card in hand.NaoHand:
+        #call method to check if the card is legal to play on to the stack return true
+        if (playable(card) == True):
+            #if first card that is playable
+            if currCard is None:
+                currCard = card
+            #want to save 8's, so if new card is an 8 and there are other options, don't pick to play
+            elif(card.value != 8):
+                #check if an 8 was already picked, and if it is, reassign to new card
+                if(currCard.value == 8):
+                    currCard = card
+                #neither newCard or best option are 8's so find new best option
+                elif(choice(currCard, card) == True):
+                    currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
     TopCard = currCard
