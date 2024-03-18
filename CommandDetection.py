@@ -43,6 +43,8 @@ Revised 3/10/2024
      - Fixed parameter counts of getTopCard calls and abs layer subscriptions
 Revised 3/16/2024
      - added setDifficulty to allow for different levels of play (Elise Lovell)
+Revised 3/18/2024
+     - added faceForward abs layer calls to hearStartGame and opppEndTurn (Elise Lovell)
 """
 
 
@@ -222,6 +224,7 @@ def endTurnOpp(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         val = str(CTemp[0])
         suit =  str(CTemp[1])
@@ -321,6 +324,7 @@ def newSuitSpade(_):
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
+        absLayer.faceForward.trigger()
         absLayer.SayWords.trigger("Alright, starting game! Would you like to play an easy, medium, or hard game?")
         game_state = "setupgame"
 
