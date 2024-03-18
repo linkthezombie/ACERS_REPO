@@ -41,6 +41,8 @@ Revised 3/5/2024
      - changed funtion parameters when player ends a turn to allow for new handeling of 8's
 Revised 3/10/2024
      - Fixed parameter counts of getTopCard calls and abs layer subscriptions
+Revised 3/16/2024
+     - added setDifficulty to allow for different levels of play (Elise Lovell)
 """
 
 
@@ -65,6 +67,9 @@ memory = None
 # Global variable to track the gamestate for command activation purposes
 game_state = "pregame"
 tts = None
+
+#global variable to track game difficulty
+game_level = 1
 
 def init():
     global CommandDetector
@@ -150,8 +155,12 @@ def init():
         "I'm making it hearts": newSuitHeart,
         "The new suit is hearts": newSuitHeart,
         "I pick hearts": newSuitHeart,
-        "It is hearts now": newSuitHeart
-        
+        "It is hearts now": newSuitHeart,
+
+        #commands for game diffculty levels
+        "Easy": setDifficulty,
+        "Medium": setDifficulty,
+        "Hard": setDifficulty
         }
 
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -246,14 +255,28 @@ def deckShuffle(_):
         absLayer.isShuffled.trigger()
         absLayer.SayWords.trigger("Thank you for shuffling, lets continue.")
 
+#uses player input to determine difficulty at start of game
+def setDifficulty(level):
+    global game_state
+    global game_level
+    if game_state == "setupgame":
+        if(level = "Easy"):
+            game_level = "1"
+        elif(level = "Medium"):
+            game_level = "2"
+        else:
+            game_level = "3"
+        absLayer.SayWords.trigger("Okay! How many players will there be playing with me?")
+        
 # When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
     global game_state
+    global game_level
     if game_state == "setupgame":
         n = num[:1] # Pulls the number of players from the command to be passed through the abstraction layer
         temp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         game_state = "midgame"
-        absLayer.startGame.trigger([n, str(temp[0]), str(temp[1])])
+        absLayer.startGame.trigger([n, str(temp[0]), str(temp[1]), game_level])
 
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to hearts
 def newSuitHeart(_):
@@ -295,7 +318,7 @@ def newSuitSpade(_):
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
-        absLayer.SayWords.trigger("Alright, starting game! How many players will there be playing with me?")
+        absLayer.SayWords.trigger("Alright, starting game! Would you like to play an easy, medium, or hard game?")
         game_state = "setupgame"
 
 def startCalib(_ = None):
