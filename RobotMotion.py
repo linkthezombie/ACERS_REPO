@@ -30,6 +30,8 @@ Edited 2/26/2024 (Elise Lovell)
   - added skeletal turnHead functions 
 Edited 2/28/2024 (Elise Lovell)
    - finished turnHead with appropriate funciton calls
+Edited 3/18/2024 (Elise Lovell)
+  - added lookForward() and abstraction subscribe
 """
 import time
 from naoqi import ALProxy
@@ -603,8 +605,11 @@ def turnHeadMove(currPlayer, totalPlayers):
     currPlayerAngle = 90- (degreeSegments * currPlayer)
     motion.setAngles("HeadYaw", currPlayerAngle*d2r,pctMax)
 
-# Set up abstraction layer callbacks
+def lookForward():
+  motion.setAngles("HeadYaw", 0, pctMax)
 
+# Set up abstraction layer callbacks
+absLayer.faceForward.subscribe(lookForward)
 absLayer.turnHead.subscribe(turnHeadMove)
 
 absLayer.drawStartingHand.subscribe(startingHand)
