@@ -160,7 +160,10 @@ def init():
         #commands for game diffculty levels
         "Easy": setDifficulty,
         "Medium": setDifficulty,
-        "Hard": setDifficulty
+        "Hard": setDifficulty,
+        "Easy Mode": setDifficulty,
+        "Medium Mode": setDifficulty,
+        "Hard Mode": setDifficulty
         }
 
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
