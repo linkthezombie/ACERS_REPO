@@ -159,6 +159,9 @@ class Card():
         def __eq__(self, other):
             return self.suit == other.suit and self.value == other.value
         
+        def __ne__(self, other):
+            return not (self == other)
+        
         def setSuit(self, s):
             self.ss = s.lower()
             #sets int for suit based on inputted string version of suit
