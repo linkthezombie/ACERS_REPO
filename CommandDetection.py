@@ -266,9 +266,9 @@ def setDifficulty(level):
     global game_state
     global game_level
     if game_state == "setupgame":
-        if(level = "Easy"):
+        if(level == "Easy"):
             game_level = "1"
-        elif(level = "Medium"):
+        elif(level == "Medium"):
             game_level = "2"
         else:
             game_level = "3"

@@ -72,7 +72,6 @@ def win():
     print("\nWin! Woo hoo")
     absLayer.NaoWon.trigger()
     #end the game
-    #need way to end game and allow for restart
     state = ""
     return 0
 
@@ -183,7 +182,6 @@ def playing():
     GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
     #change to next player
     GameStrategy.NextPlayer()
-    winGame() #check if wins game
     #call abstraction layer function to let program know there is a card to be played
     #sets of physical interactions with NAO
     #passes the card object that will be played
@@ -191,6 +189,7 @@ def playing():
         #pick new suit if the card is an 8
         GameStrategy.suitOnEight = GameStrategy.preSuitChoice()
     absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
+    winGame() #check if wins game
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     
 #what the Nao does if it must draw a card
