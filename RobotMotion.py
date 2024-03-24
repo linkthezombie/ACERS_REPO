@@ -65,7 +65,7 @@ temp = ALProxy("ALBodyTemperature", RobotInfo.getRobotIP(), RobotInfo.getPort())
 # predefined positions for drawing/playing Cards
 
 # Joint order: ['LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
-realStart = [0.1548919677734375, -0.07060599327087402, -90 * d2r, -0.03490658476948738, 90 * d2r, .65]
+realStart = [0.1548919677734375, -0.1, -90 * d2r, -0.03490658476948738, 90 * d2r, .65]
 
 def wakeRobot():
     motion.wakeUp()
@@ -101,7 +101,6 @@ T_CH = None
 def drawCard():
     # starting position
     motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
-    time.sleep(.5)
 
     # Allow the elbow to bend freely so we can easily "drag" the hand along the deck
     motion.setStiffnesses("LElbowRoll", 0)
@@ -160,34 +159,37 @@ def playOnStack(side):
 
     if(side == L):
         targetPos = lStackPos[:]
+        wristTwist = 10*d2r
     else:
         targetPos = rStackPos[:]
+        wristTwist = 0
 
     # Keep hand closed, raise shoulder to put hand above the cards
-    targetPos[-1] = .3
+    targetPos[-1] = .25
 
     pitchUp = (30 if side==L else 20) * d2r
     targetPos[0] -= pitchUp
 
     # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
     targetPos[-4] += (-15 if side==L else -10) * d2r
+    targetPos[-2] -= wristTwist
 
     startPos = lPlayStart[:] if side == L else rPlayStart[:]
-    startPos[-1] = .3
+    startPos[-1] = .25
 
     # Pull back the end position slightly so we don't overshoot the holder
     targetPos[0] -= 10 * d2r
     targetPos[-3] += 20 * d2r
 
     motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), .2)
-    time.sleep(.5)
     motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
+    motion.setAngles("LHand", .3, pctMax)
     time.sleep(.5)
-    motion.changeAngles(shoulder, pitchUp, pctMax)
+    motion.changeAngles(shoulder, pitchUp / 2, pctMax)
     time.sleep(.5)
     motion.setAngles("LHand", 1, pctMax)
     time.sleep(.5)
-    motion.changeAngles(shoulder, -pitchUp, pctMax)
+    motion.changeAngles(shoulder, -pitchUp / 2, pctMax)
     time.sleep(.5)
     motion.changeAngles("LShoulderRoll", 20*d2r, pctMax)
     motion.setAngles("HeadYaw", 45*d2r, pctMax)
@@ -219,22 +221,26 @@ def pickupFromStack(side):
         wristTwist = 0
 
     # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
-    targetPos[0] -= 30 * d2r
+    
     targetPos[-1] = 1
+    startPos = targetPos[:]
+
+    startPos[0] -= 30 * d2r
+    startPos[-3] += 15 * d2r
 
     pullBackPos[0] -= 20 * d2r
-    pullBackPos[-1] = .35
+    pullBackPos[-1] = .3
 
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), pctMax)
     # Move arm down to put hand around cards
-    motion.changeAngles(shoulder, 33 * d2r, pctMax)
-    time.sleep(.5)
+    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
     # Lightly press against the front of the cards
     motion.setStiffnesses(hand, .3)
     motion.setAngles(hand, .4, pctMax)
     time.sleep(1.5)
     # Raise hand upwards, dragging the top card with it
-    motion.changeAngles(shoulder, -20 * d2r, .1)
+    pitchUp = -20*d2r if side==L else -15*d2r
+    motion.changeAngles(shoulder, pitchUp, .1)
     motion.changeAngles("LWristYaw", wristTwist, .1)
     time.sleep(.5)
     # Grab the top card the rest of the way, now that the stack is out of the way
@@ -244,11 +250,11 @@ def pickupFromStack(side):
 
     # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
     # This prevents us from dragging the other cards left or right on the tray.
+    motion.angleInterpolationWithSpeed("LHand", .25, pctMax)
     motion.angleInterpolationWithSpeed(arm, l2rJoints(pullBackPos), pctMax)
-    motion.setAngles("LHand", .3, pctMax)
+    
     time.sleep(1)
 
-# TODO implement
 # assuming a card is in Ace's left hand, place it on the discard pile
 def playCard():
     targetPos = realStart[:]
@@ -256,7 +262,7 @@ def playCard():
     targetPos[2] += 20 * d2r
     targetPos[-3] -= 20 * d2r
     targetPos[-2] = -90 * d2r
-    targetPos[-1] = .35
+    targetPos[-1] = .25
 
     motion.angleInterpolationWithSpeed("LArm", targetPos, pctMax)
     #motion.setStiffnesses("LElbowRoll", 0)
@@ -269,6 +275,8 @@ def playCard():
     #motion.setStiffnesses("LElbowRoll", 1)
     motion.changeAngles("LShoulderPitch", -20*d2r, pctMax)
     time.sleep(.5)
+
+    motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
 
 def onDrawCard():
     drawCard()
@@ -402,9 +410,13 @@ def turnHeadMove(currPlayer, totalPlayers):
     currPlayerAngle = 90- (degreeSegments * currPlayer)
     motion.setAngles("HeadYaw", currPlayerAngle*d2r,pctMax)
 
+def turnHeadForward():
+    motion.angleInterpolationWithSpeed("HeadYaw", 0, pctMax)
+
 # Set up abstraction layer callbacks
 
 absLayer.turnHead.subscribe(turnHeadMove)
+absLayer.faceForward.subscribe(turnHeadForward)
 
 absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)

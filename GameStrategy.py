@@ -55,12 +55,12 @@ gameLevel = 2
 
 #determines how to play turn based on set difficulty
 def preTurn():
-    if (gameLevel = 1):
-        turnEasy()
-    elif (gameLevel = 2):
-        turnMedium()
+    if (gameLevel == 1):
+        return turnEasy()
+    elif (gameLevel == 2):
+        return turnMedium()
     else:
-        turnHard()
+        return turnHard()
 
 #strategy to pick turn on easy mode games
 def turnEasy(): 
@@ -226,12 +226,12 @@ def playable(c):
 
 #makes sure right logic is called for the difficulty level of the game
 def preSuitChoice():
-    if(gameLevel = 1):
-        suitChoiceEasy()
-    elif(gameLevel = 2):
-        suitChoiceMedium()
-    else():
-        suitChoiceHard()
+    if(gameLevel == 1):
+        return suitChoiceEasy()
+    elif(gameLevel == 2):
+        return suitChoiceMedium()
+    else:
+        return suitChoiceHard()
 
 #randomly picks an suit if Nao plays an 8, on easy mode
 def suitChoiceEasy():

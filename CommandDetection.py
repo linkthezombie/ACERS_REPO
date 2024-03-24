@@ -219,6 +219,7 @@ def endTurnOpp(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         val = str(CTemp[0])
         suit =  str(CTemp[1])
@@ -260,9 +261,9 @@ def setDifficulty(level):
     global game_state
     global game_level
     if game_state == "setupgame":
-        if(level = "Easy"):
+        if(level == "Easy"):
             game_level = "1"
-        elif(level = "Medium"):
+        elif(level == "Medium"):
             game_level = "2"
         else:
             game_level = "3"
@@ -283,6 +284,7 @@ def newSuitHeart(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "heart")
@@ -292,6 +294,7 @@ def newSuitClub(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "club")
@@ -301,6 +304,7 @@ def newSuitDiamond(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "diamond")
@@ -310,6 +314,7 @@ def newSuitSpade(_):
     global topCard
     global game_state
     if game_state == "midgame":
+        absLayer.faceForward.trigger()
         CTemp = ComputerVision.getTopCard(*ComputerVision.getVisibleCards())
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "spade")
@@ -318,6 +323,7 @@ def newSuitSpade(_):
 def hearStartGame(_):
     global game_state
     if game_state == "pregame":
+        absLayer.faceForward.trigger()
         absLayer.SayWords.trigger("Alright, starting game! Would you like to play an easy, medium, or hard game?")
         game_state = "setupgame"
 
