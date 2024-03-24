@@ -32,6 +32,8 @@ Edited 2/28/2024 (Elise Lovell)
    - finished turnHead with appropriate funciton calls
 Edited 3/18/2024 (Elise Lovell)
   - added lookForward() and abstraction subscribe
+Edited 3/22/2024 (Liam McKinney)
+  - adjusted various animations for consistency
 """
 import time
 from naoqi import ALProxy
