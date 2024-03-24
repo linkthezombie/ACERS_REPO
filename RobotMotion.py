@@ -30,6 +30,8 @@ Edited 2/26/2024 (Elise Lovell)
   - added skeletal turnHead functions 
 Edited 2/28/2024 (Elise Lovell)
    - finished turnHead with appropriate funciton calls
+Edited 3/18/2024 (Elise Lovell)
+  - added lookForward() and abstraction subscribe
 """
 import time
 from naoqi import ALProxy
@@ -415,6 +417,7 @@ def turnHeadForward():
 
 # Set up abstraction layer callbacks
 
+# Set up abstraction layer callbacks
 absLayer.turnHead.subscribe(turnHeadMove)
 absLayer.faceForward.subscribe(turnHeadForward)
 

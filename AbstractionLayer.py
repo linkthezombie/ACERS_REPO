@@ -25,8 +25,10 @@ Revised 2-28-2024 (Elise Lovell)
      - added event for turning head
 Revised 2-28-2024 (Nathan Smith)
      -added oppDraw, oppWonClaim, and oppWonLie events to improve opponent winning logic 
-Revised 3/5-2024 (Elise Lovell)
+Revised 3-5-2024 (Elise Lovell)
      - changed data type taken by oppEndTurn
+Revised 3-18-2024 (Elise Lovell)
+     - added faceForward
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple

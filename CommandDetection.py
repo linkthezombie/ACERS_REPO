@@ -43,6 +43,8 @@ Revised 3/10/2024
      - Fixed parameter counts of getTopCard calls and abs layer subscriptions
 Revised 3/16/2024
      - added setDifficulty to allow for different levels of play (Elise Lovell)
+Revised 3/18/2024
+     - added faceForward abs layer calls to hearStartGame and opppEndTurn (Elise Lovell)
 """
 
 
@@ -160,7 +162,10 @@ def init():
         #commands for game diffculty levels
         "Easy": setDifficulty,
         "Medium": setDifficulty,
-        "Hard": setDifficulty
+        "Hard": setDifficulty,
+        "Easy Mode": setDifficulty,
+        "Medium Mode": setDifficulty,
+        "Hard Mode": setDifficulty
         }
 
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
