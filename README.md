@@ -69,6 +69,18 @@ Requirement 58: RobotMotion.py, AbstractionLayer.py, FSM.py
 Requirement 59: 3D printed  
 Requirement 60: CommandDetection.py, AbstractionLayer.py, RobotSpeech.py, ComputerVision.py, hand.py, GameStrategy.py, FSM.py and tested the week of 3/4  
 
+Sprint 11:
+Requirement 21.1: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 21.2: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 39: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeecg.py, RobotMotion.py, ComputerVision.py  
+Requirement 50.1: work to be seen in video presentation next week(completed ahead of schedule)  
+Requirement 50.1: work to be seen in video presentation next week (completed ahead of schedule)  
+Requirement 61: RobotMotion.py, AbstractionLayer.py, FSM.py  
+Requirement 62: GameStrategy.py  
+Requirement 63: FSM.py  
+Requirement 64: RobotMotion.py  
+
+
 Requirement 6:
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
