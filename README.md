@@ -69,7 +69,7 @@ Requirement 58: RobotMotion.py, AbstractionLayer.py, FSM.py
 Requirement 59: 3D printed  
 Requirement 60: CommandDetection.py, AbstractionLayer.py, RobotSpeech.py, ComputerVision.py, hand.py, GameStrategy.py, FSM.py and tested the week of 3/4  
 
-Sprint 11:
+Sprint 11:  
 Requirement 21.1: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
 Requirement 21.2: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
 Requirement 39: FSM.py, GameStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeecg.py, RobotMotion.py, ComputerVision.py  
