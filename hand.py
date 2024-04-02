@@ -64,19 +64,10 @@ def addCard(v, s):
 #takes two card objects to compare the value of
 #based on suit then face value
 def greater(c1, c2):
-        #checks if c1's suit is larger than c2's
-        if c1.suit > c2.suit:
-                return True
-        #suits are the same value
-        elif c1.suit == c2.suit:
-                #checks which face value of the cards is larger
-                if c1.value > c2.value:
-                        return True
-                else:
-                        return False
-        #c2's suit is of a larger value
-        else:
-                return False
+    if c1.suit == c2.suit:
+        return c1.value > c2.value
+
+    return c1.suit > c2.suit
 
 #remove a card from hand
 #takes a string value and suit for the card that should be removed
