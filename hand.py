@@ -3,7 +3,7 @@ hand.py
 
 Program to control the adding, removing, storing, and tracking of cards in the robots hand
         Requirement ID 24
-        
+
 Created by Elise Lovell
 
 Created 10/19/2023
@@ -11,52 +11,53 @@ Created 10/19/2023
 Edited 10/21/2023  -Elise Lovell
         Added comments to clarify code
 Edited 10/27/2023  - Elise Lovell
-	Added main functionality and reordering of instertion into array
+    Added main functionality and reordering of instertion into array
 Edited 3/10/2024
         Fleshed out hand class to handle integer arguments
 """
 #import needed functionality for arrays and classes
-#import array 
+#import array
 from array import array
 # ab_classes.py
 
 #array to store cards
-NaoHand  = []
+NaoHand = []
 
 #adds a new card to the array
 #takes string for value and suit to add to the array
 def addCard(v, s):
-        #checks if new card is a valid card, if yes, create the card
-        #if checkValidity(v, s) == True:
-            c = Card(v, s)
-            #checks if the card is already in the hand, if it is, can't add a repeat to the hand
-            if findCardInHand(c) == True:
-                    print("\nCard already exists in hand")                        
-                    return 0
-            else:
-                print("\nAdding: Suit: "+ s + ", Value: "+ v)
-                #check if the card will be the first entry in the array and add
-                if len(NaoHand) == 0:
-                        NaoHand.append(c)
-                #insert at front of the array
-                elif greater(NaoHand[0], c) == True:
-                        NaoHand.insert(0, c)
-                #insert at back of array
-                elif greater(NaoHand[len(NaoHand)-1], c) == False:
-                        NaoHand.append(c)
-                else:
-                    #in middle of array, loop through till right location is found
-                    i = 0
-                    for x in NaoHand:
-                        if greater(c, x) == False:
-                            NaoHand.insert(i, c)
-                            return 0
-                        i= i+1
-                print("\nAdded to hand")
-        #else:
-        #    print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
-            return 0
+    #checks if new card is a valid card, if yes, create the card
+    c = Card(v, s)
 
+    #checks if the card is already in the hand, if it is, can't add a repeat to the hand
+    if findCardInHand(c):
+        print("\nCard already exists in hand")
+        return 0
+
+    print("\nAdding: Suit: "+ s + ", Value: "+ v)
+    #check if the card will be the first entry in the array and add
+    if len(NaoHand) == 0:
+        NaoHand.append(c)
+
+    #insert at front of the array
+    elif greater(NaoHand[0], c):
+        NaoHand.insert(0, c)
+
+    #insert at back of array
+    elif not greater(NaoHand[len(NaoHand)-1], c):
+        NaoHand.append(c)
+
+    else:
+        #in middle of array, loop through till right location is found
+        i = 0
+        for x in NaoHand:
+            if not greater(c, x):
+                NaoHand.insert(i, c)
+                return 0
+            i += 1
+
+    print("\nAdded to hand")
+    return 0
 
 #determine which card is "greater"
 #true if c1 is greater, false if c2 is greater
@@ -155,13 +156,13 @@ class Card():
 
         def __str__(self):
             return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
-        
+
         def __eq__(self, other):
             return self.suit == other.suit and self.value == other.value
-        
+
         def __ne__(self, other):
             return not (self == other)
-        
+
         def setSuit(self, s):
             self.ss = s.lower()
             #sets int for suit based on inputted string version of suit
@@ -177,7 +178,7 @@ class Card():
             elif s.lower() == "spade" or s == "2":
                 self.suit = 4
                 self.ss = "spade"
-                
+
         def setValue(self, v):
             self.vs = v.lower()
         #sets string value to lowercase
