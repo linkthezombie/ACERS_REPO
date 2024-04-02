@@ -45,6 +45,8 @@ Revised 3/16/2024
      - added setDifficulty to allow for different levels of play (Elise Lovell)
 Revised 3/18/2024
      - added faceForward abs layer calls to hearStartGame and opppEndTurn (Elise Lovell)
+Revised 4/2/2024
+     - added random selecting of personality at start of game
 """
 
 
@@ -72,6 +74,9 @@ tts = None
 
 #global variable to track game difficulty
 game_level = 1
+
+#global variable for personality
+persona = 1
 
 def init():
     global CommandDetector
@@ -327,6 +332,9 @@ def newSuitSpade(_):
 # When a player verbally requests to start a game, Nao enters the setup phase 
 def hearStartGame(_):
     global game_state
+    global persona
+    #select random personality
+    persona = random.choice([1, 2, 3])
     if game_state == "pregame":
         absLayer.faceForward.trigger()
         absLayer.SayWords.trigger("Alright, starting game! Would you like to play an easy, medium, or hard game?")
