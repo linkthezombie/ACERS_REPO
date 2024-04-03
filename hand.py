@@ -100,10 +100,10 @@ def checkValidity(v, s):
 #prints array in order
 #no post or preconditions
 def getHand():
-        print("\nHand:")
-        #loops through array and prints string value and suit associated with that card
-        for x in NaoHand:
-                print("\nSuit: " + x.ss + " Value: " + x.vs)
+    print("\nHand:")
+    #loops through array and prints string value and suit associated with that card
+    for x in NaoHand:
+        print("\nSuit: " + x.ss + " Value: " + x.vs)
 
 #Card class for creating a card with a suit and face value
 #preconditions - a value and suit for the card, each should be a string
