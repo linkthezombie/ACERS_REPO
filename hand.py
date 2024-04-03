@@ -72,27 +72,18 @@ def greater(c1, c2):
 #remove a card from hand
 #takes a string value and suit for the card that should be removed
 def removeCard(v, s):
-        #check if inputed variables make a valid card
-        #if checkValidity(v, s) == True:
-        #make a card object
-            c = Card(v, s)
-            #check if the card in the the hand, if it is not, exit because you can't remove something that isn't there
-            if c in NaoHand:
-                i = 0
-                #loop till card is found in the array
-                for x in NaoHand:
-                        if x.suit == c.suit and x.value == c.value:
-                        #remove the card
-                            NaoHand.pop(i)
-                            return 0
-                        else:
-                            i += 1
-                print("\nRemoved from hand")
-            else:
-                print("\nCard isn't in hand")
-        #else:
-        #    print("\nInvalid card: suit = " + s.lower() + ", value = "+ v.lower())
-            return 0
+    #make a card object
+    c = Card(v, s)
+
+    #check if the card in the the hand, if it is not, exit because you can't remove something that isn't there
+    if not c in NaoHand:
+        print("\nCard isn't in hand")
+        return 0
+
+    position = NaoHand.index(c)
+    NaoHand.pop(position)
+    print("\nRemoved from hand")
+
 
 #check for valid input matching a real playing card
 #inputed value and suit must match a real suit and value for a playing card
