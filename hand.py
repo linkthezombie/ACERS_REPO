@@ -89,15 +89,13 @@ def removeCard(v, s):
 #inputed value and suit must match a real suit and value for a playing card
 #if it doesn't, program returns false
 #takes in a string reprsenting the value and another for the suit
-def checkValidity( v, s):
-    t = False
-#check for a valid value
-    if v.lower() == "a" or v.lower() == "2" or v.lower() == "3"  or v.lower() == "4" or v.lower() == "5" or v.lower() == "6" or v.lower() == "7" or v.lower() == "8" or v.lower() == "9" or v.lower() == "10" or v.lower() == "j" or v.lower() == "q" or v.lower() == "k":
-            #check for a valid suit
-            if s.lower() == "spade" or s.lower() == "club" or s.lower() == "diamond" or s.lower() == "heart":
-                #both suit and value are vaild
-                    t = True
-    return t
+def checkValidity(v, s):
+    numbers = list(map(str, range(2, 11)))
+
+    validValue = v.lower() in (["a", "j", "q", "k"] + numbers)
+    validSuit = s.lower() in ["spade", "club", "diamond", "heart"]
+
+    return validValue and validSuit
 
 #prints array in order
 #no post or preconditions
