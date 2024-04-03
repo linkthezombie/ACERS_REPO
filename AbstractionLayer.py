@@ -29,6 +29,8 @@ Revised 3-5-2024 (Elise Lovell)
      - changed data type taken by oppEndTurn
 Revised 3-18-2024 (Elise Lovell)
      - added faceForward
+Revised 4-3-2024 (Elise Lovell)
+     - added blackJack events
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -100,3 +102,13 @@ class AbstractionLayer(object):
         #calibration process
         self.startCalib = Event[None]()
         self.nextCalibStep = Event[None]()
+
+
+        ##BlackJack Events
+        self.startBlackJack = Event[None]()
+        self.turnBlackJack = Event[None]()
+        self.hit = Event[None]()
+        self.hitReturn = Event[None]()
+        self.pass = Event[None]()
+        self.wonBlackJack = Event[None]()
+        self.lostBlackJack = Event[None]()
