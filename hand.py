@@ -30,7 +30,7 @@ def addCard(v, s):
     c = Card(v, s)
 
     #checks if the card is already in the hand, if it is, can't add a repeat to the hand
-    if findCardInHand(c):
+    if c in NaoHand:
         print("\nCard already exists in hand")
         return 0
 
@@ -77,7 +77,7 @@ def removeCard(v, s):
         #make a card object
             c = Card(v, s)
             #check if the card in the the hand, if it is not, exit because you can't remove something that isn't there
-            if findCardInHand(c) == True:
+            if c in NaoHand:
                 i = 0
                 #loop till card is found in the array
                 for x in NaoHand:
@@ -107,17 +107,6 @@ def checkValidity( v, s):
                 #both suit and value are vaild
                     t = True
     return t
-
-#searches for card in array, returns true if found and false if not present in the array
-#preconditions - takes in a Card object
-def findCardInHand(c):
-        t = False
-        #for each item in the array, check if the passed in card matches the current card in the array
-        #if yes, set variable to True
-        for x in NaoHand:
-                if x.value == c.value and x.suit == c.suit:
-                        t = True
-        return t
 
 #prints array in order
 #no post or preconditions
@@ -225,4 +214,3 @@ print(len(NaoHand))
 removeCard("2", "Spade")
 getHand()
 '''
-
