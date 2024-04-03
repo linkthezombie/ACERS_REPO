@@ -45,13 +45,6 @@ import hand
 #from positioning.Pose import *
 import ComputerVision
 
-# translate a 3d point or Position6D to work with the other arm
-def l2rPosn(vec):
-    if len(vec) == 3:
-        return [vec[0], -vec[1], vec[2]]
-    else:
-        return [vec[0], -vec[1], vec[2], -vec[3], vec[4], -vec[5]]
-
 # translate joint positions to give the same (mirrored) position with the other arm
 def l2rJoints(vec):
     return [vec[0], -vec[1], -vec[2], -vec[3], -vec[4], vec[5]]
@@ -280,7 +273,9 @@ def playCard():
     motion.changeAngles("LShoulderPitch", -20*d2r, pctMax)
     time.sleep(.5)
 
-    motion.angleInterpolationWithSpeed("LArm", realStart, pctMax)
+    endPos = realStart[:]
+    endPos[0] -= 20*d2r
+    motion.angleInterpolationWithSpeed("LArm", endPos, pctMax)
 
 def onDrawCard():
     drawCard()

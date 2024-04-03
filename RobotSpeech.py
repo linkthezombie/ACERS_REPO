@@ -34,7 +34,6 @@ import hand
 import AbstractionLayer
 import random
 import RobotInfo
-import CommandDetection
 
 absLayer = AbstractionLayer.AbstractionLayer()
 

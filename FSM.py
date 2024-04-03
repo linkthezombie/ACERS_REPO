@@ -112,7 +112,7 @@ def start(list):
     state = random.choice(["NaoPlay", "opponentPlay"]) #decides who plays first
     #propoagate the array representing who's turn it is
     setPlayerArr(state)
-    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
     if state == "NaoPlay":
         print("\nNao goes first")
         absLayer.SayWords.trigger("I will go first.")
@@ -157,7 +157,7 @@ def opponentPlay(v, s, eightS):
         
         
     GameStrategy.NextPlayer() #transition to next player
-    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
     #check if it is Nao's turn
     if (GameStrategy.Players[0] == 1):
         state = "NaoPlay"
@@ -190,7 +190,7 @@ def playing():
         GameStrategy.suitOnEight = GameStrategy.preSuitChoice()
     absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
     winGame() #check if wins game
-    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
+    absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
     
 #what the Nao does if it must draw a card
 #takes in the card object it drew to add to its virtual hand
@@ -207,7 +207,7 @@ def drawing(card1):
         #moves onto next player
         GameStrategy.NextPlayer()
         #triggers abs layer event that will let commandDetection.py know to say something before an opponent goes
-        absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
+        absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
         absLayer.oppNext.trigger()
 
 #starts the Nao's turn and moves flow on turn along

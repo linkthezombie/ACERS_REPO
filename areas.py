@@ -57,15 +57,15 @@ areas = [
             Vector3D([ 0.14,  0.25, -0.06]), # Position
             Orientation()
         ),
-        Vector3D([ .08, .06, .08])
+        Vector3D([ .08, .08, .1])
     )),
 
     ("R Stack", RectangularVolume(
         Pose(
-            Vector3D([ 0.185,  0.185, -0.05]), # Position
+            Vector3D([ 0.185,  0.17, -0.05]), # Position
             Orientation()
         ),
-        Vector3D([ .07, .07, .09])
+        Vector3D([ .07, .08, .1])
     )),
 ]
 
