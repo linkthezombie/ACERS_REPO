@@ -18,7 +18,7 @@ Edited 10-27-23 -Shelby & Elise
     -Fleshed out Methods
 Edited 11/3/2023 - Elise Lovell
     -added methods/functionality and comments and print statements for debugging
-Edited 11-17-2023 - Shelby Jones    
+Edited 11-17-2023 - Shelby Jones
     -added python 2.7 compatibility
 Revised 11-17-2023 - Elise Lovell
      -debugging
@@ -33,7 +33,7 @@ Revised 3/14 - Elise Lovell
 Revised 3/15 - Elise Lovell
      - added medium mode funcitonality
 Revised 3/16 - Elise Lovell
-     - added hard mode functionality 
+     - added hard mode functionality
 """
 
 #from DataTypes import *
@@ -63,7 +63,7 @@ def preTurn():
         return turnHard()
 
 #strategy to pick turn on easy mode games
-def turnEasy(): 
+def turnEasy():
     global TopCard
     currCard = None
     playableCards = []
@@ -82,7 +82,7 @@ def turnEasy():
 
 #gamePlay of turn if difficulty = Medium
 #playest highest value card in hand
-def turnMedium(): 
+def turnMedium():
     global TopCard
     currCard = None
     #loop through each card in hand
@@ -153,7 +153,7 @@ def choice(a, b):
         else:
             print(a.ss +", " + a.vs + " is lower\n")
             return True
-            
+
     #a is of a lower value
     else:
         print(a.ss +", " + a.vs + " is lower\n")
@@ -177,7 +177,7 @@ def canPlayCard():
         elif card.value == 8:
             var = True
             print("There are playable cards\n")
-    return var        
+    return var
 
 #sets the array representing the players turn be be the next players turn
 def NextPlayer():
@@ -194,10 +194,10 @@ def NextPlayer():
         Players[i] = 0
         Players[i+1] = 1
     print("Player "+ str(Players.index(1)) + "'s turn.\n")
-    
+
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
-def compare(c): 
+def compare(c):
     if(c.value == TopCard.value and c.suit == TopCard.suit):
         print("Top cards do match\n")
         return True
@@ -207,7 +207,7 @@ def compare(c):
 
 #takes a card object and return true if the card can be played on the stack
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile
-def playable(c): 
+def playable(c):
     #check if suit or value mactch
     if(TopCard.value == 8):
         if(c.value == TopCard.value or c.ss == suitOnEight):
@@ -263,7 +263,7 @@ def suitChoiceHard():
             suit_counts[1] = suit_counts[1] + 1
         elif card.ss == "club":
             suit_counts[2] = suit_counts[2] + 1
-        else: 
+        else:
             suit_counts[3] = suit_counts[3] + 1
     most_common_suit =  "spade"
     max = suit_counts[0]
