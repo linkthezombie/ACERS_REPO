@@ -21,10 +21,10 @@ def startGame():
 def hitOrPass():
   if totalHand() >= 17:
     print("I pass")
-    #abs layer call
+    absLayer.pass.trigger()
 else:
   print("Hit")
-  #abs layer call
+  absLayer.hit.trigger()
 
 #abs layer subscribe
 #add a newly draw card to Nao's hand
@@ -33,10 +33,10 @@ def getNewCard(card):
   #check if Nao has won or gone over
   if totalHand() == 21:
     print("I win!")
-    #abs layer call
+    absLayer.wonBlackJack.trigger()
   elif totalHand() > 21:
       print("I lose")
-      #abs layer call
+      absLayer.lostBlackJack.trigger()
   else:
     print("I'm still playing")
     #abs layer call
@@ -60,3 +60,5 @@ def totalHand():
       sum += card.value
   return sum
 
+absLayer.turnBlackJack.subscribe(hitOrPass)
+absLayer.hitReturn.subscribe(getNewCard)
