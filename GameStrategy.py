@@ -55,9 +55,9 @@ gameLevel = 2
 
 #determines how to play turn based on set difficulty
 def preTurn():
-    if (gameLevel == 1):
+    if gameLevel == 1:
         return turnEasy()
-    elif (gameLevel == 2):
+    elif gameLevel == 2:
         return turnMedium()
     else:
         return turnHard()
@@ -70,7 +70,7 @@ def turnEasy():
     #loop through each card in hand
     for card in hand.NaoHand:
         #call method to check if the card is legal to play on to the stack return true
-        if (playable(card) == True):
+        if playable(card):
             #make list of all allowed cards
             playableCards.append(card)
     #randomly pick a card to play from playable cards
@@ -88,12 +88,12 @@ def turnMedium():
     #loop through each card in hand
     for card in hand.NaoHand:
         #call method to check if the card is legal to play on to the stack return true
-        if (playable(card) == True):
+        if playable(card):
             #if first card that is playable
             if currCard is None:
                 currCard = card
             #if the card is a better option to play, set as current card
-            if(choice(currCard, card) == True):
+            if choice(currCard, card):
                 currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
@@ -109,17 +109,17 @@ def turnHard():
     #loop through each card in hand
     for card in hand.NaoHand:
         #call method to check if the card is legal to play on to the stack return true
-        if (playable(card) == True):
+        if playable(card):
             #if first card that is playable
             if currCard is None:
                 currCard = card
             #want to save 8's, so if new card is an 8 and there are other options, don't pick to play
-            elif(card.value != 8):
+            elif card.value != 8:
                 #check if an 8 was already picked, and if it is, reassign to new card
-                if(currCard.value == 8):
+                if currCard.value == 8:
                     currCard = card
                 #neither newCard or best option are 8's so find new best option
-                elif(choice(currCard, card) == True):
+                elif choice(currCard, card):
                     currCard = card
     #physical motion to play the card, will pass selected card to a higher abstraction level
     print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
@@ -166,11 +166,11 @@ def canPlayCard():
     var = False
     #loop through every card in the stack
     for card in hand.NaoHand:
-        if(TopCard.value == 8):
-            if(card.ss == suitOnEight or card.value == TopCard.value):
+        if TopCard.value == 8:
+            if card.ss == suitOnEight or card.value == TopCard.value:
                 var = True
         #is the card has a matching suit or value, set to True since it would be a playable card
-        elif(card.suit == TopCard.suit or card.value == TopCard.value):
+        elif card.suit == TopCard.suit or card.value == TopCard.value:
             var = True
             print("There are playable cards\n")
         # if the card is an eight, it is a playable card
@@ -184,7 +184,7 @@ def NextPlayer():
     print("Next Player\n")
     #edge case, if last player in the array finshed their turn, loop back around to the front
     print(len(Players))
-    if(Players[len(Players)-1] == 1):
+    if Players[len(Players)-1] == 1:
         Players[len(Players)-1] = 0
         Players[0] = 1
     #find the current player, set them to 0 and make the player after them one
@@ -198,7 +198,7 @@ def NextPlayer():
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
 def compare(c):
-    if(c.value == TopCard.value and c.suit == TopCard.suit):
+    if c.value == TopCard.value and c.suit == TopCard.suit:
         print("Top cards do match\n")
         return True
     else:
@@ -209,11 +209,11 @@ def compare(c):
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile
 def playable(c):
     #check if suit or value mactch
-    if(TopCard.value == 8):
-        if(c.value == TopCard.value or c.ss == suitOnEight):
+    if TopCard.value == 8:
+        if c.value == TopCard.value or c.ss == suitOnEight:
             print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
             return True
-    elif(c.value == TopCard.value or c.suit == TopCard.suit):
+    elif c.value == TopCard.value or c.suit == TopCard.suit:
         print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
         return True
     #check if card in an eight
@@ -226,9 +226,9 @@ def playable(c):
 
 #makes sure right logic is called for the difficulty level of the game
 def preSuitChoice():
-    if(gameLevel == 1):
+    if gameLevel == 1:
         return suitChoiceEasy()
-    elif(gameLevel == 2):
+    elif gameLevel == 2:
         return suitChoiceMedium()
     else:
         return suitChoiceHard()
@@ -247,7 +247,7 @@ def suitChoiceMedium():
         if currCard is None:
             currCard = card
         #if the card is a better option to play, set as current card
-        elif(currCard.value < card.value):
+        elif currCard.value < card.value:
             currCard = card
     return currCard.ss
 

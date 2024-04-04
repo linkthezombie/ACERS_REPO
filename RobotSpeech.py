@@ -60,17 +60,17 @@ def playCardSpeech(card, heldSuit):
     #changes variables to be more naturally spoken form
     value = card.vs
     suit = card.ss + "s"
-    if (value == "a"):
+    if value == "a":
         value = "ace"
-    elif(value == "q"):
+    elif value == "q":
         value = "queen"
-    elif(value == "j"):
+    elif value == "j":
         value = "jack"
-    elif(value == "k"):
+    elif value == "k":
         value = "king"
 
     heldSuit = str(heldSuit) + "s"
-    
+
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
         # If the rank is "8", choose a new suit
@@ -174,15 +174,15 @@ def casualSpeech():
         "I'm not gonna lose",
         "You better not be a cheater!"
     ]
-    if(num%3 == 0): # gives it 3/10 chance to say random phrase
-        if(GameStrategy.getNumOfCards() > 6):
+    if num%3 == 0: # gives it 3/10 chance to say random phrase
+        if GameStrategy.getNumOfCards() > 6:
             tts.say("Boy, I have a lot of cards")
-        elif(GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0):
+        elif GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0:
             tts.say("I only have one card left")
         else:
             selected_phrase = random.choice(CasualPhrases)
             tts.say(selected_phrase)
-        
+
 
 def anySpeech(wordsToSay):
     #say things passed through SayWords in AbsLayer

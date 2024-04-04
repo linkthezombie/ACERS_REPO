@@ -27,7 +27,7 @@ Revised 2-19-2024 (Shelby Jones)
 Edited 2/20/2024
   - Adjusted calibration animations, added vision for tray animations
 Edited 2/26/2024 (Elise Lovell)
-  - added skeletal turnHead functions 
+  - added skeletal turnHead functions
 Edited 2/28/2024 (Elise Lovell)
    - finished turnHead with appropriate funciton calls
 Edited 3/18/2024 (Elise Lovell)
@@ -161,7 +161,7 @@ def playOnStack(side):
     arm = "LArm"
     shoulder = "LShoulderPitch"
 
-    if(side == L):
+    if side == L:
         targetPos = lStackPos[:]
         wristTwist = 10*d2r
     else:
@@ -206,7 +206,7 @@ def playOnStack(side):
     drawnCard = hand.Card(str(topCard[0]), str(topCard[1]))
     cards.append(drawnCard)
 
-# Pick up the top card of the specified stack 
+# Pick up the top card of the specified stack
 def pickupFromStack(side):
     arm = "LArm"
     hand = "LHand"
@@ -225,7 +225,7 @@ def pickupFromStack(side):
         wristTwist = 0
 
     # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
-    
+
     targetPos[-1] = 1
     startPos = targetPos[:]
 
@@ -256,7 +256,7 @@ def pickupFromStack(side):
     # This prevents us from dragging the other cards left or right on the tray.
     motion.angleInterpolationWithSpeed("LHand", .25, pctMax)
     motion.angleInterpolationWithSpeed(arm, l2rJoints(pullBackPos), pctMax)
-    
+
     time.sleep(1)
 
 # assuming a card is in Ace's left hand, place it on the discard pile
@@ -305,15 +305,15 @@ def onPlayCard(cardToPlay, _):
     toStack = R if inLStack else L
     cards = lCards if inLStack else rCards
 
-    while(len(cards)>0 and cards[-1] != cardToPlay):
+    while len(cards) > 0 and cards[-1] != cardToPlay:
         pickupFromStack(fromStack)
         playOnStack(toStack)
         cards = lCards if inLStack else rCards
-    
-    if(len(cards) == 0):
+
+    if len(cards) == 0:
         #panic
         return
-    
+
     pickupFromStack(fromStack)
     playCard()
 
@@ -380,7 +380,7 @@ def onStartCalibration():
 
 def onNextCalibStep():
     global calibStep
-    if(calibStep >= len(calibPositions)):
+    if calibStep >= len(calibPositions):
         absLayer.SayWords.trigger("Calibration Complete.")
         finishCalibration()
         return
@@ -406,7 +406,7 @@ def finishCalibration():
 
 def turnHeadMove(currPlayer, totalPlayers):
   #total players includes Nao
-  if (currPlayer != 0):
+  if currPlayer != 0:
     #turn (180/totalPlayers) * currPlayers
     #0 = straight infront
     #+ is to the left, - to the right

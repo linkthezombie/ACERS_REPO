@@ -26,7 +26,7 @@ Edited 11/10/2023 - Elise Lovell
     -added interaction for debugging and comments for location to link to other programs
 Edited 11-15-2023 - Shelby and Elise
     -changed FSM format for compatability with abstraction layer
-Edited 11-17-2023 - Shelby Jones    
+Edited 11-17-2023 - Shelby Jones
     -added python 2.7 compatibility
 Edited 11-17-2023 - Elise Lovell
     -debugging
@@ -47,7 +47,7 @@ Revised 2/21 - Nathan Smith
      - implementation of functionality after players win a game
      - added lose state
 Revised 2/28/2024 - Elise Lovell
-    - added function call to turn event 
+    - added function call to turn event
 Revised 2/28 - Nathan Smith
      - removed player drawing functionality from opponentPlay, moved to opponentDrew
      - altered opponentPlay to now keep track of the number of cards in players hand
@@ -84,26 +84,26 @@ def start(list):
     #adds all of Nao's cards in his start hand to his memory by utlizing the abs layer event to physically draw the
     #first five starting cards
     absLayer.drawStartingHand.trigger()
-    
+
     GameStrategy.NumOfPlayers = int(list[0]) + 1
     GameStrategy.CardsInDrawPile = 52 - (GameStrategy.NumOfPlayers * 5) - 1 #calculates cards in draw pile
 
     GameStrategy.gameLevel = int(list[3])
-    
+
     #populates the player card count array with the number of cards each player starts with
     for _ in range(int(list[0])):
         GameStrategy.PlayerCardCount.append(5)
-    
+
     #using passed in values, update the stored discard card to the one seen
     C = hand.Card(list[1], list[2])
     GameStrategy.TopCard = C
-    
+
     #handle/set suitOnEight if crazy 8 is first card in discard pile
-    if (GameStrategy.TopCard.value == 8):
+    if GameStrategy.TopCard.value == 8:
         GameStrategy.suitOnEight = GameStrategy.TopCard.ss
     else:
         GameStrategy.suitOnEight = ""
-        
+
     ##Nao needs to store correct number of players
     GameStrategy.CardsInDiscardPile = 1
     print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
@@ -133,19 +133,19 @@ def opponentWinClaim():
         absLayer.OppWon.trigger()
     else:
         absLayer.oppWonLie.trigger()
-    
+
 #determines what happens after another player has announced they have completed their turn
 #takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s, eightS):
     print("Opponent's turn, please complete turn\n")
     NewCard = hand.Card(v, s)
 
-    if GameStrategy.compare(NewCard) == True:  #if theres NOT a new card in the discard pile
+    if GameStrategy.compare(NewCard):  #if theres NOT a new card in the discard pile
         #update all varaibles
         print("\nCards in draw pile " + str(GameStrategy.CardsInDrawPile))
         print("Opponent didn't play a card\n")
     else:
-        if (v == "8"):
+        if v == "8":
             GameStrategy.suitOnEight = eightS
         #opp played a card
         #update all variables
@@ -154,12 +154,12 @@ def opponentPlay(v, s, eightS):
         GameStrategy.CardsInDiscardPile = GameStrategy.CardsInDiscardPile+1
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
-        
-        
+
+
     GameStrategy.NextPlayer() #transition to next player
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
     #check if it is Nao's turn
-    if (GameStrategy.Players[0] == 1):
+    if GameStrategy.Players[0] == 1:
         state = "NaoPlay"
         #trigger abs layer event that will let Nao say he has won in commandDetection.py
         GameStrategy.current_player = 0
@@ -191,7 +191,7 @@ def playing():
     absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
     winGame() #check if wins game
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers +1)
-    
+
 #what the Nao does if it must draw a card
 #takes in the card object it drew to add to its virtual hand
 def drawing(card1):
@@ -201,7 +201,7 @@ def drawing(card1):
     #update variables
     GameStrategy.CardsInDrawPile = GameStrategy.CardsInDrawPile-1
     #check if the card drawn can be player
-    if(GameStrategy.canPlayCard() == True):
+    if GameStrategy.canPlayCard():
         playing()
     else:
         #moves onto next player
@@ -214,7 +214,7 @@ def drawing(card1):
 def NaoPlay():
     state = "NaoPlay"
     #checks if the Nao can play a card
-    if(GameStrategy.canPlayCard() == True): 
+    if GameStrategy.canPlayCard():
         state = "playing"
         playing()
     #the Nao must draw a card
@@ -222,8 +222,8 @@ def NaoPlay():
         state = "drawing"
         #triggers drawCard function is abstraction layer to make the NAO draw a card
         #this starts the processes of physically drawing a card
-        absLayer.drawCard.trigger()        
-    
+        absLayer.drawCard.trigger()
+
 def winGame(): #checks if NAO has won the game
     if len(hand.NaoHand) == 0:
         state = "win"
@@ -236,7 +236,7 @@ def setPlayerArr(n):
     for player in range(GameStrategy.NumOfPlayers):
         GameStrategy.Players.append(0)
     #set Nao to go first
-    if(n == "NaoPlay"):
+    if n == "NaoPlay":
         GameStrategy.Players[0] = 1
     #other player goes first
     else:
@@ -247,7 +247,7 @@ def setPlayerArr(n):
 def propogateHandOnStart(sh):
     hand.NaoHand = []
     #add the five cards in the array to the virtual hand
-    for x in sh:       
+    for x in sh:
         hand.addCard(x.vs, x.ss)
 
 #called upon isShuffled from commandDetection and AbstractionLayer
