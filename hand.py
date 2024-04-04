@@ -90,7 +90,7 @@ def removeCard(v, s):
 #if it doesn't, program returns false
 #takes in a string reprsenting the value and another for the suit
 def checkValidity(v, s):
-    numbers = list(map(str, range(2, 11)))
+    numbers = map(str, range(2, 11))
 
     validValue = v.lower() in (["a", "j", "q", "k"] + numbers)
     validSuit = s.lower() in ["spade", "club", "diamond", "heart"]
