@@ -235,50 +235,27 @@ def preSuitChoice():
 
 #randomly picks an suit if Nao plays an 8, on easy mode
 def suitChoiceEasy():
-    arr = ["spade","heart","diamond","club"]
+    arr = ["spade", "heart", "diamond", "club"]
     return random.choice(arr)
 
 #decide suit to play on 8 for medium level difficulty
 #picks suit of highest numbered card in hand
 def suitChoiceMedium():
-    currCard = None
-    #loop through every card in hand
-    for card in hand.NaoHand:
-        if currCard is None:
-            currCard = card
-        #if the card is a better option to play, set as current card
-        elif currCard.value < card.value:
-            currCard = card
-    return currCard.ss
+    maxValue = lambda a, b: a if a.value > b.value else b
+    return reduce(maxValue, hand.NaoHand).ss
 
 #pick suit on 8 for hard difficulty
 #pick suit with most cards in hand
 def suitChoiceHard():
-    suit_counts = [0, 0, 0, 0] # Initialize defaultdict to store suit counts
+    counts = {"spade": 0, "heart": 0, "diamond": 0, "club": 0}
+
     #count each suit in hand
     for card in hand.NaoHand:
-        if card.ss == "spade":
-            suit_counts[0] = suit_counts[0] + 1
-        elif card.ss == "heart":
-            suit_counts[1] = suit_counts[1] + 1
-        elif card.ss == "club":
-            suit_counts[2] = suit_counts[2] + 1
-        else:
-            suit_counts[3] = suit_counts[3] + 1
-    most_common_suit =  "spade"
-    max = suit_counts[0]
-    #find suit with most cards
-    if max < suit_counts[1]:
-        most_common_suit =  "heart"
-        max = suit_counts[1]
-    if max < suit_counts[2]:
-        most_common_suit =  "spade"
-        max = suit_counts[2]
-    if max < suit_counts[3]:
-        most_common_suit =  "diamond"
-        max = suit_counts[3]
-    return most_common_suit
+        counts[card.ss] += 1
 
+    #return the largest suit
+    maxSuit = lambda a, b: a if counts[a] > counts[b] else b
+    return reduce(maxSuit, counts)
 
 #return the number of cards in the Nao's hand
 def getNumOfCards():
