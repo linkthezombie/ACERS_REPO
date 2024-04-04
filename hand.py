@@ -123,6 +123,10 @@ class Card():
         self.setSuit(s)
         self.setValue(v)
 
+    def __hash__(self):
+        uid = str(self.suit) + ":" + str(self.value)
+        return hash(uid)
+
     def __str__(self):
         return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
 
