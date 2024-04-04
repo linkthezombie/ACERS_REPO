@@ -198,12 +198,7 @@ def NextPlayer():
 #if the top card on the draw pile is the same as the stored variable representing the top card, return true
 #takes in a card object from the camera that is on the top of the stack
 def compare(c):
-    if c.value == TopCard.value and c.suit == TopCard.suit:
-        print("Top cards do match\n")
-        return True
-    else:
-        print("Top cards don't match\n")
-        return False
+    return c == TopCard
 
 #takes a card object and return true if the card can be played on the stack
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile
