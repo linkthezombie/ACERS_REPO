@@ -54,7 +54,7 @@ suitOnEight = ""
 gameLevel = 2
 
 #determines how to play turn based on set difficulty
-def preTurn():
+def turn():
     if gameLevel == 1:
         return turnEasy()
     elif gameLevel == 2:
@@ -225,7 +225,7 @@ def playable(c):
         return False
 
 #makes sure right logic is called for the difficulty level of the game
-def preSuitChoice():
+def suitChoice():
     if gameLevel == 1:
         return suitChoiceEasy()
     elif gameLevel == 2:
