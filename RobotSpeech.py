@@ -175,9 +175,11 @@ def casualSpeech():
         "You better not be a cheater!"
     ]
     if num%3 == 0: # gives it 3/10 chance to say random phrase
-        if GameStrategy.getNumOfCards() > 6:
+        numCards = len(hand.NaoHand)
+
+        if numCards > 6:
             tts.say("Boy, I have a lot of cards")
-        elif GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0:
+        elif numCards == 1:
             tts.say("I only have one card left")
         else:
             selected_phrase = random.choice(CasualPhrases)

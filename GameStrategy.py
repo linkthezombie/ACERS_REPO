@@ -211,8 +211,3 @@ def suitChoiceHard():
         counts[card.ss] += 1
 
     return max(counts, key=lambda k: counts[k])
-
-#return the number of cards in the Nao's hand
-def getNumOfCards():
-    return len(hand.NaoHand)
-
