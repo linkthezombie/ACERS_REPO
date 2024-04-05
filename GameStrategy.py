@@ -118,29 +118,23 @@ def turnHard():
 #want to get rid of higher numbers and cards where there are more of its suits in Nao's hand
 #takes in two card objects, a and b
 def choice(a, b):
-    #check if a is of higher value
-    if a.value > b.value:
+    #if values aren't equal, choose the higher value
+    if a.value != b.value:
+        return b.value > a.value
+
+    bSuitNum = 0
+    aSuitNum = 0
+    #tally up how many of each suit are present in the hand for card a and b
+    for c in hand.NaoHand:
+        if c.suit == b.suit:
+            bSuitNum = bSuitNum + 1
+        elif c.suit == a.suit:
+            aSuitNum = aSuitNum + 1
+
+    #if there are more of a's suit in Nao's hand, return true, else false
+    if aSuitNum > bSuitNum:
         print(b.ss +", " + b.vs + " is lower\n")
         return False
-    # same value, different suits
-    elif b.value == a.value:
-        bSuitNum = 0
-        aSuitNum = 0
-        #tally up how many of each suit are present in the hand for card a and b
-        for c in hand.NaoHand:
-            if c.suit == b.suit:
-                bSuitNum = bSuitNum + 1
-            elif c.suit == a.suit:
-                aSuitNum = aSuitNum + 1
-        #if there are more of a's suit in Nao's hand, return true, else false
-        if aSuitNum > bSuitNum:
-            print(b.ss +", " + b.vs + " is lower\n")
-            return False
-        else:
-            print(a.ss +", " + a.vs + " is lower\n")
-            return True
-
-    #a is of a lower value
     else:
         print(a.ss +", " + a.vs + " is lower\n")
         return True
