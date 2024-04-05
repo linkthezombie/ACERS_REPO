@@ -122,22 +122,18 @@ def choice(a, b):
     if a.value != b.value:
         return b.value > a.value
 
+    #tally up how many of each suit are present in the hand for card a and b
     bSuitNum = 0
     aSuitNum = 0
-    #tally up how many of each suit are present in the hand for card a and b
-    for c in hand.NaoHand:
-        if c.suit == b.suit:
-            bSuitNum = bSuitNum + 1
-        elif c.suit == a.suit:
-            aSuitNum = aSuitNum + 1
 
-    #if there are more of a's suit in Nao's hand, return true, else false
-    if aSuitNum > bSuitNum:
-        print(b.ss +", " + b.vs + " is lower\n")
-        return False
-    else:
-        print(a.ss +", " + a.vs + " is lower\n")
-        return True
+    for card in hand.NaoHand:
+        if card.suit == b.suit:
+            bSuitNum += 1
+
+        if card.suit == a.suit:
+            aSuitNum += 1
+
+    return bSuitNum > aSuitNum
 
 #checks if there are any playable cards at all in Nao's hand and returns true if there are
 #a card is playable if it matches the suit or value of the top card in the stack
