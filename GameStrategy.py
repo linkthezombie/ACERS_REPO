@@ -146,25 +146,12 @@ def choice(a, b):
         print(a.ss +", " + a.vs + " is lower\n")
         return True
 
-#checks if there are any playablel cards at all in Nao's hand and returns true if there are
+#checks if there are any playable cards at all in Nao's hand and returns true if there are
 #a card is playable if it matches the suit or value of the top card in the stack
 #eight is always playable
 def canPlayCard():
-    var = False
-    #loop through every card in the stack
-    for card in hand.NaoHand:
-        if TopCard.value == 8:
-            if card.ss == suitOnEight or card.value == TopCard.value:
-                var = True
-        #is the card has a matching suit or value, set to True since it would be a playable card
-        elif card.suit == TopCard.suit or card.value == TopCard.value:
-            var = True
-            print("There are playable cards\n")
-        # if the card is an eight, it is a playable card
-        elif card.value == 8:
-            var = True
-            print("There are playable cards\n")
-    return var
+    playableCards = filter(playable, hand.NaoHand)
+    return len(playableCards) > 0
 
 #sets the array representing the players turn be be the next players turn
 def NextPlayer():
