@@ -114,7 +114,7 @@ def turnHard():
     return card
 
 #main logic, must decide whether or not the new card is a better option to play
-#true if new card(a) is a better choice than older card (b)
+#true if new card(b) is a better choice than older card (a)
 #want to get rid of higher numbers and cards where there are more of its suits in Nao's hand
 #takes in two card objects, a and b
 def choice(a, b):
