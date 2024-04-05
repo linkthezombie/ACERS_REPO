@@ -203,8 +203,7 @@ def suitChoiceEasy():
 #decide suit to play on 8 for medium level difficulty
 #picks suit of highest numbered card in hand
 def suitChoiceMedium():
-    maxValue = lambda a, b: a if a.value > b.value else b
-    return reduce(maxValue, hand.NaoHand).ss
+    return max(hand.NaoHand, key=lambda c: c.value).ss
 
 #pick suit on 8 for hard difficulty
 #pick suit with most cards in hand
