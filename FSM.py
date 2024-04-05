@@ -59,6 +59,7 @@ Revised 3/16 - Elise Lovell
 #!/usr/bin/env python2.7
 
 import AbstractionLayer
+from Card import Card
 import GameStrategy
 import hand
 import random
@@ -95,7 +96,7 @@ def start(list):
         GameStrategy.PlayerCardCount.append(5)
 
     #using passed in values, update the stored discard card to the one seen
-    C = hand.Card(list[1], list[2])
+    C = Card(list[1], list[2])
     GameStrategy.TopCard = C
 
     #handle/set suitOnEight if crazy 8 is first card in discard pile
@@ -138,7 +139,7 @@ def opponentWinClaim():
 #takes in two string representing the value and suit of the card seen on the discard pile
 def opponentPlay(v, s, eightS):
     print("Opponent's turn, please complete turn\n")
-    NewCard = hand.Card(v, s)
+    NewCard = Card(v, s)
 
     if GameStrategy.compare(NewCard):  #if theres NOT a new card in the discard pile
         #update all varaibles

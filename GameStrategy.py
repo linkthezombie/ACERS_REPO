@@ -37,12 +37,13 @@ Revised 3/16 - Elise Lovell
 """
 
 import FSM
+from Card import Card
 import random
 import hand
 from collections import defaultdict
 
 
-TopCard = hand.Card("6", "spade") #stores last known top card
+TopCard = Card("6", "spade") #stores last known top card
 CardsInDrawPile = 52 #tracks cards left in draw pile
 NumOfPlayers = 0 #stores total number of players
 Players = [] #stores players in array

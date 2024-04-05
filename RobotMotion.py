@@ -44,6 +44,7 @@ import almath
 import hand
 #from positioning.Pose import *
 import ComputerVision
+from Card import Card
 
 # translate a 3d point or Position6D to work with the other arm
 def l2rPosn(vec):
@@ -203,7 +204,7 @@ def playOnStack(side):
     # because we may not know what card we're holding (e.g. after drawing a card)
     topCard = ComputerVision.getStackTop(side)
     cards = lCards if side == L else rCards
-    drawnCard = hand.Card(str(topCard[0]), str(topCard[1]))
+    drawnCard = Card(str(topCard[0]), str(topCard[1]))
     cards.append(drawnCard)
 
 # Pick up the top card of the specified stack
