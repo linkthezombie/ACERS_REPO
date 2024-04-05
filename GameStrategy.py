@@ -187,24 +187,24 @@ def NextPlayer():
 def compare(c):
     return c == TopCard
 
+#returns the game value of the top card.
+#if it is an eight, this will return the chosen suit rather than the literal suit.
+def topCardSuit():
+    if TopCard.value == 8:
+        return suitOnEight
+    else:
+        return TopCard.suit
+
 #takes a card object and return true if the card can be played on the stack
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile
 def playable(c):
-    #check if suit or value mactch
-    if TopCard.value == 8:
-        if c.value == TopCard.value or c.ss == suitOnEight:
-            print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
-            return True
-    elif c.value == TopCard.value or c.suit == TopCard.suit:
-        print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
+    if c.value == 8:
         return True
-    #check if card in an eight
-    elif c.value == 8:
-        print("Card " + str(c.value) + ", " + str(c.suit) + " is playable\n")
-        return True
-    else:
-        print("Card " + str(c.value) + ", " + str(c.suit) + " is not playable\n")
-        return False
+
+    suitsMatch = c.ss == topCardSuit()
+    valuesMatch = c.value == TopCard.value
+
+    return suitsMatch or valuesMatch
 
 #makes sure right logic is called for the difficulty level of the game
 def suitChoice():
