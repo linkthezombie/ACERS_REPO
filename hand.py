@@ -103,22 +103,3 @@ def getHand():
     #loops through array and prints string value and suit associated with that card
     for x in NaoHand:
         print("\nSuit: " + x.ss + " Value: " + x.vs)
-
-#test functions for each method - result in output to console
-'''addCard( "2", "spade")
-addCard( "A", "Diamond")
-getHand()
-addCard("J", "heArt")
-addCard("2", "Spade")
-addCard("10", "club")
-getHand()
-
-addCard("7", "Spade")
-addCard("14", "heart")
-
-getHand()
-print(len(NaoHand))
-
-removeCard("2", "Spade")
-getHand()
-'''
