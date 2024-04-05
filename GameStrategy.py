@@ -65,67 +65,54 @@ def turn():
 #strategy to pick turn on easy mode games
 def turnEasy():
     global TopCard
-    currCard = None
-    playableCards = []
-    #loop through each card in hand
-    for card in hand.NaoHand:
-        #call method to check if the card is legal to play on to the stack return true
-        if playable(card):
-            #make list of all allowed cards
-            playableCards.append(card)
+
+    playableCards = filter(playable, hand.NaoHand)
+
     #randomly pick a card to play from playable cards
-    currCard = random.choice(playableCards)
-    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
-    TopCard = currCard
-    return currCard
-    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+    card = random.choice(playableCards)
+    TopCard = card
+
+    print("Playing card: suit: " + card.ss + "value: " + card.vs + ".\n")
+    return card
 
 #gamePlay of turn if difficulty = Medium
 #playest highest value card in hand
 def turnMedium():
     global TopCard
-    currCard = None
-    #loop through each card in hand
-    for card in hand.NaoHand:
-        #call method to check if the card is legal to play on to the stack return true
-        if playable(card):
-            #if first card that is playable
-            if currCard is None:
-                currCard = card
-            #if the card is a better option to play, set as current card
-            if choice(currCard, card):
-                currCard = card
+
+    playableCards = filter(playable, hand.NaoHand)
+
+    #find the best card according to the choice function
+    chooseCard = lambda a, b: b if choice(a, b) else a
+    card = reduce(chooseCard, playableCards)
+
     #physical motion to play the card, will pass selected card to a higher abstraction level
-    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
-    TopCard = currCard
-    return currCard
-    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+    print("Playing card: suit: " + card.ss + "value: " + card.vs + ".\n")
+    TopCard = card
+    return card
 
 #actions on Nao turn if game level set to 3
 #play highest card value, but save 8's
 def turnHard():
     global TopCard
-    currCard = None
-    #loop through each card in hand
-    for card in hand.NaoHand:
-        #call method to check if the card is legal to play on to the stack return true
-        if playable(card):
-            #if first card that is playable
-            if currCard is None:
-                currCard = card
-            #want to save 8's, so if new card is an 8 and there are other options, don't pick to play
-            elif card.value != 8:
-                #check if an 8 was already picked, and if it is, reassign to new card
-                if currCard.value == 8:
-                    currCard = card
-                #neither newCard or best option are 8's so find new best option
-                elif choice(currCard, card):
-                    currCard = card
+
+    playableCards = filter(playable, hand.NaoHand)
+
+    notAnEight = lambda c: c.value != 8
+    preferableCards = filter(notAnEight, playableCards)
+
+    #avoid playing eights if possible
+    if len(preferableCards) > 0:
+        playableCards = preferableCards
+
+    #find the best card according to the choice function
+    chooseCard = lambda a, b: b if choice(a, b) else a
+    card = reduce(chooseCard, playableCards)
+
     #physical motion to play the card, will pass selected card to a higher abstraction level
-    print("Playing card: suit: " + currCard.ss + "value: " + currCard.vs + ".\n")
-    TopCard = currCard
-    return currCard
-    print("Top card: " + TopCard.ss + ", " + TopCard.vs + "\n")
+    print("Playing card: suit: " + card.ss + "value: " + card.vs + ".\n")
+    TopCard = card
+    return card
 
 #main logic, must decide whether or not the new card is a better option to play
 #true if new card(a) is a better choice than older card (b)
