@@ -36,7 +36,6 @@ Revised 3/16 - Elise Lovell
      - added hard mode functionality
 """
 
-#from DataTypes import *
 import FSM
 import random
 import hand
