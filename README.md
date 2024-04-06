@@ -80,6 +80,12 @@ Requirement 62: GameStrategy.py
 Requirement 63: FSM.py  
 Requirement 64: RobotMotion.py  
 
+Sprint 12:  
+Requirement 20:  
+Requirement 28.1:  
+Requirement 28.2: BlackJackLogic.py  
+Requirement 50.3-50.6:  final work seen in video submitted on canvas  
+Requirement 65: thorugh all files  
 
 Requirement 6:
    - Intro: 
