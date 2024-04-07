@@ -37,21 +37,43 @@ import RobotInfo
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
+
+###
+
+#persona 1 is kind
+#persona 2 is stoic
+#persona 3 is snarky / passive-agressive
+
+###
+
 # Connect to the text-to-speech module
 tts = ALProxy("ALTextToSpeech", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 def drawCardSpeech():
     # Create an array of various ways to announce NAO drawing a card
-    alternative_phrases = [
-        "I will draw a card.",
-        "I will draw.",
-        "I will take a card.",
-        "I will grab a card.",
-        "One more card for me.",
-        "I'm taking a card."
+    persona1Draw=[
+        "I'm taking a card",
+        "I will grab a card"
+    ]
+    persona2Draw=[
+        "I will draw",
+        "I will take a card"
+    ]
+    persona3Draw=[
+        "Dang, another card?",
+        "One more card for me I guess"
     ]
     # Choose a random phrase for the NAO to say
-    selected_phrase = random.choice(alternative_phrases)
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1Draw)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2Draw)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3Draw)
+    else:
+        selected_phrase = random.choise(persona2Draw)
     # Say the specified drawing card line
     tts.say(selected_phrase)
 
@@ -59,17 +81,17 @@ def playCardSpeech(card, heldSuit):
     #changes variables to be more naturally spoken form
     value = card.vs
     suit = card.ss + "s"
-    if (value == "a"):
+    if value == "a":
         value = "ace"
-    elif(value == "q"):
+    elif value == "q":
         value = "queen"
-    elif(value == "j"):
+    elif value == "j":
         value = "jack"
-    elif(value == "k"):
+    elif value == "k":
         value = "king"
 
     heldSuit = str(heldSuit) + "s"
-    
+
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
         # If the rank is "8", choose a new suit
@@ -95,27 +117,58 @@ def endTurnSpeech():
 
 def gameWinSpeech():
     # Create an array of various ways to announce NAO has won
-    alternative_phrases = [
-        "Victory is mine!",
-        "I am the winner!",
-        "I have won!"
+    persona1Win = [
+        "I win! You played a great game",
+        "I won! This was fun!"
+    ]
+    persona2Win=[
+        "I have won",
+        "I am the winner"
+    ]
+    persona3Win = [
+        "Yes! Victory is mine!",
+        "Boohyah, I Win!!"
     ]
     # Choose a random phrase for the NAO to say
-    selected_phrase = random.choice(alternative_phrases)
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1Win)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2Win)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3Win)
+    else:
+        selected_phrase = random.choise(persona2Win)
     # Say the specified victory line
     tts.say(selected_phrase)
     gameRestartSpeech()
 
 def gameLostSpeech():
     # Create an array of various ways to announce NAO has lost
-    alternative_phrases = [
-        "Good game!",
-        "Well played!",
-        "Nicely done!",
-        "Congratulations!"
+    persona1Lost=[
+        "Great job!",
+        "Nicely done!"
+    ]
+    persona2Lost=[
+        "Good Game.",
+        "Well Played."
+    ]
+    persona3Lost=[
+        "You must've cheated",
+        "Congratulations I guess."
     ]
     # Choose a random phrase for the NAO to say
-    selected_phrase = random.choice(alternative_phrases)
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1Lost)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2Lost)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3Lost)
+    else:
+        selected_phrase = random.choise(persona2Lost)
     # Say the specified defeat line
     tts.say(selected_phrase)
     gameRestartSpeech()
@@ -135,53 +188,118 @@ def gameRestartSpeech():
 
 #selects a phrase for the Nao to say if it is now his turn
 def NaoGoes():
-    NaoTurnPhrases = [
-        "Okay, my turn now",
-        "I get to go now",
-        "Cool, my turn"
+    persona1NaoTurn=[
+        "Okay, my turn"
+        "I get to go next"
     ]
-    selected_phrase = random.choice(NaoTurnPhrases)
+    persona2NaoTurn=[
+        "It's my turn"
+        "I play now"
+    ]
+    persona3NaoTurn=[
+        "Finally, It's my turn now",
+        "Cool, My turn"
+    ]
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1NaoTurn)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2NaoTurn)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3NaoTurn)
+    else:
+        selected_phrase = random.choise(persona2NaoTurn)
     tts.say(selected_phrase)
 
 #selects a phrase to say if an opponent is going
 def newOpp():
-    NextPlayerTurnPhrases = [
-        "Okay, your turn",
-        "Next player please!",
-        "Your turn now!"
+    persona1NextPlayer=[
+        "Next player please!"
+        "Okay, your turn"
     ]
-    selected_phrase = random.choice(NextPlayerTurnPhrases)
+    persona2NextPlayer=[
+        "Next player"
+        "Your turn"
+    ]
+    persona3NextPlayer=[
+        "I don't have all day, next player go"
+        "Next player now"
+    ]
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1NextPlayer)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2NextPlayer)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3NextPlayer)
+    else:
+        selected_phrase = random.choise(persona2NextPlayer)
     tts.say(selected_phrase)
 
 #selects a phrase to say if an opponent is caught trying to announce their victory prematurely
 def accusePlayer():
-    AccusePlayerPhrases = [
-        "Hey, you don't have 0 cards left!",
-        "Wait, that's not true!",
-        "Are you sure about that?",
-        "Sorry, but I think you still have cards left"
+    persona1Accuse=[ #kind
+        "Sorry, but I think you still have cards left",
+        "Are you sure about that?"
     ]
-    selected_phrase = random.choice(AccusePlayerPhrases)
+    persona2Accuse=[ #stoic
+        "That's not true."
+        "You haven't won yet."
+    ]
+    persona3Accuse=[ #snarky
+        "Hey, you don't have 0 cards left!",
+        "Liar, you still have cards left!"
+    ]
+    if(CommandDetection.persona == 1):
+        selected_phrase = random.choice(persona1Accuse)
+
+    if(CommandDetection.persona == 2):
+        selected_phrase = random.choice(persona2Accuse)
+
+    if(CommandDetection.persona == 3):
+        selected_phrase = random.choice(persona3Accuse)
+    else:
+        selected_phrase = random.choise(persona2Accuse)
     tts.say(selected_phrase)
 
 def casualSpeech():
     num = random.randint(1, 10)#chose random number between 1 and 10
-    CasualPhrases = [
+    
+    persona1Casual = [ #kind
         "You're pretty good at this game",
         "Don't worry, I'm not a cheater!",
-        "Isn't this game fun?",
-        "I'm not gonna lose",
-        "You better not be a cheater!"
+        "Isn't this game fun?"
     ]
-    if(num%3 == 0): # gives it 3/10 chance to say random phrase
-        if(GameStrategy.getNumOfCards() > 6):
-            tts.say("Boy, I have a lot of cards")
-        elif(GameStrategy.getNumOfCards() < 2 and GameStrategy.getNumOfCards() > 0):
+    persona2Casual = [ #stoic
+        "I will not lose",
+        "You play this game well"
+    ]
+    persona3Casual = [ #snarky
+        "You Better not be a cheater!",
+        "Why don't you just surrender now?"
+    ]
+    if num%3 == 0: # gives it 3/10 chance to say random phrase
+        numCards = len(hand.NaoHand)
+
+        if numCards > 6:
+            tts.say("I have a lot of cards")
+        elif numCards == 1:
             tts.say("I only have one card left")
         else:
-            selected_phrase = random.choice(CasualPhrases)
+            if(CommandDetection.persona == 1):
+                selected_phrase = random.choice(persona1Casual)
+
+            if(CommandDetection.persona == 2):
+                selected_phrase = random.choice(persona2Casual)
+
+            if(CommandDetection.persona == 3):
+                selected_phrase = random.choice(persona3Casual)
+            else:
+                selected_phrase = random.choise(persona2Casual)
             tts.say(selected_phrase)
-        
+
 
 def anySpeech(wordsToSay):
     #say things passed through SayWords in AbsLayer

@@ -27,13 +27,15 @@ Revised 2-19-2024 (Shelby Jones)
 Edited 2/20/2024
   - Adjusted calibration animations, added vision for tray animations
 Edited 2/26/2024 (Elise Lovell)
-  - added skeletal turnHead functions 
+  - added skeletal turnHead functions
 Edited 2/28/2024 (Elise Lovell)
    - finished turnHead with appropriate funciton calls
 Edited 3/18/2024 (Elise Lovell)
   - added lookForward() and abstraction subscribe
 Edited 3/22/2024 (Liam McKinney)
   - adjusted various animations for consistency
+Edited 4/3/2024 (Liam McKinney)
+  - removed l2rJoints and changed all positions to left-arm angles
 """
 import time
 from naoqi import ALProxy
@@ -42,12 +44,8 @@ import AbstractionLayer
 import numpy as np
 import almath
 import hand
-#from positioning.Pose import *
 import ComputerVision
-
-# translate joint positions to give the same (mirrored) position with the other arm
-def l2rJoints(vec):
-    return [vec[0], -vec[1], -vec[2], -vec[3], -vec[4], vec[5]]
+from Card import Card
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
@@ -135,12 +133,12 @@ def drawCard():
 
 
 # Position where the bot grabs cards from the left or right stack
-lStackPos = [0.1548919677734375, -0.705974278834025, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.7583341121673584, 0.2, 0.03490658476948738, 0, 1]
-rStackPos = [0.10253213444010417, -0.3, -1.370795, 0.03490658476948738, 1.570795, 1]
+lStackPos = [0.1548919677734375, 0.705974278834025, 1.370795, -0.03490658476948738, -1.570795, 1]#[0.1548919677734375, -0.7583341121673584, 0.2, 0.03490658476948738, 0, 1]
+rStackPos = [0.10253213444010417, 0.3, 1.370795, -0.03490658476948738, -1.570795, 1]
 #rStackPos = [0.10253213444010417, -0.37981154785325794, -1.370795, 0.03490658476948738, 1.570795, 1]#[0.1548919677734375, -0.41471810340881348, 0.2, 0.03490658476948738, 0, 1]
 
-lPlayStart = [-0.7256240844726562, -0.49697399139404297, -2.023303985595703, 1.0783600807189941, 1.5938677787780762, 0.25]
-rPlayStart = [-0.5476799011230469, -0.21011614799499512, -1.8729721307754517, 1.0660879611968994, 1.8116960525512695, 0.25]
+lPlayStart = [-0.7256240844726562, 0.49697399139404297, 2.023303985595703, -1.0783600807189941, -1.5938677787780762, 0.25]
+rPlayStart = [-0.5476799011230469, 0.21011614799499512, 1.8729721307754517, -1.0660879611968994, -1.8116960525512695, 0.25]
 
 # Used to specify which stack to play/pick up from
 L = True
@@ -154,7 +152,7 @@ def playOnStack(side):
     arm = "LArm"
     shoulder = "LShoulderPitch"
 
-    if(side == L):
+    if side == L:
         targetPos = lStackPos[:]
         wristTwist = 10*d2r
     else:
@@ -168,18 +166,18 @@ def playOnStack(side):
     targetPos[0] -= pitchUp
 
     # Adjust elbow/wrist angles so elbow faces down (keeps card straight on to the stack)
-    targetPos[-4] += (-15 if side==L else -10) * d2r
-    targetPos[-2] -= wristTwist
+    targetPos[-4] -= (-15 if side==L else -10) * d2r
+    targetPos[-2] += wristTwist
 
     startPos = lPlayStart[:] if side == L else rPlayStart[:]
     startPos[-1] = .25
 
     # Pull back the end position slightly so we don't overshoot the holder
     targetPos[0] -= 10 * d2r
-    targetPos[-3] += 20 * d2r
+    targetPos[-3] -= 20 * d2r
 
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), .2)
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, startPos, .2)
+    motion.angleInterpolationWithSpeed(arm, targetPos, pctMax)
     motion.setAngles("LHand", .3, pctMax)
     time.sleep(.5)
     motion.changeAngles(shoulder, pitchUp / 2, pctMax)
@@ -196,10 +194,10 @@ def playOnStack(side):
     # because we may not know what card we're holding (e.g. after drawing a card)
     topCard = ComputerVision.getStackTop(side)
     cards = lCards if side == L else rCards
-    drawnCard = hand.Card(str(topCard[0]), str(topCard[1]))
+    drawnCard = Card(str(topCard[0]), str(topCard[1]))
     cards.append(drawnCard)
 
-# Pick up the top card of the specified stack 
+# Pick up the top card of the specified stack
 def pickupFromStack(side):
     arm = "LArm"
     hand = "LHand"
@@ -218,19 +216,19 @@ def pickupFromStack(side):
         wristTwist = 0
 
     # Put hand above the holder so we don't wipe out the cards on our way to the pick up position.
-    
+
     targetPos[-1] = 1
     startPos = targetPos[:]
 
     startPos[0] -= 30 * d2r
-    startPos[-3] += 15 * d2r
+    startPos[-3] -= 15 * d2r
 
     pullBackPos[0] -= 20 * d2r
     pullBackPos[-1] = .3
 
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(startPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, startPos, pctMax)
     # Move arm down to put hand around cards
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(targetPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, targetPos, pctMax)
     # Lightly press against the front of the cards
     motion.setStiffnesses(hand, .3)
     motion.setAngles(hand, .4, pctMax)
@@ -248,7 +246,7 @@ def pickupFromStack(side):
     # Pull arm back by simultaneously bending the elbow and moving the shoulder out.
     # This prevents us from dragging the other cards left or right on the tray.
     motion.angleInterpolationWithSpeed("LHand", .25, pctMax)
-    motion.angleInterpolationWithSpeed(arm, l2rJoints(pullBackPos), pctMax)
+    motion.angleInterpolationWithSpeed(arm, pullBackPos, pctMax)
     
     time.sleep(1)
 
@@ -300,15 +298,15 @@ def onPlayCard(cardToPlay, _):
     toStack = R if inLStack else L
     cards = lCards if inLStack else rCards
 
-    while(len(cards)>0 and cards[-1] != cardToPlay):
+    while len(cards) > 0 and cards[-1] != cardToPlay:
         pickupFromStack(fromStack)
         playOnStack(toStack)
         cards = lCards if inLStack else rCards
-    
-    if(len(cards) == 0):
+
+    if len(cards) == 0:
         #panic
         return
-    
+
     pickupFromStack(fromStack)
     playCard()
 
@@ -334,35 +332,35 @@ calibInstructions = [
     "Place the deck holder against my fingers"
 ]
 intermedPositions = [
-    [l2rJoints(lStackPos)],
-    [l2rJoints(lStackPos), l2rJoints(rStackPos)],
-    [l2rJoints(rStackPos), realStart[:]]
+    [lStackPos],
+    [lStackPos, rStackPos],
+    [rStackPos, realStart[:]]
 ]
 calibPositions = [
-    l2rJoints(lStackPos),
-    l2rJoints(rStackPos),
+    lStackPos,
+    rStackPos,
     [1.1090400218963623, -0.09668397903442383, -1.659830093383789, -0.9418339729309082, -1.5355758666992188, 0.9847999811172485]
 ]
 def onStartCalibration():
     # Populate calibPositions with correct poses based on l/rStackPos
-    calibPositions[0] = l2rJoints(lStackPos)
+    calibPositions[0] = lStackPos[:]
     calibPositions[0][0] -= 5*d2r
     calibPositions[0][-1] = .8
 
-    intermedPositions[0][0] = l2rJoints(lStackPos)
+    intermedPositions[0][0] = lStackPos[:]
     intermedPositions[0][0][0] -= 15*d2r
 
-    calibPositions[1] = l2rJoints(rStackPos)
+    calibPositions[1] = rStackPos[:]
     calibPositions[1][0] -= 5*d2r
     calibPositions[1][-1] = .8
 
-    intermedPositions[1][0] = l2rJoints(lStackPos)
+    intermedPositions[1][0] = lStackPos[:]
     intermedPositions[1][0][0] -= 25*d2r
 
-    intermedPositions[1][1] = l2rJoints(rStackPos)
+    intermedPositions[1][1] = rStackPos[:]
     intermedPositions[1][1][0] -= 25*d2r
 
-    intermedPositions[2][0] = l2rJoints(rStackPos)
+    intermedPositions[2][0] = rStackPos[:]
     intermedPositions[2][0][0] -= 25*d2r
 
     intermedPositions[2][1] = realStart[:]
@@ -375,7 +373,7 @@ def onStartCalibration():
 
 def onNextCalibStep():
     global calibStep
-    if(calibStep >= len(calibPositions)):
+    if calibStep >= len(calibPositions):
         absLayer.SayWords.trigger("Calibration Complete.")
         finishCalibration()
         return
@@ -401,7 +399,7 @@ def finishCalibration():
 
 def turnHeadMove(currPlayer, totalPlayers):
   #total players includes Nao
-  if (currPlayer != 0):
+  if currPlayer != 0:
     #turn (180/totalPlayers) * currPlayers
     #0 = straight infront
     #+ is to the left, - to the right

@@ -93,14 +93,14 @@ def init():
         "Your turn": endTurnOpp,
         "end turn": endTurnOpp,
         "my turn is over": endTurnOpp,
-        #"end": endTurnOpp, 
+        #"end": endTurnOpp,
         #"over": endTurnOpp,
         #"done": endTurnOpp,
 
         #Commands to announce a player has won
         "I win": playerWinsClaim,
         "I won": playerWinsClaim,
-        "I have won": playerWinsClaim, 
+        "I have won": playerWinsClaim,
         "We Win": playerWinsClaim,
         "I am victorious!": playerWinsClaim,
 
@@ -121,8 +121,8 @@ def init():
         #Commands to determine how many people are playing the game with Nao
         "1 player": hearNumPlayers,
         "2 players": hearNumPlayers,
-        "3 players": hearNumPlayers, 
-        "4 players": hearNumPlayers, 
+        "3 players": hearNumPlayers,
+        "4 players": hearNumPlayers,
         "5 players": hearNumPlayers,
         "6 players": hearNumPlayers,
 
@@ -210,7 +210,7 @@ class CommandDetectorModule(ALModule):
         #    MODULE_NAME)
         print(value)
         # If confidence is high enough, run the command
-        if(value[1] >= .4):
+        if value[1] >= .4:
             cb = self.commands[value[0]]
             cb(value[0])
         # Resume speech recognition
@@ -271,14 +271,14 @@ def setDifficulty(level):
     global game_state
     global game_level
     if game_state == "setupgame":
-        if(level == "Easy"):
+        if level == "Easy":
             game_level = "1"
-        elif(level == "Medium"):
+        elif level == "Medium":
             game_level = "2"
         else:
             game_level = "3"
         absLayer.SayWords.trigger("Okay! How many players will there be playing with me?")
-        
+
 # When a player verbally states the number of players to participate in the game (exluding Nao), Nao saves this information for later use
 def hearNumPlayers(num):
     global game_state
@@ -329,7 +329,7 @@ def newSuitSpade(_):
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "spade")
 
-# When a player verbally requests to start a game, Nao enters the setup phase 
+# When a player verbally requests to start a game, Nao enters the setup phase
 def hearStartGame(_):
     global game_state
     global persona

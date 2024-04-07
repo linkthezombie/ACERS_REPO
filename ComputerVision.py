@@ -74,17 +74,17 @@ def getVisibleCards():
     parameters =  aruco.DetectorParameters_create()
     corners, ids, _ = aruco.detectMarkers(gray, aruco_dict,
                                                           parameters=parameters)
-    
-    if( ids is None ):
+
+    if ids is None:
         return [], [], []
-    
+
     # SUB PIXEL DETECTION
     # For each marker, refine the corner locations beyond just integer coordinates
     # stop at 100 iterations, or when the corner position changes by less than .0001
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.0001)
     for markerCorners in corners:
         cv2.cornerSubPix(gray, markerCorners, winSize = (3,3), zeroZone = (-1,-1), criteria = criteria)
-    
+
     size_of_marker = 0.75 # side length of the marker in inches
 
     # get position & orientation of the detected markers in 3d space
@@ -96,7 +96,7 @@ def getVisibleCards():
 
     # transformation mtx of camera frame in torso frame (in meters)
     T_CT = np.array( body.getTransform("CameraBottom", frame, useSensorValues) ).reshape(4,4)
-    
+
     xs = []
     Rs = []
     # translate each opencv rvec/tvec pair into a rotation matrix and position in Nao's robot space
@@ -125,7 +125,7 @@ def getVisibleCards():
         # from the transformation matrix, and add them to the list
         Rs.append(T_MT[:3,:3])
         xs.append(T_MT[:3,3])
-        
+
     return ids, xs, Rs
 
 # Takes the marker ids, and determines the suit and rank of the card that id represents (Req. 22.2.1)
@@ -166,7 +166,7 @@ if __name__ == "__main__":
     while True:
         ids, xs, Rs = getVisibleCards()
 
-        if(ids is None):
+        if ids is None:
             print("No markers visible!")
         zeroFound = False
         for i in range(len(ids)):

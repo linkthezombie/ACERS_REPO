@@ -16,9 +16,8 @@ Edited 3/10/2024
         Fleshed out hand class to handle integer arguments
 """
 #import needed functionality for arrays and classes
-#import array
 from array import array
-# ab_classes.py
+from Card import Card
 
 #array to store cards
 NaoHand = []
@@ -90,7 +89,7 @@ def removeCard(v, s):
 #if it doesn't, program returns false
 #takes in a string reprsenting the value and another for the suit
 def checkValidity(v, s):
-    numbers = list(map(str, range(2, 11)))
+    numbers = map(str, range(2, 11))
 
     validValue = v.lower() in (["a", "j", "q", "k"] + numbers)
     validSuit = s.lower() in ["spade", "club", "diamond", "heart"]
@@ -104,85 +103,3 @@ def getHand():
     #loops through array and prints string value and suit associated with that card
     for x in NaoHand:
         print("\nSuit: " + x.ss + " Value: " + x.vs)
-
-#Card class for creating a card with a suit and face value
-#preconditions - a value and suit for the card, each should be a string
-        #need to be valid suit or value for a card
-class Card():
-    #String version of suit
-    ss = ""
-    #String version of value
-    vs = ""
-    #int version of suit
-    suit  = 0
-    #int version of value
-    value = 0
-
-    #method for initalizing a card with 2 input variables
-    def __init__(self, v, s):
-        self.setSuit(s)
-        self.setValue(v)
-
-    def __str__(self):
-        return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
-
-    def __eq__(self, other):
-        return self.suit == other.suit and self.value == other.value
-
-    def __ne__(self, other):
-        return not (self == other)
-
-    #sets int for suit based on inputted string version of suit
-    def setSuit(self, s):
-        match s.lower():
-            case "club" | "0":
-                self.suit = 1
-                self.ss = "club"
-            case "diamond" | "3":
-                self.suit = 2
-                self.ss = "diamond"
-            case "heart" | "1":
-                self.suit = 3
-                self.ss = "heart"
-            case "spade" | "2":
-                self.suit = 4
-                self.ss = "spade"
-
-    #sets int for value based on inputted string version of value
-    def setValue(self, v):
-
-        match v.lower():
-            case "a" | "1":
-                self.value = 1
-                self.vs = "a"
-            case "j" | "11":
-                self.value = 11
-                self.vs = "j"
-            case "q" | "12":
-                self.value = 12
-                self.vs = "q"
-            case "k" | "13":
-                self.value = 13
-                self.vs = "k"
-            case default:
-                self.value = int(v)
-                self.vs = v
-
-#test functions for each method - result in output to console
-'''addCard( "2", "spade")
-addCard( "A", "Diamond")
-getHand()
-addCard("J", "heArt")
-addCard("2", "Spade")
-addCard("10", "club")
-getHand()
-
-addCard("7", "Spade")
-addCard("14", "heart")
-
-getHand()
-print(len(NaoHand))
-
-removeCard("2", "Spade")
-getHand()
-'''
