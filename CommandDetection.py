@@ -249,16 +249,6 @@ def playerDraws(_):
         absLayer.SayWords.trigger("Okay, draw a card!")
         absLayer.oppDraw.trigger()
 
-# When NaoWon is triggered from the FSM, sets game state to pregame
-def naoWins():
-    global game_state
-    game_state = "pregame"
-
-# When PlayerWon is triggered from the FSM, sets game state to pregame
-def oppWins():
-    global game_state
-    game_state = "pregame"
-
 # When a player verbally calls for a deck shuffle, Nao registers this
 def deckShuffle(_):
     global game_state
@@ -346,6 +336,17 @@ def startCalib(_ = None):
 def continueCalib(_ = None):
     absLayer.nextCalibStep.trigger()
 
+# ABSTRACTION LAYER SUBSCRIPTIONS
+
+# When NaoWon is triggered from the FSM, sets game state to pregame
+def naoWins():
+    global game_state
+    game_state = "pregame"
+
+# When PlayerWon is triggered from the FSM, sets game state to pregame
+def oppWins():
+    global game_state
+    game_state = "pregame"
 init()
 
 atexit.register(deinit)
