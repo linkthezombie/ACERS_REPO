@@ -20,8 +20,22 @@ class Card():
         uid = str(self.suit) + ":" + str(self.value)
         return hash(uid)
 
-    def __str__(self):
+    def __repr__(self):
         return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
+    
+    def cardName(self):
+        value = self.vs
+        suit = self.ss + "s"
+        if value == "a":
+            value = "ace"
+        elif value == "q":
+            value = "queen"
+        elif value == "j":
+            value = "jack"
+        elif value == "k":
+            value = "king"
+        
+        return "%s of %s" % (value, suit)
 
     def __eq__(self, other):
         return self.suit == other.suit and self.value == other.value

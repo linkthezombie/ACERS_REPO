@@ -34,6 +34,7 @@ import hand
 import AbstractionLayer
 import random
 import RobotInfo
+import CommandDetection
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
@@ -72,33 +73,22 @@ def drawCardSpeech():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3Draw)
-    else:
-        selected_phrase = random.choise(persona2Draw)
     # Say the specified drawing card line
     tts.say(selected_phrase)
 
 def playCardSpeech(card, heldSuit):
     #changes variables to be more naturally spoken form
-    value = card.vs
-    suit = card.ss + "s"
-    if value == "a":
-        value = "ace"
-    elif value == "q":
-        value = "queen"
-    elif value == "j":
-        value = "jack"
-    elif value == "k":
-        value = "king"
+    cardName = card.cardName()
 
     heldSuit = str(heldSuit) + "s"
 
     # Annouces the card it is playing, and if it is playing an 8 announces the new suit it has chosen
     if card.value == 8:
         # If the rank is "8", choose a new suit
-        phrase = "I will play the %s of %s, and I will make the new suit %s." % (value, suit, heldSuit)
+        phrase = "I will play the %s, and I will make the new suit %s." % (cardName, heldSuit)
     else:
         # If the rank is not "8", use the provided suit
-        phrase = "I will play the %s of %s." % (value, suit)
+        phrase = "I will play the %s." % (cardName)
     tts.say(phrase)
 
 def endTurnSpeech():
@@ -138,8 +128,6 @@ def gameWinSpeech():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3Win)
-    else:
-        selected_phrase = random.choise(persona2Win)
     # Say the specified victory line
     tts.say(selected_phrase)
     gameRestartSpeech()
@@ -167,8 +155,6 @@ def gameLostSpeech():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3Lost)
-    else:
-        selected_phrase = random.choise(persona2Lost)
     # Say the specified defeat line
     tts.say(selected_phrase)
     gameRestartSpeech()
@@ -208,22 +194,21 @@ def NaoGoes():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3NaoTurn)
-    else:
-        selected_phrase = random.choise(persona2NaoTurn)
+
     tts.say(selected_phrase)
 
 #selects a phrase to say if an opponent is going
 def newOpp():
     persona1NextPlayer=[
-        "Next player please!"
+        "Next player please!",
         "Okay, your turn"
     ]
     persona2NextPlayer=[
-        "Next player"
+        "Next player",
         "Your turn"
     ]
     persona3NextPlayer=[
-        "I don't have all day, next player go"
+        "I don't have all day, next player go",
         "Next player now"
     ]
     if(CommandDetection.persona == 1):
@@ -234,8 +219,7 @@ def newOpp():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3NextPlayer)
-    else:
-        selected_phrase = random.choise(persona2NextPlayer)
+
     tts.say(selected_phrase)
 
 #selects a phrase to say if an opponent is caught trying to announce their victory prematurely
@@ -245,7 +229,7 @@ def accusePlayer():
         "Are you sure about that?"
     ]
     persona2Accuse=[ #stoic
-        "That's not true."
+        "That's not true.",
         "You haven't won yet."
     ]
     persona3Accuse=[ #snarky
@@ -260,8 +244,7 @@ def accusePlayer():
 
     if(CommandDetection.persona == 3):
         selected_phrase = random.choice(persona3Accuse)
-    else:
-        selected_phrase = random.choise(persona2Accuse)
+
     tts.say(selected_phrase)
 
 def casualSpeech():
@@ -296,8 +279,7 @@ def casualSpeech():
 
             if(CommandDetection.persona == 3):
                 selected_phrase = random.choice(persona3Casual)
-            else:
-                selected_phrase = random.choise(persona2Casual)
+
             tts.say(selected_phrase)
 
 
