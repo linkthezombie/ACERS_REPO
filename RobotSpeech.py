@@ -62,7 +62,8 @@ def drawCardSpeech():
     ]
     persona3Draw=[
         "Dang, another card?",
-        "One more card for me I guess"
+        "One more card for me I guess",
+        "one more card to beat you with"
     ]
     # Choose a random phrase for the NAO to say
     if(CommandDetection.persona == 1):
@@ -110,14 +111,17 @@ def gameWinSpeech():
     persona1Win = [
         "I win! You played a great game",
         "I won! This was fun!"
+        "I win! great job"
     ]
     persona2Win=[
         "I have won",
         "I am the winner"
+        "I win"
     ]
     persona3Win = [
         "Yes! Victory is mine!",
         "Boohyah, I Win!!"
+        "I'm the winner, and you're a loser"
     ]
     # Choose a random phrase for the NAO to say
     if(CommandDetection.persona == 1):
@@ -137,14 +141,17 @@ def gameLostSpeech():
     persona1Lost=[
         "Great job!",
         "Nicely done!"
+        "You played a great game"
     ]
     persona2Lost=[
         "Good Game.",
         "Well Played."
+        "Good job"
     ]
     persona3Lost=[
         "You must've cheated",
-        "Congratulations I guess."
+        "Congratulations I guess.",
+        "You got lucky, That won't happen again"
     ]
     # Choose a random phrase for the NAO to say
     if(CommandDetection.persona == 1):
@@ -175,16 +182,19 @@ def gameRestartSpeech():
 #selects a phrase for the Nao to say if it is now his turn
 def NaoGoes():
     persona1NaoTurn=[
-        "Okay, my turn"
-        "I get to go next"
+        "Okay, my turn",
+        "I get to go next",
+        "Good move, My turn!"
     ]
     persona2NaoTurn=[
-        "It's my turn"
-        "I play now"
+        "It's my turn",
+        "I play now",
+        "My turn"
     ]
     persona3NaoTurn=[
         "Finally, It's my turn now",
-        "Cool, My turn"
+        "Cool, My turn",
+        "I'm One turn closer to beating you"
     ]
     if(CommandDetection.persona == 1):
         selected_phrase = random.choice(persona1NaoTurn)
@@ -201,15 +211,18 @@ def NaoGoes():
 def newOpp():
     persona1NextPlayer=[
         "Next player please!",
-        "Okay, your turn"
+        "Okay, your turn",
+        "you get to go next"
     ]
     persona2NextPlayer=[
         "Next player",
-        "Your turn"
+        "Your turn",
+        "Your move"
     ]
     persona3NextPlayer=[
         "I don't have all day, next player go",
-        "Next player now"
+        "Next player now",
+        "Next player Hurry Up"
     ]
     if(CommandDetection.persona == 1):
         selected_phrase = random.choice(persona1NextPlayer)
@@ -226,15 +239,18 @@ def newOpp():
 def accusePlayer():
     persona1Accuse=[ #kind
         "Sorry, but I think you still have cards left",
-        "Are you sure about that?"
+        "Are you sure about that?",
+        "Not yet, I can see you still have cards."
     ]
     persona2Accuse=[ #stoic
         "That's not true.",
-        "You haven't won yet."
+        "You haven't won yet.",
+        "That is incorrect"
     ]
     persona3Accuse=[ #snarky
         "Hey, you don't have 0 cards left!",
         "Liar, you still have cards left!"
+        "I guess I'm playing with a liar then"
     ]
     if(CommandDetection.persona == 1):
         selected_phrase = random.choice(persona1Accuse)
@@ -261,7 +277,8 @@ def casualSpeech():
     ]
     persona3Casual = [ #snarky
         "You Better not be a cheater!",
-        "Why don't you just surrender now?"
+        "Why don't you just surrender now?",
+        "You must enjoy losing"
     ]
     if num%3 == 0: # gives it 3/10 chance to say random phrase
         numCards = len(hand.NaoHand)
