@@ -54,7 +54,6 @@ class Card():
         if v == "a" or v == "1":
             self.value = 1
             self.vs = "a"
-            self.value = 10
         elif v == "j" or v == "11":
             self.value = 11
             self.vs = "j"
