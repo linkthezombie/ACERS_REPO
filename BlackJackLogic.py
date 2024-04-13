@@ -9,12 +9,13 @@ Created 4/2/2024
   Edited 4/10/2024 - Elise Lovell
     - expanded on framework and broke gameplay into functions
   Edited 4/13/2024 - Elise Lovell
-     - cleaned function logic, added calls and triggers
+     - cleaned function logic, added calls and triggers and tested
 """
 #!/usr/bin/env python2.7
 
 import AbstractionLayer
 import hand
+from Card import Card
 
 absLayer = AbstractionLayer.AbstractionLayer()
 dealerCard = Card("6", "spade")
@@ -27,9 +28,9 @@ def startGame(dealtCards):
   hand.NaoHand = []
   #add all card in starting hand to virtual hand
   ctemp = dealtCards[0]
-  hand.NaoHand.addCard(ctemp.vs ,ctemp.ss)
+  hand.addCard(ctemp.vs ,ctemp.ss)
   ctemp = dealtCards[1]
-  hand.NaoHand.addCard(ctemp.vs ,ctemp.ss)
+  hand.addCard(ctemp.vs ,ctemp.ss)
   dealerCard = dealtCards[2]
   print("Starting game")
 
@@ -44,7 +45,7 @@ def hitOrPass():
 
 #add a newly draw card to Nao's hand
 def getNewCard(card):
-  hand.NaoHand.addCard(card.vs ,card.ss)
+  hand.addCard(card.vs ,card.ss)
   #check if Nao has won or gone over
   if totalHand() == 21:
     print("21!")
@@ -89,6 +90,9 @@ def gameEnd(dealerTot):
   elif totalHand() > dealerTot :
     print("I won")
     absLayer.wonBlackJack.trigger("I won")
+  else:
+    print("tied")
+    absLayer.lostBlackJack.trigger("Tied")
 
 #calcualte sum of all cards in hands
 def totalHand():
@@ -98,7 +102,7 @@ def totalHand():
     if card.value >= 10:
       sum += 10
     #if its an ace, see if making it 11 or 1 will work
-    elif card.vs == "a":
+    elif card.value == 1:
       if sum + 11 <= 21:
         sum += 11
         print("ace as 11")
