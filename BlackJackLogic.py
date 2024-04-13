@@ -8,6 +8,8 @@ Created 4/2/2024
      - added basic funcitonality on turn
   Edited 4/10/2024 - Elise Lovell
     - expanded on framework and broke gameplay into functions
+  Edited 4/13/2024 - Elise Lovell
+     - cleaned function logic, added calls and triggers
 """
 #!/usr/bin/env python2.7
 
@@ -15,27 +17,23 @@ import AbstractionLayer
 import hand
 
 absLayer = AbstractionLayer.AbstractionLayer()
-dealerSum = 0
+dealerCard = Card("6", "spade")
 
 #start game after everyone is given two cards
-#TO DO: subscribe to event
-def startGame(dealtCards, dealerCard):
+#first two are Nao's cards
+#last in list is dealer's card
+def startGame(dealtCards):
+  global dealerCard
+  hand.NaoHand = []
   #add all card in starting hand to virtual hand
-  for card in dealtCard:
-    hand.NaoHand.addCard(card.vs ,card.ss)
-
-  #set variable for dealers value of cards
-  if dealerCard.vs != "a":
-    dealerSum = dealerCard.value
-  else:
-    #TO DO
-    print("")
-    #determine what to do with dealer ace
+  ctemp = dealtCards[0]
+  hand.NaoHand.addCard(ctemp.vs ,ctemp.ss)
+  ctemp = dealtCards[1]
+  hand.NaoHand.addCard(ctemp.vs ,ctemp.ss)
+  dealerCard = dealtCards[2]
   print("Starting game")
 
 #decide to get new card or not
-#TO DO: write code for triggers
-#TO DO: write subscirbe that will be triggered with voice command
 def hitOrPass():
   if totalHand() >= 17:
     print("I pass")
@@ -45,35 +43,52 @@ def hitOrPass():
     absLayer.hit.trigger()
 
 #add a newly draw card to Nao's hand
-#TO DO: write code for subscribe
 def getNewCard(card):
   hand.NaoHand.addCard(card.vs ,card.ss)
   #check if Nao has won or gone over
   if totalHand() == 21:
-    print("I win!")
-    absLayer.wonBlackJack.trigger()
+    print("21!")
+    absLayer.done.trigger()
   elif totalHand() > 21:
-      print("I lose")
-      absLayer.lostBlackJack.trigger()
+      print("Bust")
+      absLayer.done.trigger()
   else:
-    print("I'm still playing")
+    print("Still in")
     hitOrPass()
 
 #determines if Nao won or not
-#TO DO: fix decsions rules
-#TO DO: set up subscribe
 def gameEnd(dealerTot):
   if totalHand() > 21:
-    print("Busted")
-  elif totalHand() < dealerTot and totalHand != 21:
+    print("I lost")
+    absLayer.lostBlackJack.trigger("Bust")
+  elif totalHand() == 21:
+    if len(hand.NaoHand) == 2:
+      if hand.NaoHand[0].value == 1:
+        if hand.NaoHand[1].value > 9:
+          print("BlackJack")
+          absLayer.wonBlackJack.trigger("BlackJack")
+        else:
+          print("21, I win!")
+          absLayer.wonBlackJack.trigger("I won")
+      elif hand.NaoHand[0].value > 9:
+        if hand.NaoHand[1].value == 1:
+          print("BlackJack")
+          absLayer.wonBlackJack.trigger("BlackJack")
+        else:
+          print("21, I win!")
+          absLayer.wonBlackJack.trigger("I won")
+      else:
+          print("21, I win!")
+          absLayer.wonBlackJack.trigger("I won")
+    else:
+        print("21, I win!")
+        absLayer.wonBlackJack.trigger("I won")
+  elif totalHand() < dealerTot:
     print("The house wins")
+    absLayer.lostBlackJack.trigger("The house wins")
   elif totalHand() > dealerTot :
     print("I won")
-  #check for blackjack
-  elif True:
-    print("Blackjack")
-  else:
-      print("I got 21")
+    absLayer.wonBlackJack.trigger("I won")
 
 #calcualte sum of all cards in hands
 def totalHand():
@@ -94,5 +109,7 @@ def totalHand():
       sum += card.value
   return sum
 
+absLayer.endBlackJack.subscribe(gameEnd)
 absLayer.turnBlackJack.subscribe(hitOrPass)
 absLayer.hitReturn.subscribe(getNewCard)
+absLayer.startBlackJack.subscribe(startGame)
