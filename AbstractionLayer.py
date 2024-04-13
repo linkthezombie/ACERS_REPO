@@ -31,8 +31,10 @@ Revised 3-18-2024 (Elise Lovell)
      - added faceForward
 Revised 4-3-2024 (Elise Lovell)
      - added blackJack events
-Revised 4-13-2024 (Elise Lovell)
+Revised 4-12-2024 (Elise Lovell)
      - added/edited black jack events
+Revised 4-13-2023 (Elise Lovell)
+     - edited blackjack events
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
@@ -111,8 +113,5 @@ class AbstractionLayer(object):
         self.turnBlackJack = Event[None]()
         self.hit = Event[None]()
         self.hitReturn = Event[Card]()
-        self.passTurn = Event[None]()
-        self.done = Event[None]()
         self.wonBlackJack = Event[str]()
-        self.lostBlackJack = Event[str]()
-        self.endBlackJack = Event[int]()
+        self.drawBlackJackStart = Event[None]()
