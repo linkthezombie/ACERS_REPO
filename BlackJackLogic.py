@@ -8,8 +8,10 @@ Created 4/2/2024
      - added basic funcitonality on turn
   Edited 4/10/2024 - Elise Lovell
     - expanded on framework and broke gameplay into functions
-  Edited 4/13/2024 - Elise Lovell
+  Edited 4/12/2024 - Elise Lovell
      - cleaned function logic, added calls and triggers and tested
+  Edited 4/13/2023 - Elise Lovell
+    - connected other layers and events
 """
 #!/usr/bin/env python2.7
 
@@ -31,16 +33,17 @@ def startGame(dealtCards):
   hand.addCard(ctemp.vs ,ctemp.ss)
   ctemp = dealtCards[1]
   hand.addCard(ctemp.vs ,ctemp.ss)
-  dealerCard = dealtCards[2]
   print("Starting game")
+  absLayer.SayWords.trigger("I'm ready")
 
 #decide to get new card or not
 def hitOrPass():
   if totalHand() >= 17:
     print("I pass")
-    absLayer.passTurn.trigger()
+    absLayer.SayWords.trigger("I'm done, I'll pass")
   else:
     print("Hit")
+    absLayer.SayWords.trigger("Hit")
     absLayer.hit.trigger()
 
 #add a newly draw card to Nao's hand
@@ -49,11 +52,12 @@ def getNewCard(card):
   #check if Nao has won or gone over
   if totalHand() == 21:
     print("21!")
-    absLayer.done.trigger()
+    absLayer.SayWords.trigger("21, I'm done, I'll pass")
   elif totalHand() > 21:
       print("Bust")
-      absLayer.done.trigger()
+      absLayer.SayWords.trigger("Bust, darn it")
   else:
+    absLayer.SayWords.trigger("I'm not out yet")
     print("Still in")
     hitOrPass()
 
@@ -61,38 +65,39 @@ def getNewCard(card):
 def gameEnd(dealerTot):
   if totalHand() > 21:
     print("I lost")
-    absLayer.lostBlackJack.trigger("Bust")
+    absLayer.SayWords.trigger("Bust, I lost")
   elif totalHand() == 21:
     if len(hand.NaoHand) == 2:
       if hand.NaoHand[0].value == 1:
         if hand.NaoHand[1].value > 9:
           print("BlackJack")
-          absLayer.wonBlackJack.trigger("BlackJack")
+          absLayer.SayWords.trigger("BlackJack, I win!")
         else:
           print("21, I win!")
-          absLayer.wonBlackJack.trigger("I won")
+          absLayer.SayWords.trigger("I win!")
       elif hand.NaoHand[0].value > 9:
         if hand.NaoHand[1].value == 1:
           print("BlackJack")
-          absLayer.wonBlackJack.trigger("BlackJack")
+          absLayer.SayWords.trigger("BlackJack, I win!")
         else:
           print("21, I win!")
-          absLayer.wonBlackJack.trigger("I won")
+          absLayer.SayWords.trigger("I win!")
       else:
           print("21, I win!")
-          absLayer.wonBlackJack.trigger("I won")
+          absLayer.SayWords.trigger("I win!")
     else:
         print("21, I win!")
-        absLayer.wonBlackJack.trigger("I won")
+        absLayer.SayWords.trigger("I win!")
   elif totalHand() < dealerTot:
     print("The house wins")
-    absLayer.lostBlackJack.trigger("The house wins")
+    absLayer.SayWords.trigger("The house wins")
   elif totalHand() > dealerTot :
     print("I won")
-    absLayer.wonBlackJack.trigger("I won")
+    absLayer.SayWords.trigger("I win!")
   else:
     print("tied")
-    absLayer.lostBlackJack.trigger("Tied")
+    absLayer.SayWords.trigger("Tie, the house wins")
+absLayer.SayWords.trigger("Want to play again?")
 
 #calcualte sum of all cards in hands
 def totalHand():
