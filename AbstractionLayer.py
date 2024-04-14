@@ -113,5 +113,5 @@ class AbstractionLayer(object):
         self.turnBlackJack = Event[None]()
         self.hit = Event[None]()
         self.hitReturn = Event[Card]()
-        self.wonBlackJack = Event[str]()
+        self.endBlackJack = Event[int]()
         self.drawBlackJackStart = Event[None]()
