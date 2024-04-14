@@ -47,6 +47,8 @@ Revised 3/18/2024
      - added faceForward abs layer calls to hearStartGame and opppEndTurn (Elise Lovell)
 Revised 4/2/2024
      - added random selecting of personality at start of game
+Revised 4/13/2024
+     - added functionality for blackjack included methods and commands (Elise Lovell)
 """
 
 
@@ -87,6 +89,10 @@ def init():
 
     commands = { # List of verbal commands Nao listens out for and the functions triggered after identifying a command
 
+        #game options
+        "BlackJack": playBlackjack,
+        "Crazy eight's": playCrazyEights,
+        
         #Commands to end a player's turn
         "I end my turn": endTurnOpp,
         "I'm done": endTurnOpp,
@@ -133,7 +139,6 @@ def init():
         #Commands to start a new game or play again at the end of a game
         "Play Again": hearStartGame,
         "Start Game": hearStartGame,
-        "Play Crazy Eights": hearStartGame,
         "Play Game": hearStartGame,
 
         #Commands for human player changing the suit to spades
@@ -170,7 +175,33 @@ def init():
         "Hard": setDifficulty,
         "Easy Mode": setDifficulty,
         "Medium Mode": setDifficulty,
-        "Hard Mode": setDifficulty
+        "Hard Mode": setDifficulty,
+
+        #Blackjack commands
+        #Nao's turn
+        "Your turn Nao": naoTurn,
+        "Nao's turn": naoTurn,
+        "Nao can play": naoTurn,
+
+        #end blackjack game
+        "Dealer's turn": dealerTurn,
+        "Everyone is done": dealerTurn,
+        "Game end": dealerTurn,
+
+        #point numbers
+        "seventeen": dealerPoints,
+        "eighteen": dealerPoints,
+        "nineteen": dealerPoints,
+        "twenty": dealerPoints,
+        "tewnty-one": dealerPoints,
+        "twenty-two": dealerPoints,
+        "twenty-three": dealerPoints,
+        "twenty-four": dealerPoints,
+        "twenty-five": dealerPoints,
+        "twenty-six": dealerPoints,
+        "twenty-seven": dealerPoints,
+        "twenty-eight": dealerPoints
+        
         }
 
     CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
@@ -299,6 +330,29 @@ def newSuitClub(_):
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "club")
 
+#triggers to let nao know they are going
+def naoTurn(_):
+    global game_state
+    if game_state == "midgame":
+        absLayer.faceForward.trigger()
+        absLayer.SayWords.trigger("My turn")
+        absLayer.turnBlackJack.trigger()
+
+#finish game of blackjack
+def dealerTurn(_):
+    global game_state
+    if game_state == "midgame":
+        absLayer.SayWords.trigger("Lets see who won!")
+        absLayer.SayWords.trigger("How many points does the dealer have?")
+
+#gets the dealers point total
+def dealerPoints(points)
+    global game_state
+    if game_state == "midgame":
+        n = points[:1] # Pulls the number of players from the command to be passed through the abstraction layer
+        absLayer.endBlackJack.trigger(n)
+        game_state = "pregame"
+        
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
 def newSuitDiamond(_):
     global topCard
@@ -319,8 +373,24 @@ def newSuitSpade(_):
         suit =  str(CTemp[1])
         absLayer.oppEndTurn.trigger("8", suit, "spade")
 
-# When a player verbally requests to start a game, Nao enters the setup phase
+#detect command to start a game with the Nao
 def hearStartGame(_):
+    absLayer.SayWords.trigger("Let's play a game. Do you want to play blackjack or crazy eights?")
+
+#triggers a game of blackjack with voice commands
+def playBlackjack(_):
+    global game_state
+    global persona
+    #select random personality
+    persona = random.choice([1, 2, 3])
+    if game_state == "pregame":
+        absLayer.faceForward.trigger()
+        absLayer.SayWords("Lets play! I'll get my cards.")
+        absLayer.drawBlackJackStart.trigger()
+        game_state = "midgame"
+
+# When a player verbally requests to start a game, Nao enters the setup phase for crazy eights
+def playCrazyEights(_):
     global game_state
     global persona
     #select random personality
