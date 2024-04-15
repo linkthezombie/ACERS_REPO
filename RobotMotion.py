@@ -46,6 +46,7 @@ import almath
 import hand
 import ComputerVision
 from Card import Card
+import threading
 
 absLayer = AbstractionLayer.AbstractionLayer()
 
@@ -61,6 +62,12 @@ temp = ALProxy("ALBodyTemperature", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
 # Joint order: ['LShoulderPitch', 'LShoulderRoll', 'LElbowYaw', 'LElbowRoll', 'LWristYaw', 'LHand']
 realStart = [0.1548919677734375, -0.1, -90 * d2r, -0.03490658476948738, 90 * d2r, .65]
+
+
+helpComplete = threading.Event()
+helpComplete.set()
+# We need to track if we were moving a card when we asked for help, so we can mention it when describing our hand.
+wasMovingCard = False
 
 def wakeRobot():
     motion.wakeUp()
@@ -192,9 +199,27 @@ def playOnStack(side):
 
     # We figure out what card we're putting on the stack after the animation is over
     # because we may not know what card we're holding (e.g. after drawing a card)
-    topCard = ComputerVision.getStackTop(side)
     cards = lCards if side == L else rCards
-    drawnCard = Card(str(topCard[0]), str(topCard[1]))
+
+    drawnCard = None
+
+    # Make sure we have a new card in the tray. If not, ask for help until we do.
+    while drawnCard == None or drawnCard in cards:
+        topCard = ComputerVision.getStackTop(side)
+        if topCard == None:
+            # No card in tray means Nao failed to put the card in the tray,
+            # possibly knocking over others as well. Nao must ask for help.
+            absLayer.SayWords.trigger("Oops, I must have dropped something. Could someone fix my cards for me?")
+            waitForHelp(True)
+            continue
+        
+        drawnCard = Card(str(topCard[0]), str(topCard[1]))
+        if drawnCard in cards:
+            # If the top card is one that was already in the stack, we messed something up. Ask for help.
+            absLayer.SayWords.trigger("Oops, I must have dropped something. Could someone fix my cards for me?")
+            waitForHelp(True)
+            continue
+
     cards.append(drawnCard)
 
 # Pick up the top card of the specified stack
@@ -286,13 +311,20 @@ def onDrawCard():
 def onPlayCard(cardToPlay, _):
     #type: (AbstractionLayer.Card, str)->None
     #search for card
-    inLStack = False
-    for card in lCards:
-        if card == cardToPlay:
-            inLStack = True
-            break
 
-    print("Is in L stack: %s" % inLStack)
+    if cardToPlay in lCards:
+        inLStack = True
+    elif cardToPlay in rCards:
+        inLStack = False
+    else:
+        # We don't have the card we need. Something went wrong, we need help.
+        absLayer.SayWords.trigger("Oops. I seem to have lost the %s. Could someone find it and play it for me?")
+        waitForHelp(False)
+
+        # The user already played the card for us, no need to do anything else.
+        absLayer.playedCard.trigger()
+        return
+
 
     fromStack = L if inLStack else R
     toStack = R if inLStack else L
@@ -410,6 +442,46 @@ def turnHeadMove(currPlayer, totalPlayers):
 def turnHeadForward():
     motion.angleInterpolationWithSpeed("HeadYaw", 0, pctMax)
 
+# Blocks until the user says they have finished helping.
+# Will then return normally and allow the caller to continue execution.
+# Because each command works on a different thread, we are fine to stall execution like this,
+# as long as we make sure the speech recognition doesn't stay paused.
+def waitForHelp(fromMovingCard):
+    global wasMovingCard
+    wasMovingCard = fromMovingCard
+
+    absLayer.awaitHelp.trigger()
+
+    helpComplete.clear()
+    helpComplete.wait()
+
+# If the robot needs help fixing its hand, we are willing to tell the user the contents of Nao's hand if necessary.
+def onHandRequest():
+    if not helpComplete.is_set():
+        handString = ""
+        for (traySide, cards) in [("left", lCards), ("right", rCards)]:
+            if len(cards) == 0:
+                print("empty case")
+                handString += "My %s tray should be empty. " % traySide
+            elif len(cards) == 1:
+                print("single case")
+                handString += "My %s tray should only have the %s." % (traySide, cards[0].cardName())
+            else:
+                print("multi case")
+                handString += "The cards in my %s tray, from bottom to top, should be " % traySide
+                for card in cards[:-1]:
+                    handString += "the %s, " % card.cardName()
+                handString += "and the %s. " % cards[-1].cardName()
+
+        if(wasMovingCard):
+            handString += "The card I was just trying to move should be at the top of the stack in my right tray."
+
+        absLayer.SayWords.trigger(handString)
+
+# User says they are finished helping, we can resume execution
+def onHelpReceived():
+    helpComplete.set()
+
 # Set up abstraction layer callbacks
 
 # Set up abstraction layer callbacks
@@ -422,3 +494,6 @@ absLayer.playCard.subscribe(onPlayCard)
 
 absLayer.startCalib.subscribe(onStartCalibration)
 absLayer.nextCalibStep.subscribe(onNextCalibStep)
+
+absLayer.handRequested.subscribe(onHandRequest)
+absLayer.helpComplete.subscribe(onHelpReceived)

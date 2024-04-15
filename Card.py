@@ -38,7 +38,7 @@ class Card():
         return "%s of %s" % (value, suit)
 
     def __eq__(self, other):
-        return self.suit == other.suit and self.value == other.value
+        return other != None and self.suit == other.suit and self.value == other.value
 
     def __ne__(self, other):
         return not (self == other)

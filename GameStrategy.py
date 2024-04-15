@@ -170,7 +170,7 @@ def topCardSuit():
     if TopCard.value == 8:
         return suitOnEight
     else:
-        return TopCard.suit
+        return TopCard.ss
 
 #takes a card object and return true if the card can be played on the stack
 #can be played if it is an 8 or the suit matches or the value matches the card on the top of the discard pile

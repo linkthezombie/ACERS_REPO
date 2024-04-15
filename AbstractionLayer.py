@@ -103,6 +103,10 @@ class AbstractionLayer(object):
         self.startCalib = Event[None]()
         self.nextCalibStep = Event[None]()
 
+        #Events to help recover from dropped cards
+        self.awaitHelp = Event[None]()
+        self.handRequested = Event[None]()
+        self.helpComplete = Event[None]()
 
         ##BlackJack Events
         self.startBlackJack = Event[None]()

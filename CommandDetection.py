@@ -105,7 +105,6 @@ def init():
         "I am victorious!": playerWinsClaim,
 
         #Commands to announce a player is drawing a card
-        "I will draw": playerDraws,
         "I will draw a card": playerDraws,
         "I am drawing": playerDraws,
         "I am drawing a card": playerDraws,
@@ -172,8 +171,22 @@ def init():
         "Medium Mode": setDifficulty,
         "Hard Mode": setDifficulty
         }
+    
+    # Commands when helping recover from dropped cards
+    helpCommands = {
+        # Requesting info about expected state
+        "What was in your hand": requestHand,
+        "What cards did you have": requestHand,
+        "Cards in hand": requestHand,
 
-    CommandDetector = CommandDetectorModule(MODULE_NAME, commands)
+        # Help complete commands
+        "All done": helpComplete,
+        "You're good to go": helpComplete,
+        "Let's keep playing": helpComplete
+    }
+
+    CommandDetector = CommandDetectorModule(MODULE_NAME, commands, helpCommands)
+
 def deinit():
     memory.unsubscribeToEvent(EVENT_NAME, MODULE_NAME)
     CommandDetector.asr.unsubscribe(MODULE_NAME)
@@ -181,9 +194,12 @@ class CommandDetectorModule(ALModule):
     """ A simple module able to react
     to voice commands
     """
-    def __init__(self, name, commands):
+    def __init__(self, name, commands, helpCommands):
         ALModule.__init__(self, name)
         self.commands = commands
+        self.helpCommands = helpCommands
+        self.currentCommands = commands
+        self.helpMode = False
         # Create proxies for speech recognition and text to speech (for debugging)
         self.asr = ALProxy("ALSpeechRecognition", RobotInfo.getRobotIP(), RobotInfo.getPort())
 
@@ -211,13 +227,33 @@ class CommandDetectorModule(ALModule):
         print(value)
         # If confidence is high enough, run the command
         if value[1] >= .4:
-            cb = self.commands[value[0]]
+            cb = self.currentCommands[value[0]]
             cb(value[0])
         # Resume speech recognition
         self.asr.pause(False)
         #memory.subscribeToEvent(EVENT_NAME,
         #    MODULE_NAME,
         #    "onWordRecognized")
+
+    def setHelpMode(self, helpMode):
+        if helpMode == self.helpMode:
+            return
+        
+        self.helpMode = helpMode
+        newVocab = self.helpCommands if helpMode else self.commands
+        self.currentCommands = newVocab
+
+        self.asr.pause(True)
+        self.asr.setVocabulary(newVocab.keys(), False)
+
+        # Unpause to wait for help commands.
+        # If we're finished helping, we don't unpause asr because
+        # we don't want the robot hearing its own words as commands
+        # or starting new commands while still finishing the previous animation.
+        if(helpMode):
+            self.asr.pause(False)
+
+
 myBroker = ALBroker("myBroker",
        "0.0.0.0",   # listen to anyone
        0,           # find a free port and use it
@@ -336,6 +372,13 @@ def startCalib(_ = None):
 def continueCalib(_ = None):
     absLayer.nextCalibStep.trigger()
 
+def requestHand(_ = None):
+    absLayer.handRequested.trigger()
+
+def helpComplete(_ = None):
+    CommandDetector.setHelpMode(False)
+    absLayer.helpComplete.trigger()
+
 # ABSTRACTION LAYER SUBSCRIPTIONS
 
 # When NaoWon is triggered from the FSM, sets game state to pregame
@@ -347,6 +390,10 @@ def naoWins():
 def oppWins():
     global game_state
     game_state = "pregame"
+
+def onStartHelp():
+    CommandDetector.setHelpMode(True)
+
 init()
 
 atexit.register(deinit)
@@ -355,4 +402,6 @@ atexit.register(deinit)
 absLayer.NaoWon.subscribe(naoWins)
 # If NaoWon is triggered in FSM, abs layer will make sure naoWins is called
 absLayer.OppWon.subscribe(oppWins)
+# If the robot messed up and needs help, we switch to "help mode"
+absLayer.awaitHelp.subscribe(onStartHelp)
 
