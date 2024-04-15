@@ -17,6 +17,7 @@ Created 4/2/2024
 
 import AbstractionLayer
 import hand
+from BlackJackStrategy import getBestMove, Move
 from Card import Card
 
 absLayer = AbstractionLayer.AbstractionLayer()
@@ -57,13 +58,17 @@ def splitHand():
 
 #decide to get new card or not
 def hitOrPass():
-  if totalHand() >= 17:
+  move = getBestMove(hand.NaoHand, dealerCard)
+
+  if move == Move.STAND:
     print("I pass")
     absLayer.SayWords.trigger("I'm done, I'll pass")
-  else:
+  elif move == Move.HIT:
     print("Hit")
     absLayer.SayWords.trigger("Hit")
     absLayer.hit.trigger()
+  else:
+    print("getBestMove returned a bad value")
 
 #add a newly draw card to Nao's hand
 def getNewCard(card):

@@ -26,6 +26,8 @@ Edited 2-28-2024 - Nathan Smith
      - added playerAccuse so that if a player announces their victory before Nao thinks they are out of cards, Nao says so
 Edited 3-4-2024 - Shelby Jones
     - added basic casual interactions for Nao to say
+Edited week of 4-8-24 - Shelby Jones
+    - redid speech sayings, added multiple personas to allow for more interesting interactions
 """
 
 # Import the necessary modules from the qi library

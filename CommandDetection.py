@@ -346,10 +346,11 @@ def dealerTurn(_):
         absLayer.SayWords.trigger("How many points does the dealer have?")
 
 #gets the dealers point total
-def dealerPoints(points)
+def dealerPoints(points):
     global game_state
     if game_state == "midgame":
-        n = points[:1] # Pulls the number of players from the command to be passed through the abstraction layer
+        n = points[:1]
+        nint = int(n)
         absLayer.endBlackJack.trigger(n)
         game_state = "pregame"
         
