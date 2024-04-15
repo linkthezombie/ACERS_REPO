@@ -13,9 +13,6 @@ def getBestMove(hand, upCard):
     else:
         return getBestMoveWithoutAce(hand, upCard)
 
-def getBestMoveWithAce(hand, upCard):
-    return Move.DOUBLE
-
 def getBestMoveWithoutAce(hand, upCard):
     handValue = getHandValue(hand)
     upCardValue = getCardValue(upCard)
