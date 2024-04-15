@@ -103,3 +103,10 @@ def getHand():
     #loops through array and prints string value and suit associated with that card
     for x in NaoHand:
         print("\nSuit: " + x.ss + " Value: " + x.vs)
+
+# returns array of card values, ignoring card suits
+def getValues():
+    values = []
+    for x in NaoHand:
+        values.append(x.ss)
+    return values

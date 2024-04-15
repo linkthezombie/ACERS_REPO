@@ -33,8 +33,27 @@ def startGame(dealtCards):
   hand.addCard(ctemp.vs ,ctemp.ss)
   ctemp = dealtCards[1]
   hand.addCard(ctemp.vs ,ctemp.ss)
+  # splitHand() # When fully implemented, allows Nao to decide if it wants to split a hand or not, and if so Nao plays two hands in the same round
   print("Starting game")
   absLayer.SayWords.trigger("I'm ready")
+
+# logic to decide whether or not NAO splits a hand
+def splitHand():
+  card_value = hand.getValues() # Access getValues in hand to create an array of the two current card's values
+  if card_value[0] == card_value[1]: # If the two cards have the same values, Nao will decide if splitting is a good idea or not
+    if card_value[0] == 1 or card_value[0] == 8: # If Nao has two Aces or Eights, ideal splitting cards, Nao will split regardless
+      #TODO: Implement splitting action
+      pass
+    elif card_value[0] == 2 or card_value[0] == 3 or card_value[0] == 7: # If Nao has bad pairs and Dealer has low card displayed, split to improve bad hands
+      if dealerCard.value >= 2 and dealerCard.value <= 7:
+        #TODO: Implement splitting action
+        pass
+    if card_value[0] == 6: # If Nao has two sixes and the Dealer has a 6, split hand so Nao can stand on safe hands while Dealer must draw at least one more card and potentially bust
+      if dealerCard.value >= 2 and dealerCard.value <= 6:
+        #TODO: Implement splitting action
+        pass
+
+
 
 #decide to get new card or not
 def hitOrPass():
