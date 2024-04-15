@@ -22,7 +22,7 @@ class Card():
 
     def __repr__(self):
         return "(Suit: %s, Value: %s)" % (self.ss, self.vs)
-    
+
     def cardName(self):
         value = self.vs
         suit = self.ss + "s"
@@ -34,7 +34,7 @@ class Card():
             value = "jack"
         elif value == "k":
             value = "king"
-        
+
         return "%s of %s" % (value, suit)
 
     def __eq__(self, other):
@@ -68,7 +68,6 @@ class Card():
         if v == "a" or v == "1":
             self.value = 1
             self.vs = "a"
-            self.value = 10
         elif v == "j" or v == "11":
             self.value = 11
             self.vs = "j"

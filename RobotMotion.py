@@ -36,6 +36,8 @@ Edited 3/22/2024 (Liam McKinney)
   - adjusted various animations for consistency
 Edited 4/3/2024 (Liam McKinney)
   - removed l2rJoints and changed all positions to left-arm angles
+Edited 4/13/2024 (Elise Lovell)
+   - added blackjack functions
 """
 import time
 from naoqi import ALProxy
@@ -300,11 +302,21 @@ def playCard():
     endPos[0] -= 20*d2r
     motion.angleInterpolationWithSpeed("LArm", endPos, pctMax)
 
+#draw card crazy 8
 def onDrawCard():
     drawCard()
     playOnStack(R)
 
     absLayer.drewCard.trigger(rCards[-1])
+    # we can't put the card into the tray yet, we wait for the drewCard Event
+    # to know what we drew to update the hand and know where to put the card.
+
+#draw card Blackjack
+def drawBlackJack():
+    drawCard()
+    playOnStack(R)
+
+    absLayer.hitReturn.trigger(rCards[-1])
     # we can't put the card into the tray yet, we wait for the drewCard Event
     # to know what we drew to update the hand and know where to put the card.
 
@@ -356,6 +368,19 @@ def startingHand():
     arr.append(rCards[-1])
   #give abs layer list of cards drawn
   absLayer.returnSH.trigger(arr)
+
+#draw two starting cards for blackjack
+def startingHandBlackJack():
+  arr = []
+  #loop to draw five cards
+  for x in range(2):
+    #draw card
+    drawCard()
+    playOnStack(R)
+    #add new card to array
+    arr.append(rCards[-1])
+  #give abs layer list of cards drawn
+  absLayer.startBlackJack.trigger(arr)
 
 calibStep = 0
 calibInstructions = [
@@ -488,8 +513,10 @@ def onHelpReceived():
 absLayer.turnHead.subscribe(turnHeadMove)
 absLayer.faceForward.subscribe(turnHeadForward)
 
+absLayer.drawBlackJackStart.subscribe(startingHandBlackJack)
 absLayer.drawStartingHand.subscribe(startingHand)
 absLayer.drawCard.subscribe(onDrawCard)
+absLayer.hit.subscribe(drawBlackJack)
 absLayer.playCard.subscribe(onPlayCard)
 
 absLayer.startCalib.subscribe(onStartCalibration)
