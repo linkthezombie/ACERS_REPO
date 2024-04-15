@@ -76,8 +76,9 @@ def win():
     state = ""
     return 0
 
-#runs to start the program and set up variables and functions
-#takes list with the value and suit of the seen card on the discard pile in index 1 and 2 and the num of players in index 0
+#starts the program and set up variables and functions
+#takes list with value and suit of the seen card on the discard pile in index 1 and 2 respectively 
+#the num of players is index 0
 #index 3 it the game difficulty level
 def start(list):
     print("Starting Game: \n\n")
@@ -156,7 +157,6 @@ def opponentPlay(v, s, eightS):
         print("\nCards in discard pile: " + str(GameStrategy.CardsInDiscardPile))
         print("Opponent played card\n")
 
-
     GameStrategy.NextPlayer() #transition to next player
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
     #check if it is Nao's turn
@@ -190,7 +190,7 @@ def playing():
         #pick new suit if the card is an 8
         GameStrategy.suitOnEight = GameStrategy.suitChoice()
     absLayer.playCard.trigger(card, GameStrategy.suitOnEight)
-    winGame() #check if wins game
+    winGame() #check if nao has won game
     absLayer.turnHead.trigger(GameStrategy.Players.index(1), GameStrategy.NumOfPlayers)
     
 #what the Nao does if it must draw a card
