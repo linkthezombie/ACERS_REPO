@@ -349,7 +349,8 @@ def dealerTurn(_):
 def dealerPoints(points):
     global game_state
     if game_state == "midgame":
-        n = points[:1] # Pulls the number of players from the command to be passed through the abstraction layer
+        n = points[:1]
+        nint = int(n)
         absLayer.endBlackJack.trigger(n)
         game_state = "pregame"
         

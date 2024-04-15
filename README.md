@@ -87,7 +87,15 @@ Requirement 28.2: BlackJackLogic.py
 Requirement 50.3-50.6:  final work seen in video submitted on canvas  
 Requirement 65: thorugh all files  
 
-Requirement 6:
+Sprint 13:
+Requirement 66:  
+Requirement 67.1:  
+Requirement 67.2:  
+Requirement 68:  
+Requirement 69:  
+Requirement 70:  
+Requirement 70.1:  
+
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
 	    - We knew the Nao must be able to draw a card from a pile, hold the card and move it around, set the card in his hand and in the draw pile, and draw a card from his hand to play.
