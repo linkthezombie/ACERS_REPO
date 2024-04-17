@@ -87,14 +87,14 @@ Requirement 28.2: BlackJackLogic.py
 Requirement 50.3-50.6:  final work seen in video submitted on canvas  
 Requirement 65: thorugh all files  
 
-Sprint 13:
-Requirement 66:  
-Requirement 67.1:  
-Requirement 67.2:  
-Requirement 68:  
-Requirement 69:  
-Requirement 70:  
-Requirement 70.1:  
+Sprint 13:  
+Requirement 66: BlackJackLogic.py, BlackJackStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py  
+Requirement 67.1: BlackJackLogic.py, BlackJackStrategy.py, hand.py  
+Requirement 67.2: BlackJackLogic.py, BlackJackStrategy.py, CommandDetection.py, AbstractionLayer.py, RobotSpeech.py, RobtotMotion.py  
+Requirement 68:  throughout various files  
+Requirement 69:  RobotSpeech.py  
+Requirement 70:  RobotMotion.py  
+Requirement 70.1:  ComputerVision.py, RobotSpeech.py  
 
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
