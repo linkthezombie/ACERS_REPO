@@ -121,7 +121,7 @@ def gameEnd(dealerTot):
   else:
     print("tied")
     absLayer.SayWords.trigger("Tie, the house wins")
-absLayer.SayWords.trigger("Want to play again?")
+  absLayer.SayWords.trigger("Want to play again?")
 
 #calcualte sum of all cards in hands
 def totalHand():
