@@ -38,7 +38,7 @@ Revised 4-13-2023 (Elise Lovell)
 """
 
 from typing import TypeVar, Generic, List, Callable, Tuple
-from DataTypes import *
+from Card import Card
 
 # We use type generic type hints for events to make it easier to
 # know what data types to expect during development

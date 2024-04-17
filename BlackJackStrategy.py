@@ -31,7 +31,7 @@ def getBestMoveWithoutAce(hand, upCard):
         [Move.HIT, Move.STAND, Move.STAND, Move.STAND, Move.STAND, Move.STAND, Move.HIT, Move.HIT, Move.HIT, Move.HIT], #15
         [Move.HIT, Move.STAND, Move.STAND, Move.STAND, Move.STAND, Move.STAND, Move.HIT, Move.HIT, Move.HIT, Move.HIT], #16
     ]
-    return strategy[handValue-1, upCardValue-12]
+    return strategy[handValue-12][upCardValue-1]
 
 def getBestMoveWithAce(hand, upCard):
     handValue = getHandValue(hand)
@@ -61,4 +61,4 @@ def getHandValue(hand):
     return reduce(sum, hand, 0)
 
 def getCardValue(card):
-    return max(card.value, 10)
+    return min(card.value, 10)

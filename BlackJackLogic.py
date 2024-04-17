@@ -23,7 +23,7 @@ from BlackJackStrategy import getBestMove, Move
 from Card import Card
 
 absLayer = AbstractionLayer.AbstractionLayer()
-dealerCard = Card("6", "spade")
+dealerCard = Card("8", "spade")
 
 #start game after everyone is given two cards
 #first two are Nao's cards
@@ -121,7 +121,7 @@ def gameEnd(dealerTot):
   else:
     print("tied")
     absLayer.SayWords.trigger("Tie, the house wins")
-absLayer.SayWords.trigger("Want to play again?")
+  absLayer.SayWords.trigger("Want to play again?")
 
 #calcualte sum of all cards in hands
 def totalHand():

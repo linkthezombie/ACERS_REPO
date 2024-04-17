@@ -188,18 +188,18 @@ def init():
         "Game end": dealerTurn,
 
         #point numbers
-        "seventeen": dealerPoints,
-        "eighteen": dealerPoints,
-        "nineteen": dealerPoints,
-        "twenty": dealerPoints,
-        "tewnty-one": dealerPoints,
-        "twenty-two": dealerPoints,
-        "twenty-three": dealerPoints,
-        "twenty-four": dealerPoints,
-        "twenty-five": dealerPoints,
-        "twenty-six": dealerPoints,
-        "twenty-seven": dealerPoints,
-        "twenty-eight": dealerPoints
+        "17": dealerPoints,
+        "18": dealerPoints,
+        "19": dealerPoints,
+        "20": dealerPoints,
+        "21": dealerPoints,
+        "22": dealerPoints,
+        "23": dealerPoints,
+        "24": dealerPoints,
+        "25": dealerPoints,
+        "26": dealerPoints,
+        "27": dealerPoints,
+        "28": dealerPoints
         
         }
     
@@ -385,9 +385,8 @@ def dealerTurn(_):
 def dealerPoints(points):
     global game_state
     if game_state == "midgame":
-        n = points[:1]
-        nint = int(n)
-        absLayer.endBlackJack.trigger(n)
+        nint = int(points)
+        absLayer.endBlackJack.trigger(nint)
         game_state = "pregame"
         
 #function to set off chain of events if opponent announces they have played an 8 and are changing the suit to diamonds
@@ -422,7 +421,7 @@ def playBlackjack(_):
     persona = random.choice([1, 2, 3])
     if game_state == "pregame":
         absLayer.faceForward.trigger()
-        absLayer.SayWords("Lets play! I'll get my cards.")
+        absLayer.SayWords.trigger("Lets play! I'll get my cards.")
         absLayer.drawBlackJackStart.trigger()
         game_state = "midgame"
 
