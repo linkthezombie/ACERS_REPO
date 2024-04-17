@@ -12,6 +12,8 @@ Created 4/2/2024
      - cleaned function logic, added calls and triggers and tested
   Edited 4/13/2023 - Elise Lovell
     - connected other layers and events
+  Edited 4/15/2024 - Nathan Smith
+    - added splitHand() for decision making process on when Nao splits starting hand
 """
 #!/usr/bin/env python2.7
 
@@ -34,36 +36,34 @@ def startGame(dealtCards):
   hand.addCard(ctemp.vs ,ctemp.ss)
   ctemp = dealtCards[1]
   hand.addCard(ctemp.vs ,ctemp.ss)
-  # splitHand() # When fully implemented, allows Nao to decide if it wants to split a hand or not, and if so Nao plays two hands in the same round
+  #splitHand() # When fully implemented, allows Nao to decide if it wants to split a hand or not, and if so Nao plays two hands in the same round
   print("Starting game")
   absLayer.SayWords.trigger("I'm ready")
 
 # logic to decide whether or not NAO splits a hand
 def splitHand():
-  card_value = hand.getValues() # Access getValues in hand to create an array of the two current card's values
-  if card_value[0] == card_value[1]: # If the two cards have the same values, Nao will decide if splitting is a good idea or not
-    if card_value[0] == 1 or card_value[0] == 8: # If Nao has two Aces or Eights, ideal splitting cards, Nao will split regardless
+  card_value = hand.getValues() #access getValues in hand to create an array of the two current card's values
+  if card_value[0] == card_value[1]: #if the two cards have the same values, Nao will decide if splitting is a good idea or not
+    if card_value[0] == 1 or card_value[0] == 8: #if Nao has two Aces or Eights, ideal splitting cards, Nao will split regardless
       #TODO: Implement splitting action
       pass
-    elif card_value[0] == 2 or card_value[0] == 3 or card_value[0] == 7: # If Nao has bad pairs and Dealer has low card displayed, split to improve bad hands
+    elif card_value[0] == 2 or card_value[0] == 3 or card_value[0] == 7: #if Nao has bad pairs and Dealer has low card displayed, split to improve bad hands
       if dealerCard.value >= 2 and dealerCard.value <= 7:
         #TODO: Implement splitting action
         pass
-    if card_value[0] == 6: # If Nao has two sixes and the Dealer has a 6, split hand so Nao can stand on safe hands while Dealer must draw at least one more card and potentially bust
+    if card_value[0] == 6: #if Nao has two sixes and the Dealer has a 6, split hand so Nao can stand on safe hands while Dealer must draw at least one more card and potentially bust
       if dealerCard.value >= 2 and dealerCard.value <= 6:
         #TODO: Implement splitting action
         pass
-
-
 
 #decide to get new card or not
 def hitOrPass():
   move = getBestMove(hand.NaoHand, dealerCard)
 
-  if move == Move.STAND:
+  if move == Move.STAND: #if best available move is to keep current hand, Nao tells the dealer it will pass
     print("I pass")
     absLayer.SayWords.trigger("I'm done, I'll pass")
-  elif move == Move.HIT:
+  elif move == Move.HIT: #if best available move is to obtain another card, Nao asks the dealer for another card
     print("Hit")
     absLayer.SayWords.trigger("Hit")
     absLayer.hit.trigger()
@@ -90,7 +90,7 @@ def gameEnd(dealerTot):
   if totalHand() > 21:
     print("I lost")
     absLayer.SayWords.trigger("Bust, I lost")
-  elif totalHand() == 21:
+  elif totalHand() == 21: #TODO: This may be simplified, and doesn't account for ties when both dealer and player have blackjack
     if len(hand.NaoHand) == 2:
       if hand.NaoHand[0].value == 1:
         if hand.NaoHand[1].value > 9:
@@ -127,10 +127,10 @@ absLayer.SayWords.trigger("Want to play again?")
 def totalHand():
   sum = 0
   for card in hand.NaoHand:
-    #if card is jack, queen, king, or 10, it's value is 10
+    #if card is jack, queen, king, or 10, it's point value is 10
     if card.value >= 10:
       sum += 10
-    #if its an ace, see if making it 11 or 1 will work
+    #if its an ace, see if making it worth 11 or 1 points will be optimal
     elif card.value == 1:
       if sum + 11 <= 21:
         sum += 11
@@ -138,7 +138,7 @@ def totalHand():
       else:
         sum += 1
         print("ace as 1")
-    else:
+    else: #for other cards the face value is it's point value
       sum += card.value
   return sum
 
