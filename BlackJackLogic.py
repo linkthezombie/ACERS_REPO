@@ -87,40 +87,31 @@ def getNewCard(card):
 
 #determines if Nao won or not
 def gameEnd(dealerTot):
-  if totalHand() > 21:
+  if totalHand() > 21: #if Nao busts, they lose no matter what
     print("I lost")
     absLayer.SayWords.trigger("Bust, I lost")
-  elif totalHand() == 21: #TODO: This may be simplified, and doesn't account for ties when both dealer and player have blackjack
+  elif dealerTot > 21: #if the dealer busts, Nao win
+    print("I won")
+    absLayer.SayWords.trigger("I win!")
+  elif totalHand() == dealerTot: #if Nao has the same amount of points as dealer, they tie (lose)
+    print("tied")
+    absLayer.SayWords.trigger("Tie, the house wins") 
+  elif totalHand() == 21: #if Nao gets 21, they win. Special message for natural blackjack
     if len(hand.NaoHand) == 2:
-      if hand.NaoHand[0].value == 1:
-        if hand.NaoHand[1].value > 9:
-          print("BlackJack")
-          absLayer.SayWords.trigger("BlackJack, I win!")
-        else:
-          print("21, I win!")
-          absLayer.SayWords.trigger("I win!")
-      elif hand.NaoHand[0].value > 9:
-        if hand.NaoHand[1].value == 1:
-          print("BlackJack")
-          absLayer.SayWords.trigger("BlackJack, I win!")
-        else:
-          print("21, I win!")
-          absLayer.SayWords.trigger("I win!")
-      else:
-          print("21, I win!")
-          absLayer.SayWords.trigger("I win!")
+      print("21, I win!")
+      absLayer.SayWords.trigger("Natural Blackjack, I win!")
     else:
         print("21, I win!")
         absLayer.SayWords.trigger("I win!")
-  elif totalHand() < dealerTot:
-    print("The house wins")
-    absLayer.SayWords.trigger("The house wins")
-  elif totalHand() > dealerTot :
+  elif totalHand() > dealerTot : #if Nao has 20 points or less, but more points than dealer, they win
     print("I won")
     absLayer.SayWords.trigger("I win!")
-  else:
-    print("tied")
-    absLayer.SayWords.trigger("Tie, the house wins")
+  elif totalHand() < dealerTot: #if Nao has 20 points or less, and less points than dealer, they lose
+    print("The house wins")
+    absLayer.SayWords.trigger("The house wins")
+  else: #if a situation was missed in coding gives an error
+    print("gameEnd had an error")
+    absLayer.SayWords.trigger("Uh oh! Coder messed up!")
   absLayer.SayWords.trigger("Want to play again?")
 
 #calcualte sum of all cards in hands
