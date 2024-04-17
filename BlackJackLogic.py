@@ -109,6 +109,9 @@ def gameEnd(dealerTot):
   elif totalHand() < dealerTot: #if Nao has 20 points or less, and less points than dealer, they lose
     print("The house wins")
     absLayer.SayWords.trigger("The house wins")
+  else: #if a situation was missed in coding gives an error
+    print("gameEnd had an error")
+    absLayer.SayWords.trigger("Uh oh! Coder messed up!")
   absLayer.SayWords.trigger("Want to play again?")
 
 #calcualte sum of all cards in hands
