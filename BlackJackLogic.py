@@ -126,20 +126,22 @@ def gameEnd(dealerTot):
 #calcualte sum of all cards in hands
 def totalHand():
   sum = 0
+  numAces = 0
+
   for card in hand.NaoHand:
-    #if card is jack, queen, king, or 10, it's point value is 10
-    if card.value >= 10:
-      sum += 10
-    #if its an ace, see if making it worth 11 or 1 points will be optimal
-    elif card.value == 1:
-      if sum + 11 <= 21:
-        sum += 11
-        print("ace as 11")
-      else:
-        sum += 1
-        print("ace as 1")
-    else: #for other cards the face value is it's point value
-      sum += card.value
+    if card.value == 1:
+      numAces += 1
+    else:
+      sum += min(card.value, 10)
+
+  for _ in range(numAces):
+    if sum + 11 <= 21:
+      sum += 11
+      print("ace as 11")
+    else:
+      sum += 1
+      print("ace as 1")
+
   return sum
 
 absLayer.endBlackJack.subscribe(gameEnd)
