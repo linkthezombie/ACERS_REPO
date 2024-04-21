@@ -94,7 +94,7 @@ Requirement 67.2: BlackJackLogic.py, BlackJackStrategy.py, CommandDetection.py, 
 Requirement 68:  throughout various files  
 Requirement 69:  RobotSpeech.py  
 Requirement 70:  RobotMotion.py  
-Requirement 70.1:  ComputerVision.py, RobotSpeech.py  
+Requirement 70.1:  ComputerVision.py, RobotSpeech.py, RobotMotion.py  
 
    - Intro: 
       - First, we had to discuss potential ideas for interacting with the cards that would work in a human like way and allow the Nao to play a game.
