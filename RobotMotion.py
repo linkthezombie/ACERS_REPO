@@ -189,11 +189,11 @@ def playOnStack(side):
     motion.angleInterpolationWithSpeed(arm, targetPos, pctMax)
     motion.setAngles("LHand", .3, pctMax)
     time.sleep(.5)
-    motion.changeAngles(shoulder, pitchUp / 2, pctMax)
+    motion.changeAngles(shoulder, pitchUp * .75, pctMax)
     time.sleep(.5)
     motion.setAngles("LHand", 1, pctMax)
     time.sleep(.5)
-    motion.changeAngles(shoulder, -pitchUp / 2, pctMax)
+    motion.changeAngles(shoulder, -pitchUp * .75, pctMax)
     time.sleep(.5)
     motion.changeAngles("LShoulderRoll", 20*d2r, pctMax)
     motion.setAngles("HeadYaw", 45*d2r, pctMax)
@@ -462,7 +462,7 @@ def turnHeadMove(currPlayer, totalPlayers):
     #+ is to the left, - to the right
     degreeSegments = 180/totalPlayers
     currPlayerAngle = 90- (degreeSegments * currPlayer)
-    motion.setAngles("HeadYaw", currPlayerAngle*d2r,pctMax)
+    motion.angleInterpolationWithSpeed("HeadYaw", currPlayerAngle*d2r,pctMax)
 
 def turnHeadForward():
     motion.angleInterpolationWithSpeed("HeadYaw", 0, pctMax)
